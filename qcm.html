@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Data Insights MCQ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Young+Serif&display=swap">
+<style>
+/* Layout: sticky table of contents on the left, one reading column on the right; every step is a numbered card with "why → click path → what to read → expected result". */
+:root{
+  --bg:#f7f6f4; --surface:#ffffff; --sunk:#efece8; --line:#ddd7d0;
+  --fg:#231a15; --muted:#6b5f57;
+  --cocoa:#5b3420; --cocoa-soft:#f0e4dc; --accent:#9a4f22;
+  --spss:#1f5f9c; --spss-soft:#e3edf7;
+  --ok:#2f7a4a; --ok-soft:#e2f1e7; --warn:#9a6a0a; --warn-soft:#fbf0d6; --bad:#a3352a; --bad-soft:#f8e3e0;
+  --why:#5c4a8a; --why-soft:#eeeaf6;
+  --code-bg:#221a16; --code-fg:#f3e9e2;
+  --f-display:"Young Serif", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#171210; --surface:#211a17; --sunk:#2a221e; --line:#3d332d;
+  --fg:#f1e8e2; --muted:#b3a59b;
+  --cocoa:#e7b996; --cocoa-soft:#3a2a21; --accent:#e89a63;
+  --spss:#8cbcf0; --spss-soft:#1c2a3a;
+  --ok:#7ccf98; --ok-soft:#1a2e22; --warn:#e8c169; --warn-soft:#33290f; --bad:#f09a8e; --bad-soft:#3a1d19;
+  --why:#c4b5f0; --why-soft:#27213a;
+  --code-bg:#0f0b09; --code-fg:#f3e9e2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171210; --surface:#211a17; --sunk:#2a221e; --line:#3d332d;
+  --fg:#f1e8e2; --muted:#b3a59b;
+  --cocoa:#e7b996; --cocoa-soft:#3a2a21; --accent:#e89a63;
+  --spss:#8cbcf0; --spss-soft:#1c2a3a;
+  --ok:#7ccf98; --ok-soft:#1a2e22; --warn:#e8c169; --warn-soft:#33290f; --bad:#f09a8e; --bad-soft:#3a1d19;
+  --why:#c4b5f0; --why-soft:#27213a;
+  --code-bg:#0f0b09; --code-fg:#f3e9e2; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);gap:48px;max-width:1240px;margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:32px 96px}
+@media (max-width:960px){.wrap{grid-template-columns:minmax(0,1fr);gap:24px}}
+
+/* ---------- TOC ---------- */
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);align-self:start;max-height:calc(100vh - 32px);overflow:auto;font-size:14px;padding-right:4px}
+nav.toc .brand{font-family:var(--f-display);font-size:20px;line-height:1.2;color:var(--cocoa);margin:0 0 4px}
+nav.toc .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+nav.toc h4{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:18px 0 6px;font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+nav.toc a{display:flex;gap:8px;align-items:baseline;padding:4px 8px;border-radius:6px;color:var(--fg);text-decoration:none}
+nav.toc a:hover{background:var(--sunk)}
+nav.toc a .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);min-width:26px}
+nav.toc .progress{margin-top:18px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);font-size:13px}
+nav.toc .bar{height:6px;background:var(--sunk);border-radius:3px;margin-top:6px;overflow:hidden}
+nav.toc .bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+@media (max-width:960px){
+  nav.toc{position:static;max-height:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+  nav.toc ol{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
+
+/* ---------- Main ---------- */
+main{min-width:0}
+header.hero{padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:32px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 8px}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(32px,5vw,48px);line-height:1.1;margin:0 0 14px;text-wrap:balance;color:var(--cocoa)}
+.lede{font-size:18px;color:var(--muted);max-width:68ch;margin:0}
+h2{font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.2;margin:56px 0 8px;color:var(--cocoa);text-wrap:balance}
+h2 .tag{font-family:var(--f-mono);font-size:14px;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:.04em}
+h3{font-size:19px;line-height:1.35;margin:28px 0 8px;font-weight:600;text-wrap:balance}
+h4{font-size:15px;margin:18px 0 6px;font-weight:600}
+p,li{max-width:72ch}
+section > p{margin:8px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+strong{font-weight:600}
+
+/* Step cards */
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:18px 0;position:relative}
+.step-head{display:flex;gap:14px;align-items:flex-start}
+.step-num{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--cocoa);color:var(--surface);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:14px}
+.step-head h3{margin:4px 0 0;flex:1;min-width:0}
+.done{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap;margin-top:6px}
+.done input{width:17px;height:17px;accent-color:var(--ok);cursor:pointer}
+.step.is-done{border-color:var(--ok)}
+.step.is-done .step-num{background:var(--ok)}
+.step-body{margin-left:48px;min-width:0}
+@media (max-width:560px){.step-body{margin-left:0}.step{padding:16px}}
+
+/* "Why" box: the short explanation of what a step is for */
+.why{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;background:var(--why-soft);border-radius:6px;padding:10px 14px;margin:12px 0;font-size:15px}
+.why::before{content:"Why";font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--why);padding-top:3px}
+.why p{margin:0}
+.why p + p{margin-top:4px}
+
+/* Sub-headings inside a step */
+.phase{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+
+/* SPSS click paths */
+.path{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--f-mono);font-size:13.5px;line-height:1.3;vertical-align:middle}
+.path kbd{font:inherit;background:var(--spss-soft);color:var(--spss);border:1px solid color-mix(in srgb, var(--spss) 30%, transparent);border-radius:5px;padding:2px 7px;font-weight:500;white-space:nowrap}
+.path .sep{color:var(--muted)}
+.btn{font-family:var(--f-mono);font-size:13px;background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:1px 7px;white-space:nowrap;color:var(--fg)}
+.var{font-family:var(--f-mono);font-size:.9em;background:var(--cocoa-soft);color:var(--cocoa);padding:1px 6px;border-radius:4px;white-space:nowrap}
+
+ol.clicks{counter-reset:c;list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}
+ol.clicks[start="4"]{counter-reset:c 3}
+ol.clicks > li{counter-increment:c;display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;max-width:none}
+ol.clicks > li::before{content:counter(c);font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--spss);background:var(--spss-soft);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;margin-top:1px}
+ol.clicks > li > span{min-width:0}
+ol.clicks .hint{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+
+/* Callouts */
+.note{border-radius:var(--r);padding:12px 16px;margin:14px 0;font-size:15px;border:1px solid transparent}
+.note p{margin:4px 0}
+.note > strong:first-child{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.note.tip{background:var(--spss-soft);border-color:color-mix(in srgb, var(--spss) 25%, transparent)}
+.note.tip > strong:first-child{color:var(--spss)}
+.note.warn{background:var(--warn-soft);border-color:color-mix(in srgb, var(--warn) 30%, transparent)}
+.note.warn > strong:first-child{color:var(--warn)}
+.note.ok{background:var(--ok-soft);border-color:color-mix(in srgb, var(--ok) 30%, transparent)}
+.note.ok > strong:first-child{color:var(--ok)}
+.note.bad{background:var(--bad-soft);border-color:color-mix(in srgb, var(--bad) 30%, transparent)}
+.note.bad > strong:first-child{color:var(--bad)}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunk);font-weight:600;font-size:13px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+td code,th code{font-family:var(--f-mono);font-size:13px}
+.sig{color:var(--ok);font-weight:600}
+.ns{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.ns{background:var(--sunk);color:var(--muted)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* Reading the output: table name -> what to look at */
+.read{border:1px dashed var(--line);border-radius:var(--r);margin:12px 0;overflow:hidden}
+.read > p{margin:0;padding:8px 14px;background:var(--sunk);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.read dl{margin:0;display:grid;grid-template-columns:minmax(120px,210px) minmax(0,1fr)}
+.read dt,.read dd{margin:0;padding:8px 14px;border-top:1px solid var(--line);font-size:14.5px}
+.read dt{font-family:var(--f-mono);font-size:13px;color:var(--spss);font-weight:500}
+@media (max-width:560px){.read dl{grid-template-columns:minmax(0,1fr)}.read dd{border-top:0;padding-top:0}}
+
+/* RQ spec grid */
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:14px 0}
+.spec > div{background:var(--surface);padding:10px 14px;min-width:0}
+.spec .k{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.spec .v{font-size:14.5px;margin-top:2px}
+
+.hyp{display:grid;gap:6px;margin:12px 0}
+.hyp div{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;font-size:15px}
+.hyp b{font-family:var(--f-mono);color:var(--accent);font-weight:600}
+
+/* Report sentence */
+blockquote.report{margin:14px 0;padding:12px 16px;border-left:3px solid var(--cocoa);background:var(--cocoa-soft);border-radius:0 var(--r) var(--r) 0;font-size:15px}
+blockquote.report p{margin:4px 0}
+blockquote.report .lbl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--cocoa);font-weight:600}
+
+/* Code */
+details{margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+details > summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:14px;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details > summary::-webkit-details-marker{display:none}
+details > summary::after{content:"+";font-family:var(--f-mono);color:var(--muted)}
+details[open] > summary::after{content:"−"}
+details > .inner{padding:0 14px 14px;min-width:0}
+.code{position:relative}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);padding:14px 16px;border-radius:6px;overflow-x:auto;font-family:var(--f-mono);font-size:12.5px;line-height:1.55}
+.copy{position:absolute;top:8px;right:8px;font-family:var(--f-mono);font-size:11px;background:#3a2d27;color:#f3e9e2;border:0;border-radius:4px;padding:4px 8px;cursor:pointer}
+.copy:hover{background:#4d3c34}
+
+/* Flow diagram */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:18px 0}
+.flow a{flex:1 1 100px;text-decoration:none;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:14px}
+.flow a:hover{border-color:var(--cocoa)}
+.flow a b{display:block;font-family:var(--f-mono);font-size:11px;color:var(--accent);letter-spacing:.06em}
+
+/* SPSS window sketch */
+.windows{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.win{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
+.win .tb{background:var(--sunk);padding:6px 12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.win .tb i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.win .wb{padding:10px 14px;font-size:14.5px}
+.win .wb p{margin:4px 0}
+
+/* Dialog sketch */
+.dialog{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0;font-size:13.5px}
+.dialog .box{border:1px solid var(--line);border-radius:5px;padding:8px 10px;background:var(--bg);min-height:72px;font-family:var(--f-mono);font-size:12.5px;line-height:1.7}
+.dialog .box b{display:block;font-family:var(--f-body);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dialog .arrow{font-family:var(--f-mono);background:var(--spss-soft);color:var(--spss);border-radius:5px;padding:6px 10px;font-weight:600}
+.dialog .btns{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+
+/* Bar charts */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:14px 0}
+.chart h5{margin:0 0 10px;font-size:14px;font-weight:600}
+.bars{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 46px;gap:6px 10px;align-items:center;font-size:13.5px}
+.bars .track{height:16px;background:var(--sunk);border-radius:3px;position:relative}
+.bars .fill{position:absolute;inset:0 auto 0 0;background:var(--cocoa);border-radius:3px}
+.bars .fill.alt{background:var(--muted)}
+.bars .fill.hi{background:var(--accent)}
+.bars .val{font-family:var(--f-mono);font-size:12.5px;text-align:right}
+.axis{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 46px;gap:10px;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:4px}
+.axis span{display:flex;justify-content:space-between}
+.axis i{font-style:normal}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.two > *{min-width:0}
+/* Switch between the two pages of the guide */
+.pageswitch{display:flex;flex-wrap:wrap;gap:4px;background:var(--sunk);border-radius:999px;padding:4px;margin:0 0 20px;width:fit-content;max-width:100%}
+.pageswitch a{padding:6px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500}
+.pageswitch a[aria-current="page"]{background:var(--surface);color:var(--cocoa);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.pageswitch a:hover{color:var(--fg)}
+.diff td:first-child{font-weight:600}
+hr.sep{border:0;border-top:1px solid var(--line);margin:48px 0 0}
+footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+<style>
+/* SPSS Output Viewer look: tables stay white like the real viewer, in both themes */
+:root{--spo-bg:#ffffff;--spo-fg:#1d1d1d;--spo-head:#eef1f5;--spo-line:#b8bec7;--spo-soft:#d9dde3;--spo-mark:#c0392b;--spo-hl:#fff3b0;--spo-frame:#e4e7eb}
+.viewer{background:var(--spo-frame);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:14px 0;overflow-x:auto}
+.viewer .vtag{font:600 11px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:#5a6270;margin:0 0 8px}
+.spo{background:var(--spo-bg);color:var(--spo-fg);font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-size:12px;padding:12px 14px;margin:0 0 10px;width:max-content;max-width:none;border:1px solid var(--spo-soft)}
+.spo:last-child{margin-bottom:0}
+.spo .t{font-weight:bold;font-size:13px;text-align:center;margin:0 0 6px}
+.spo .sub{text-align:center;font-size:12px;margin:-2px 0 6px}
+.spo table{border-collapse:collapse;width:auto;font-size:12px;font-variant-numeric:normal}
+.spo th,.spo td{border:1px solid var(--spo-line);padding:3px 8px;white-space:nowrap;vertical-align:top;color:var(--spo-fg)}
+.spo th{background:var(--spo-head);font-weight:normal;text-align:center;font-size:12px}
+.spo td{text-align:right;background:var(--spo-bg)}
+.spo td.rl{background:var(--spo-head);text-align:left}
+.spo td.e{background:var(--spo-head)}
+.spo .foot{font-size:11px;margin-top:5px;max-width:560px;white-space:normal;line-height:1.35}
+.spo .hl{background:var(--spo-hl)!important;outline:2px solid #e0b100;outline-offset:-2px}
+.spo .xx{text-decoration:line-through;color:#8a8f98}
+.mk{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--spo-mark);color:#fff;font:bold 10px/1 Arial,sans-serif;margin-right:4px;vertical-align:1px}
+.legend{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.legend li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:6px;max-width:none;font-size:15px}
+.legend .mk{margin-top:3px}
+/* Data editor sketch */
+.de{background:var(--spo-bg);color:var(--spo-fg);font-family:Arial,sans-serif;font-size:12px;border:1px solid var(--spo-soft);width:max-content}
+.de table{border-collapse:collapse}
+.de th,.de td{border:1px solid var(--spo-soft);padding:3px 10px;white-space:nowrap;color:var(--spo-fg)}
+.de th{background:var(--spo-head);font-weight:normal}
+.de td{text-align:right}
+.de td.l{text-align:left}
+.de td.rn{background:var(--spo-head);text-align:center;color:#555}
+.de td.off{background:#f4f4f4}
+.de td.cross{background:var(--spo-head);text-align:center;color:#555;text-decoration:line-through}
+.de .tabs{display:flex;gap:0;border-top:1px solid var(--spo-soft)}
+.de .tabs span{padding:4px 12px;font-size:11px;border-right:1px solid var(--spo-soft);color:#555}
+.de .tabs span.on{background:#fff;font-weight:bold;color:#1d1d1d}
+/* Decision tree */
+.tree{display:grid;gap:10px;margin:14px 0}
+.tree .q{background:var(--cocoa);color:var(--surface);border-radius:var(--r);padding:10px 14px;font-weight:600;text-align:center}
+.tree .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.tree .leaf{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:14px}
+.tree .leaf b{display:block;color:var(--accent);font-size:15px;margin-top:2px}
+.tree .leaf small{color:var(--muted)}
+/* Quiz */
+.quiz{counter-reset:q;display:grid;gap:10px;margin:14px 0}
+.quiz details{margin:0}
+.quiz summary{counter-increment:q;font-weight:500}
+.quiz summary::before{content:counter(q) ". ";font-family:var(--f-mono);color:var(--accent);margin-right:4px}
+.quiz .inner p{margin:4px 0}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.kv > div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;min-width:0}
+.kv b{display:block;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+svg text{font-family:Arial,sans-serif}
+</style>
+</head>
+<body>
+<style>
+/* MCQ page: one centred column, a setup card, then one question card at a time */
+.qwrap{max-width:860px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:32px 96px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:18px 0}
+@media (max-width:560px){.card{padding:16px}}
+.lbl{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;font-size:14.5px;background:var(--bg);color:var(--fg);transition:background .15s,border-color .15s}
+.chip input:checked + span{background:var(--cocoa);border-color:var(--cocoa);color:var(--surface)}
+.chip input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.chip small{opacity:.75;font-size:12px}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.mode{position:relative}
+.mode input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.mode div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg);height:100%}
+.mode b{display:block;font-size:15.5px;margin-bottom:2px}
+.mode p{margin:0;font-size:14px;color:var(--muted)}
+.mode input:checked + div{border-color:var(--cocoa);box-shadow:0 0 0 2px var(--cocoa) inset;background:var(--surface)}
+.mode input:focus-visible + div{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:18px}
+.go{font:600 15px var(--f-body);background:var(--cocoa);color:var(--surface);border:0;border-radius:8px;padding:11px 20px;cursor:pointer}
+.go:hover{filter:brightness(1.1)}
+.go:disabled{opacity:.45;cursor:not-allowed}
+.ghost{font:500 14.5px var(--f-body);background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 16px;cursor:pointer}
+.ghost:hover{background:var(--sunk)}
+.ghost:disabled{opacity:.4;cursor:not-allowed}
+.meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:13.5px;color:var(--muted)}
+.stag{font-family:var(--f-mono);font-size:12px;background:var(--cocoa-soft);color:var(--cocoa);padding:2px 8px;border-radius:999px}
+.pbar{height:6px;background:var(--sunk);border-radius:3px;overflow:hidden;margin:10px 0 16px}
+.pbar i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.qtext{font-size:19px;line-height:1.45;font-weight:600;margin:0 0 14px;text-wrap:pretty}
+.opts{display:grid;gap:8px;margin:14px 0 0}
+.opt{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start;text-align:left;font:15.5px/1.45 var(--f-body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--cocoa)}
+.opt .k{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--sunk);font:600 13px var(--f-mono);color:var(--muted)}
+.opt.sel{border-color:var(--cocoa);box-shadow:0 0 0 2px var(--cocoa) inset}
+.opt.sel .k{background:var(--cocoa);color:var(--surface)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.opt.ok .k{background:var(--ok);color:var(--surface)}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt.bad .k{background:var(--bad);color:var(--surface)}
+.opt:disabled{cursor:default}
+.fb{margin-top:14px;border-radius:10px;padding:12px 16px;font-size:15px}
+.fb.ok{background:var(--ok-soft);border:1px solid color-mix(in srgb,var(--ok) 35%,transparent)}
+.fb.bad{background:var(--bad-soft);border:1px solid color-mix(in srgb,var(--bad) 35%,transparent)}
+.fb b{display:block;margin-bottom:2px}
+.qout{overflow-x:auto;background:var(--spo-frame);border-radius:8px;padding:10px;margin:4px 0 6px}
+.score{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.score .big{font-family:var(--f-display);font-size:64px;line-height:1;color:var(--cocoa)}
+.score .big small{font-size:28px;color:var(--muted)}
+.bysess{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+.bysess span{font-size:13.5px;background:var(--sunk);padding:4px 10px;border-radius:999px}
+.review{display:grid;gap:12px;margin-top:16px}
+.ritem{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg)}
+.ritem.ok{border-left:4px solid var(--ok)}
+.ritem.bad{border-left:4px solid var(--bad)}
+.ritem .qtext{font-size:16px;margin-bottom:8px}
+.ritem p{margin:4px 0;font-size:14.5px}
+.ritem .you{color:var(--bad)}
+.ritem.ok .you{color:var(--ok)}
+.ritem .right{color:var(--ok);font-weight:600}
+.hint{font-size:13.5px;color:var(--muted)}
+.runscore{font-family:var(--f-mono);font-size:13px;color:var(--fg)}
+</style>
+
+<div class="qwrap">
+<header class="hero" style="margin-bottom:8px">
+  <nav class="pageswitch" aria-label="Guide pages"><a href="index.html">Full guide</a><a href="course.html">Course methods only</a><a href="revision.html">Revision sheet</a><a href="qcm.html" aria-current="page">MCQ practice</a></nav>
+  <p class="eyebrow">IÉSEG · Data Insights · Sessions 1, 2, 4, 5</p>
+  <h1>MCQ practice</h1>
+  <p class="lede">10 random questions per round, drawn from a bank of <span id="bankSize">90</span> exam-style questions, some with SPSS output to read. Pick the sessions and how you want the answers.</p>
+</header>
+
+<!-- SETUP -->
+<section class="card" id="setup" aria-labelledby="setupTitle">
+  <h2 id="setupTitle" class="lbl">1 · Sessions</h2>
+  <div class="chips" role="group" aria-label="Sessions">
+    <label class="chip"><input type="checkbox" id="sAll" checked><span>All sessions</span></label>
+    <label class="chip"><input type="checkbox" id="s1" value="1" checked class="sess"><span>S1 · Introduction <small id="n1"></small></span></label>
+    <label class="chip"><input type="checkbox" id="s2" value="2" checked class="sess"><span>S2 · Data preparation <small id="n2"></small></span></label>
+    <label class="chip"><input type="checkbox" id="s4" value="4" checked class="sess"><span>S4 · Chi² &amp; one-sample t <small id="n4"></small></span></label>
+    <label class="chip"><input type="checkbox" id="s5" value="5" checked class="sess"><span>S5 · t-tests &amp; ANOVA <small id="n5"></small></span></label>
+  </div>
+  <p class="lbl" style="margin-top:20px">2 · Mode</p>
+  <div class="modes" role="radiogroup" aria-label="Mode">
+    <label class="mode"><input type="radio" name="mode" id="mPractice" value="practice" checked><div><b>Practice</b><p>See right away if you are right, with the correct answer and the explanation.</p></div></label>
+    <label class="mode"><input type="radio" name="mode" id="mExam" value="exam"><div><b>Exam</b><p>Answer all 10 questions first. Then see your score out of 10, the correct answers and the explanations.</p></div></label>
+  </div>
+  <div class="row">
+    <span class="hint" id="poolInfo"></span>
+    <button class="go" id="startBtn" type="button">Start the 10 questions</button>
+  </div>
+</section>
+
+<!-- QUESTION -->
+<section class="card" id="quiz" hidden aria-live="polite">
+  <div class="meta"><span id="qCount">Question 1 / 10</span><span class="stag" id="qSess">S1</span><span class="runscore" id="runScore"></span></div>
+  <div class="pbar"><i id="qBar"></i></div>
+  <p class="qtext" id="qText"></p>
+  <div class="qout" id="qOut" hidden></div>
+  <div class="opts" id="opts"></div>
+  <div id="fb"></div>
+  <div class="row">
+    <button class="ghost" id="prevBtn" type="button">← Previous</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="ghost" id="quitBtn" type="button">Quit</button>
+      <button class="go" id="nextBtn" type="button">Next →</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="card" id="results" hidden>
+  <p class="lbl">Result</p>
+  <div class="score"><span class="big" id="scoreBig">0<small>/10</small></span><span id="scoreMsg"></span></div>
+  <div class="bysess" id="bySess"></div>
+  <div class="row" style="justify-content:flex-start">
+    <button class="go" id="againBtn" type="button">New round, same settings</button>
+    <button class="ghost" id="setupBtn" type="button">Change sessions or mode</button>
+  </div>
+  <div class="review" id="review"></div>
+</section>
+</div>
+
+<script>
+// Question bank. a = index of the correct option (before shuffling). o = optional SPSS output (HTML).
+const BANK = [
+// ---------------- Session 1 ----------------
+{s:1,q:"The number of downloads of different bands' songs is measured at which level?",c:["Nominal","Ordinal","Interval","Ratio"],a:3,e:"Ratio: equal distances and a true, meaningful zero (no downloads at all)."},
+{s:1,q:"The positions of bands in the download chart (1st, 2nd, 3rd…) are…",c:["Nominal","Ordinal","Interval","Ratio"],a:1,e:"Ordinal: we know the order, but not how many more downloads number 1 had than number 2."},
+{s:1,q:"The year in which a song was downloaded (98, 99, 00, 01…) is…",c:["Nominal","Ordinal","Interval","Ratio"],a:2,e:"Interval: equal distances between years, but year 00 is not “no year”, so there is no true zero."},
+{s:1,q:"The phone numbers bands received from fans are…",c:["Nominal","Ordinal","Interval","Ratio"],a:0,e:"Nominal: the numbers have no meaningful order; they could as well be letters."},
+{s:1,q:"A satisfaction question answered on a 1–5 scale is treated in this course as…",c:["Nominal","Ordinal","Interval","Ratio"],a:1,e:"Fewer than 7 points = ordinal. 7 points or more = interval."},
+{s:1,q:"A 7-point Likert scale (1 = completely disagree, 7 = completely agree) is treated as…",c:["Nominal","Ordinal","Interval","Ratio"],a:2,e:"7 points or more = interval, so Measure = Scale in SPSS."},
+{s:1,q:"Temperature in degrees Celsius is…",c:["Ordinal","Interval","Ratio","Nominal"],a:1,e:"Interval: equal distances, but 0 °C does not mean “no temperature”."},
+{s:1,q:"An experimenter rank-orders 30 children by IQ and gives them a score from 30 (most intelligent) to 1. The new variable is…",c:["Nominal","Ordinal","Interval","Ratio"],a:1,e:"A ranking only keeps the order, not the distances: ordinal."},
+{s:1,q:"In the SPSS Data View, one row represents…",c:["One variable","One question of the survey","One case (e.g. one respondent)","One value label"],a:2,e:"Rows = cases (one unit's answers to all variables); columns = variables."},
+{s:1,q:"Which variable name is allowed in SPSS?",c:["2nd_visit","visit-time","visit time","visit_time"],a:3,e:"No symbols like “-”, no spaces, and the name cannot start with a number."},
+{s:1,q:"A variable contains the words “yes” and “no” (String). What is the right order to fix it?",c:["Change the Type to Numeric, then type the numbers","First replace the words by numbers, then change the Type to Numeric","Only add value labels","Delete the variable"],a:1,e:"Steps in order: first update the Data View (words → numbers), then change String to Numeric, then add value labels."},
+{s:1,q:"Which value labels does a 1–7 “disagree – agree” scale need?",c:["A label for every value 1 to 7","Only the end-points (1 and 7)","No labels at all","Only the midpoint 4"],a:1,e:"Invented metric scales (Likert, semantic differential): label the end-points."},
+{s:1,q:"Which value labels does the variable “age in years” need?",c:["One per age","Only the youngest and oldest","None: it is a natural scale","Only 0"],a:2,e:"Natural scales (age, €, time, height) need no labels."},
+{s:1,q:"For a nominal variable, which measure of central tendency can you use?",c:["Mean","Median","Mode","Standard deviation"],a:2,e:"Nominal: mode only. Ordinal: mode and median. Interval/ratio: mode, median and mean."},
+{s:1,q:"For an ordinal variable, which measures can you use?",c:["Mode only","Mode and median","Mode, median and mean","Mean and SD"],a:1,e:"The mean needs equal distances (interval/ratio), which ordinal data do not have."},
+{s:1,q:"“Does playing classical vs hip-hop music affect the time customers spend in the store?” What is the IV?",c:["Time spent in the store","The type of music","The store","The customers"],a:1,e:"IV = the supposed cause (music type). DV = the effect (time spent)."},
+{s:1,q:"How do you report a standard deviation of 0.5 the course way?",c:["SD = 0.50","SD = .5","SD = .50","sd = 0,5"],a:2,e:"2 decimals, and numbers below 1 lose the 0: .50 (but 10.50 stays 10.50)."},
+{s:1,q:"What does a 95% confidence interval for a mean tell you?",c:["95% of the respondents fall inside it","A range that contains the population mean in 95% of samples","The sample mean is 95% correct","The p-value is .95"],a:1,e:"The CI estimates where the population mean lies: we are 95% confident it is within [lower; upper]."},
+{s:1,q:"Why is a sample mean not exactly the population mean?",c:["Because SPSS rounds numbers","Because of sampling variation: samples contain different members of the population","Because the SD is too big","Because of missing values only"],a:1,e:"Sampling variation: different samples contain different people, so their means vary."},
+{s:1,q:"Look at the output. How many respondents did not answer the age question?",o:`<div class="spo"><div class="t">Statistics</div><div class="sub">Age</div><table><tr><td class="rl" rowspan="2">N</td><td class="rl">Valid</td><td>667</td></tr><tr><td class="rl">Missing</td><td>24</td></tr><tr><td class="rl" colspan="2">Mean</td><td>34.74</td></tr><tr><td class="rl" colspan="2">Median</td><td>32.00</td></tr><tr><td class="rl" colspan="2">Std. Deviation</td><td>12.768</td></tr></table></div>`,c:["667","24","691","34"],a:1,e:"N Missing = 24. N Valid (667) are those who answered; 667 + 24 = 691 respondents."},
+{s:1,q:"How do you report these descriptives?",o:`<div class="spo"><div class="t">Statistics</div><div class="sub">Age</div><table><tr><td class="rl" rowspan="2">N</td><td class="rl">Valid</td><td>667</td></tr><tr><td class="rl">Missing</td><td>24</td></tr><tr><td class="rl" colspan="2">Mean</td><td>34.74</td></tr><tr><td class="rl" colspan="2">Median</td><td>32.00</td></tr><tr><td class="rl" colspan="2">Mode</td><td>23</td></tr><tr><td class="rl" colspan="2">Std. Deviation</td><td>12.768</td></tr></table></div>`,c:["Mo = 23.00, Md = 32.00, M = 34.74, SD = 12.77","M = 34.7436, SD = 12.768","Mean = 34.74 (12.768)","Mo = 23, Md = 32, M = 35, SD = 13"],a:0,e:"Symbols Mo, Md, M, SD with 2 decimals."},
+{s:1,q:"In a frequency table, the mode is…",c:["The row with the highest Cumulative Percent","The category with the highest Frequency","The middle category","The Total row"],a:1,e:"The mode is the most frequent score. Cumulative Percent always ends at 100 and is used for cutting into groups."},
+// ---------------- Session 2 ----------------
+{s:2,q:"Which of these is NOT an impossible value on a 1–7 scale?",c:["12","8 = “no opinion”","4 = “neutral”","“Don't know”"],a:2,e:"The neutral midpoint is a valid answer. Out-of-range, extremely unlikely or unusable answers (don't know, no opinion) are impossible values."},
+{s:2,q:"A 1–7 item contains the value 12, which has no label. What does SPSS do with it in analyses?",c:["It ignores it automatically","It uses it like any other value","It turns it into 7","It deletes the case"],a:1,e:"SPSS does NOT ignore impossible values on its own, even if they have no label. You must declare them missing."},
+{s:2,q:"Customer length is 1173 days while all others are between 100 and 300; it is obviously a typo for 173. What do you do?",c:["Declare 1173 as missing","Fix it by hand in Data View (173) and report it","Delete the variable","Leave it"],a:1,e:"Obvious mistake with only one solution: fix it in Data View. Otherwise: declare as missing. Report both."},
+{s:2,q:"The CEO answered “8 = don't know” on a 1–7 interest scale. What do you do?",c:["Recode 8 into 4","Indicate 8 as missing in Variable View","Fix it to 7","Keep it, it is a valid answer"],a:1,e:"An unusable answer is represented by a specific score: indicate it as missing so it is ignored."},
+{s:2,q:"Which statement about impossible values is correct?",c:["Only values fixed by hand must be reported","Only missing values must be reported","All fixed values and all values set as missing must be reported","They never need to be reported"],a:2,e:"Be transparent about the data preparation: report all of them."},
+{s:2,q:"Which menu creates a new variable as a calculation of other variables?",c:["Data › Select Cases","Transform › Compute Variable","Analyze › Descriptive Statistics","Transform › Recode into Same Variables"],a:1,e:"Transform › Compute Variable. Afterwards: check the Data View and update the Variable View."},
+{s:2,q:"You used Data › Select Cases for one analysis. What must you do afterwards?",c:["Nothing","Save the file","Switch it back off (All cases, or delete the filter variable)","Delete the unselected cases"],a:2,e:"Otherwise every next analysis only uses the subset. Also report the selection with its coding."},
+{s:2,q:"You split a metric variable into 3 groups. What % of people should each group contain?",c:["About 25%","About 33.33%","About 50%","It does not matter"],a:1,e:"X groups → 100%/X each. 3 groups → 33.33%, so cut near 33.33 and 66.66 cumulative %."},
+{s:2,q:"Where do you cut for the first of 3 groups?",o:`<div class="spo"><div class="t">Number of posts (excerpt)</div><table><tr><th colspan="2"></th><th>Frequency</th><th>Percent</th><th>Cumulative Percent</th></tr><tr><td class="rl" rowspan="3">Valid</td><td class="rl">1665</td><td>1</td><td>2.0</td><td>32.0</td></tr><tr><td class="rl">1761</td><td>1</td><td>2.0</td><td>34.0</td></tr><tr><td class="rl">1890</td><td>1</td><td>2.0</td><td>36.0</td></tr></table></div>`,c:["After 1665 (32.0%)","After 1761 (34.0%)","After 1890 (36.0%)","Exactly at 33.33"],a:1,e:"Split after the cumulative % closest to 33.33: |34.0 − 33.33| = 0.67 < |32.0 − 33.33| = 1.33."},
+{s:2,q:"Which menu turns a metric variable into a 3-group variable in the course?",c:["Transform › Compute Variable","Transform › Recode into Different Variables","Data › Select Cases","Analyze › Scale › Reliability Analysis"],a:1,e:"Recode into a DIFFERENT variable, so the original metric variable is kept."},
+{s:2,q:"In Recode into Different Variables, what is the first old → new value you specify (course steps)?",c:["Lowest through 10 → 1","System- or user-missing → System-missing","All other values → Copy","Else → 0"],a:1,e:"Step 3.1 in the slides: missing values first (System- or user-missing → System-missing), then the recoding."},
+{s:2,q:"In a recode range, the value you type is…",c:["Excluded from that category","Always included in that category","Rounded first","Set to missing"],a:1,e:"Useful hint from the slides: the value you mention is always included in that category."},
+{s:2,q:"Which of these is NOT one of the 4 requirements for a summated scale?",c:["Same answering format","Items asked together","Items have the same mean","Items are internally reliable (Cronbach's α)"],a:2,e:"The 4 requirements: same format, asked together, same construct (common sense), internal reliability."},
+{s:2,q:"Cronbach's α = .78. Which level is this?",c:["Excellent","Very good","Good","Acceptable"],a:2,e:".70 ≤ α < .80 = good. ≥ .90 excellent, .80–.89 very good, .60–.69 acceptable, .50–.59 poor."},
+{s:2,q:"Cronbach's α = .65. Which level is this?",c:["Good","Acceptable","Poor","Unacceptable"],a:1,e:".60 ≤ α < .70 = acceptable."},
+{s:2,q:"Item “Shopping is a drag” is phrased in the opposite direction from the other items. What do you do before checking α?",c:["Delete it","Recode it by mirroring (1↔7, 2↔6, 3↔5, 4 stays)","Multiply it by −1","Nothing"],a:1,e:"Items must be phrased in the same direction: recode into a different variable by mirroring."},
+{s:2,q:"α = .67 with 4 items. Deleting item 3 gives .74. What do you do?",c:["Keep all items","Remove item 3 from the scale (it moves to another level) but keep it in the dataset","Delete item 3 from the dataset","Stop: no scale possible"],a:1,e:"Remove only if α moves to another level (acceptable → good). Never delete it from the dataset."},
+{s:2,q:"α = .91. Deleting one item gives .93. What do you do?",c:["Remove the item","Keep all items","Recode the item","Use Pearson instead"],a:1,e:"Both excellent: only a small increase. If the difference is small, keep more items."},
+{s:2,q:"Your construct has only 2 items. How do you check reliability?",c:["Cronbach's α","Pearson correlation r (Analyze › Correlate › Bivariate)","Chi² test","You cannot"],a:1,e:"With 2 items: no α but Pearson r, interpreted with the same thresholds, reported as r = .xx."},
+{s:2,q:"What are the minimum and maximum numbers of items for a scale according to the slides?",c:["2 and 5","3 and 10","3 and 20","No limit"],a:1,e:"Min. 3 items, max. 10 items (α increases with the number of items)."},
+{s:2,q:"Which measurement level is a summated scale?",c:["Always nominal","Same as its items","Always interval","Always ordinal"],a:2,e:"The slides: summated scales are ALWAYS interval (Measure = Scale)."},
+{s:2,q:"You get this output. What is the most likely cause?",o:`<div class="spo"><div class="t">Reliability Statistics</div><table><tr><th>Cronbach's Alpha</th><th>N of Items</th></tr><tr><td>-.049<sup>a</sup></td><td>5</td></tr></table><div class="foot">a. The value is negative due to a negative average covariance among items. This violates reliability model assumptions. You may want to check item codings.</div></div>`,c:["Too many missing values","Some items are phrased in the other direction and were not recoded","The sample is too small","Normal result"],a:1,e:"A negative α means some items go the opposite way: recode them by mirroring."},
+{s:2,q:"In this output, should an item be removed?",o:`<div class="spo"><div class="t">Reliability Statistics</div><table><tr><th>Cronbach's Alpha</th><th>N of Items</th></tr><tr><td>.917</td><td>3</td></tr></table></div><div class="spo"><div class="t">Item-Total Statistics</div><table><tr><th></th><th>Corrected Item-Total Correlation</th><th>Cronbach's Alpha if Item Deleted</th></tr><tr><td class="rl">Easy not to eat</td><td>.789</td><td>.920</td></tr><tr><td class="rl">Easy to control amount</td><td>.860</td><td>.863</td></tr><tr><td class="rl">Can easily say no</td><td>.857</td><td>.861</td></tr></table></div>`,c:["Yes, “Easy not to eat”, because .920 > .917","No: .920 stays excellent like .917, so keep all 3","Yes, “Can easily say no”, because .861 is the lowest","No scale can be made"],a:1,e:"Look at “Cronbach's Alpha if Item Deleted”: .917 → .920 is a tiny increase in the same level (excellent). Keep all items."},
+{s:2,q:"When do you create the summated scale with Compute Variable?",c:["Always, for every matrix question","Only if all 4 requirements are met","Only if α is negative","Before checking α"],a:1,e:"If the requirements are not met, you do not create a scale and analyse each item separately."},
+// ---------------- Session 4 ----------------
+{s:4,q:"Which alternative hypothesis (H1) follows the course structure?",c:["Hunger has an effect on purchases","Hungry people are different","People who are hungry will buy more products than people who are not hungry","Hunger is good for sales"],a:2,e:"H1: cause → effect, specific DV, benchmark in the IV (“than…”), clear direction, testable."},
+{s:4,q:"Which null hypothesis (H0) follows the course structure?",c:["Hungry people will not buy more products","People who are hungry will buy the same amount of products as people who are not hungry","Hunger has no direction","Hungry people will buy less"],a:1,e:"H0 states a clear lack of effect: equal / the same / similar. “Not more” is ambiguous (equal or less?)."},
+{s:4,q:"What does the p-value represent?",c:["The probability that H1 is true","The probability that the effect found in the dataset is due to chance (if H0 were true)","The size of the effect","The percentage of respondents who agree"],a:1,e:"We assume H0 is true and calculate how likely the observed effect is by chance."},
+{s:4,q:"A test gives p = .050. Conclusion?",c:["Not significant","Significant: reject H0","Borderline: report nothing","Increase the sample"],a:1,e:"p ≤ .050 → significant. p > .050 → not significant."},
+{s:4,q:"H1 predicts that people eat MORE chocolate after thinking about it. The test gives p = .020, but they ate LESS. Conclusion?",c:["H1 is supported","H0 is rejected but H1 is not supported","H0 is supported","The test is wrong"],a:1,e:"A significant result does not show the direction: interpret the means before confirming H1."},
+{s:4,q:"In Crosstabs, where do you put the variables (course rule of thumb)?",c:["Rows = IV, Columns = DV","Rows = DV, Columns = IV","Both in Rows","It does not matter"],a:1,e:"Rows = dependent variable, Columns = independent variable."},
+{s:4,q:"In a 2×2 crosstab, what is the condition for the Chi² test?",c:["Max 20% of expected counts below 5","No expected count below 5","All observed counts above 10","N above 100"],a:1,e:"2×2: no expected count < 5. Larger tables: all expected counts > 1 and max 20% below 5."},
+{s:4,q:"A 3×4 table: 2 of 12 cells have an expected count below 5, the minimum expected count is 1.9. Is the condition met?",c:["Yes: 16.7% ≤ 20% and all expected counts > 1","No: some counts are below 5","No: the minimum is below 5","Only if p < .050"],a:0,e:"Larger tables: all expected > 1 and max 20% below 5. 2/12 = 16.7%."},
+{s:4,q:"What does this footnote mean for your Chi² test?",o:`<div class="spo"><div class="t">Chi-Square Tests</div><table><tr><th></th><th>Value</th><th>df</th><th>Asymptotic Significance (2-sided)</th></tr><tr><td class="rl">Pearson Chi-Square</td><td>43.421<sup>a</sup></td><td>18</td><td>.001</td></tr><tr><td class="rl">N of Valid Cases</td><td>691</td><td class="e"></td><td class="e"></td></tr></table><div class="foot">a. 9 cells (30.0%) have expected count less than 5. The minimum expected count is 1.75.</div></div>`,c:["The test is significant, report it","The condition is not met (30% > 20%): merge categories or stop","Use Phi instead","Read the Likelihood Ratio row"],a:1,e:"The Chi² may not be reliable. Merge cells (Recode) or STOP, even if p = .001."},
+{s:4,q:"Which effect size do you use for a Chi² on a 2×3 table?",c:["Phi","Cramer's V","Cohen's d","Eta²"],a:1,e:"Phi for 2×2 tables, Cramer's V as soon as one variable has more than 2 categories."},
+{s:4,q:"Cramer's V = .35. How big is the effect?",c:["Negligible","Small","Moderate","Big"],a:2,e:".30–.39 moderate. .20–.29 small, .40–.69 big, ≥ .70 very big, .01–.19 negligible."},
+{s:4,q:"Which row of the Chi-Square Tests table do you report?",c:["Likelihood Ratio","Linear-by-Linear Association","Pearson Chi-Square","N of Valid Cases"],a:2,e:"Read and report the Pearson Chi-Square row."},
+{s:4,q:"How do you report this result?",o:`<div class="spo"><div class="t">Chi-Square Tests</div><table><tr><th></th><th>Value</th><th>df</th><th>Asymptotic Significance (2-sided)</th></tr><tr><td class="rl">Pearson Chi-Square</td><td>1.452<sup>a</sup></td><td>2</td><td>.485</td></tr></table><div class="foot">a. 0 cells (0.0%) have expected count less than 5. The minimum expected count is 12.40.</div></div>`,c:["χ²(2) = 1.45, p = .485","χ²(2.00) = 1.452, p = 0.485","χ² = 1.45, df = 2, p < .05","χ²(2) = 1.45, p = .485, Cramer's V = .11 (big effect)"],a:0,e:"df without decimals, χ² with 2 decimals, p with 3 decimals. Not significant → no effect size interpretation."},
+{s:4,q:"A significant Chi² between gender and Internet usage allows you to say…",c:["Gender causes Internet usage","Gender and Internet usage are associated","Internet usage causes gender","Nothing"],a:1,e:"Association ≠ causality."},
+{s:4,q:"When do you use a one-sample t-test?",c:["To compare 2 groups","To compare the mean of one group with a known or predicted value","To compare 3 groups","To test two categorical variables"],a:1,e:"One category in the IV (or no IV): compare the dataset mean with a known value (e.g. the midpoint 4)."},
+{s:4,q:"One-sample t-test with N = 240. What is the df?",c:["240","239","238","241"],a:1,e:"df = number of cases − 1."},
+{s:4,q:"How do you report the significance in this output?",o:`<div class="spo"><div class="t">One-Sample Test</div><table><tr><th rowspan="3"></th><th colspan="5">Test Value = 4</th></tr><tr><th rowspan="2">t</th><th rowspan="2">df</th><th colspan="2">Significance</th><th rowspan="2">Mean Difference</th></tr><tr><th>One-Sided p</th><th>Two-Sided p</th></tr><tr><td class="rl">Coolness of the ad</td><td>-36.180</td><td>239</td><td>.000</td><td>.000</td><td>-1.817</td></tr></table></div>`,c:["t(239) = −36.18, p = .000","t(239) = −36.18, p < .001","t(240) = −36.18, p < .05","t = −36.180, p = 0"],a:1,e:"Two-sided p (course rule). .000 must be written p < .001."},
+{s:4,q:"Cohen's d = .50. How big is the difference?",c:["Small","Moderate","Big","No difference"],a:1,e:".21–.79 moderate. ≥ .80 big, .01–.20 small."},
+{s:4,q:"Cohen's d = −.85. Interpretation?",c:["Small negative difference","Big difference (the sign only gives the direction)","Not significant","Moderate difference"],a:1,e:"Look at the absolute value: |.85| ≥ .80 = big."},
+{s:4,q:"In a t-test sentence, which statistics do you report with the means?",c:["SD","SE (standard error)","Variance","Range"],a:1,e:"Course format: M = …, SE = … (2 decimals)."},
+{s:4,q:"When do you look at the effect size?",c:["Always","Only if the test is significant","Only if p > .050","Never in reports"],a:1,e:"Only a real (significant) effect gets an effect size to judge its practical relevance."},
+{s:4,q:"Two 95% CIs of two group means overlap a lot. What does that suggest?",c:["The groups probably differ","The means probably come from the same population (not different)","The test is significant","The SD is zero"],a:1,e:"Overlapping CIs: probably the same population. No overlap: probably different populations."},
+{s:4,q:"You want to describe ONE categorical variable (e.g. preferred gift). What do you use?",c:["The mean","Frequencies / % per category","A t-test","Cronbach's α"],a:1,e:"The mean is meaningless for nominal data; describe with frequencies and percentages."},
+// ---------------- Session 5 ----------------
+{s:5,q:"Each customer rates the quality of their own brand AND of the competitor. Which test?",c:["Independent samples t-test","Paired (dependent) samples t-test","One-way ANOVA","Chi²"],a:1,e:"The same units took part in both categories of the IV → paired."},
+{s:5,q:"Shoppers are randomly shown the old or the new “buy now” button (A/B test). Which test for number of purchases?",c:["Paired samples t-test","Independent samples t-test","One-sample t-test","Chi²"],a:1,e:"Different units in each category of the IV → independent."},
+{s:5,q:"You compare click-through rates of 5-, 10- and 15-second ads. Which test?",c:["Independent t-test","Paired t-test","One-way ANOVA","Chi²"],a:2,e:"Metric DV with more than 2 independent categories → ANOVA."},
+{s:5,q:"What is required of the DV for every t-test?",c:["Nominal","Ordinal","Metric (interval or ratio)","Dichotomous"],a:2,e:"t-tests and ANOVA compare means: the DV must be metric."},
+{s:5,q:"What is H0 of Levene's test?",c:["The means are equal","The variances in the groups are equal","The groups are independent","The effect is small"],a:1,e:"Levene tests equality of variances, not means. It decides which row/test you read."},
+{s:5,q:"Which row do you read?",o:`<div class="spo"><div class="t">Independent Samples Test</div><table><tr><th colspan="2" rowspan="2"></th><th colspan="2">Levene's Test</th><th colspan="3">t-test for Equality of Means</th></tr><tr><th>F</th><th>Sig.</th><th>t</th><th>df</th><th>Two-Sided p</th></tr><tr><td class="rl" rowspan="2">Attractiveness</td><td class="rl">Equal variances assumed</td><td>9.704</td><td>.002</td><td>1.764</td><td>689</td><td>.078</td></tr><tr><td class="rl">Equal variances not assumed</td><td class="e"></td><td class="e"></td><td>2.020</td><td>184.215</td><td>.045</td></tr></table></div>`,c:["Top row: t(689) = 1.76, p = .078, not significant","Bottom row: t(184.22) = 2.02, p = .045, significant","Both rows","Neither: Levene is significant so stop"],a:1,e:"Levene Sig. = .002 ≤ .050 → variances not equal → bottom row."},
+{s:5,q:"Levene's test gives Sig. = .410 in an independent t-test. Which row?",c:["Equal variances assumed (top)","Equal variances not assumed (bottom)","The one with the smallest p","Average of both"],a:0,e:"p > .050 → equal variances assumed → top row."},
+{s:5,q:"In a paired t-test output, which table contains the result of the test?",c:["Paired Samples Statistics","Paired Samples Correlations","Paired Samples Test","Case Processing Summary"],a:2,e:"Paired Samples Correlations only shows how related the two answers are; its p is not the test."},
+{s:5,q:"How many decimals for the df of the bottom row (equal variances not assumed)?",c:["0","2","3","None, df is not reported"],a:1,e:"df with 0 decimals on the top row, 2 decimals on the bottom row (e.g. t(184.22))."},
+{s:5,q:"ANOVA: Levene's test Sig. = .003. What do you read?",c:["ANOVA table + Bonferroni","Welch (Robust Tests) + Tamhane","ANOVA table + Tamhane","Welch + Bonferroni"],a:1,e:"Variances not equal → Welch and Tamhane. Equal (p > .050) → ANOVA and Bonferroni."},
+{s:5,q:"ANOVA: Levene's test Sig. = .240. What do you read?",c:["ANOVA table + Bonferroni","Welch + Tamhane","Only the post hoc","Only Descriptives"],a:0,e:"p > .050 → equal variances → ANOVA F and Bonferroni post hoc."},
+{s:5,q:"Welch's F(2, 197.58) = 1.20, p = .304. Do you look at the post hoc tests?",c:["Yes, to find which groups differ","No: the overall test is not significant, all means are equal","Only Bonferroni","Only if eta² is large"],a:1,e:"Never look at post hoc tests when the general ANOVA/Welch test is not significant."},
+{s:5,q:"Eta² = .05. How big is the difference?",c:["Small","Medium","Large","No difference"],a:1,e:".04–.14 medium. ≥ .14 large, .01–.04 small."},
+{s:5,q:"What do post hoc tests do after a significant ANOVA?",c:["They test equality of variances","They compare each time two categories to see which ones differ","They compute the effect size","They check the expected counts"],a:1,e:"ANOVA says at least one group differs; post hoc tests say which pairs."},
+{s:5,q:"An independent t-test gives t(38) = −.36, p = .719. How do you report the groups?",c:["Group 1 scored lower than group 2","The groups are equal in the population; no effect size","Small effect","H1 is supported"],a:1,e:"Report the means, but never say one is higher if not significant. No effect size because not significant."},
+{s:5,q:"How do you make the bar chart for a paired t-test in Chart Builder?",c:["DV on Y, IV on X","Drag both paired variables into the same Y-axis box","Use a pie chart","Use a clustered bar with the filter"],a:1,e:"Simple Bar: drag the first variable on Y, then the second onto the “+” of the same box."},
+{s:5,q:"In the ANOVA report, how do you write a non-significant post hoc comparison?",c:["Leave it out","p > .050","p = n.s.","The exact p with 3 decimals"],a:1,e:"Report ALL comparisons: exact p if significant, p > .050 if not."},
+{s:5,q:"In the Independent-Samples T Test dialog, what do you type in Define Groups?",c:["The labels of the DV","The codes of the two IV categories (e.g. 0 and 1)","The number of cases","The test value"],a:1,e:"Define Groups depends on the IV values, e.g. Group 1 = 0 (old button), Group 2 = 1 (new button)."},
+{s:5,q:"Which comparisons are significant (Levene was significant)?",o:`<div class="spo"><div class="t">Multiple Comparisons</div><table><tr><th colspan="3"></th><th>Mean Difference (I-J)</th><th>Sig.</th></tr><tr><td class="rl" rowspan="3">Bonferroni</td><td class="rl">5 sec</td><td class="rl">10 sec</td><td>-1.800</td><td>1.000</td></tr><tr><td class="rl">5 sec</td><td class="rl">15 sec</td><td>15.500<sup>*</sup></td><td>.006</td></tr><tr><td class="rl">10 sec</td><td class="rl">15 sec</td><td>17.300<sup>*</sup></td><td>.002</td></tr><tr><td class="rl" rowspan="3">Tamhane</td><td class="rl">5 sec</td><td class="rl">10 sec</td><td>-1.800</td><td>.979</td></tr><tr><td class="rl">5 sec</td><td class="rl">15 sec</td><td>15.500<sup>*</sup></td><td>.010</td></tr><tr><td class="rl">10 sec</td><td class="rl">15 sec</td><td>17.300<sup>*</sup></td><td>.003</td></tr></table><div class="foot">*. The mean difference is significant at the 0.05 level. (Illustration.)</div></div>`,c:["Bonferroni: 15 s differs from 5 s (p = .006) and 10 s (p = .002)","Tamhane: 15 s differs from 5 s (p = .010) and 10 s (p = .003); 5 s = 10 s (p > .050)","All three pairs differ","None"],a:1,e:"Levene significant → Tamhane block. 5 vs 10 s is not significant."},
+{s:5,q:"Which is the correct ANOVA report when Levene is significant?",c:["F(2, 297) = 6.86, p = .001","Welch's F(2, 197.58) = 6.86, p = .001","Welch's F(2, 198) = 6.860, p = 0.001","t(2) = 6.86, p = .001"],a:1,e:"Welch's F with df1 and df2 (2 decimals for df2), value with 2 decimals, p with 3 decimals."},
+{s:5,q:"Each pair appears twice in Multiple Comparisons (A–B and B–A). Why?",c:["Two different tests","SPSS shows every combination; the two rows are the same comparison with opposite sign","One is for each gender","Because Levene is significant"],a:1,e:"Read each pair once; the sign of the mean difference just flips."},
+{s:5,q:"What must the dataset look like for a paired t-test?",c:["One DV column and one group column","Two columns: the DV measured for category 1 and for category 2","One column only","Three columns"],a:1,e:"Paired: same people, two columns. Independent: one DV column + a column with the group code."}
+];
+
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var N=10, round=[], idx=0, mode='practice';
+  var sessBoxes=[].slice.call(document.querySelectorAll('.sess'));
+  $('bankSize').textContent=BANK.length;
+  [1,2,4,5].forEach(function(s){$('n'+s).textContent='('+BANK.filter(function(q){return q.s===s}).length+')'});
+  function chosen(){return sessBoxes.filter(function(b){return b.checked}).map(function(b){return +b.value})}
+  function refresh(){
+    var c=chosen(); $('sAll').checked=c.length===4;
+    var pool=BANK.filter(function(q){return c.indexOf(q.s)>=0}).length;
+    $('poolInfo').textContent=c.length?pool+' questions available in the selected sessions':'Select at least one session';
+    $('startBtn').disabled=!c.length;
+  }
+  $('sAll').addEventListener('change',function(){var v=this.checked;sessBoxes.forEach(function(b){b.checked=v});refresh()});
+  sessBoxes.forEach(function(b){b.addEventListener('change',refresh)});
+  refresh();
+  function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+  function start(){
+    var c=chosen(); if(!c.length)return;
+    mode=document.querySelector('input[name=mode]:checked').value;
+    var pool=shuffle(BANK.filter(function(q){return c.indexOf(q.s)>=0})).slice(0,N);
+    round=pool.map(function(q){
+      var order=shuffle(q.c.map(function(_,i){return i}));
+      return {q:q,order:order,pick:null,locked:false};
+    });
+    idx=0;
+    $('setup').hidden=true;$('results').hidden=true;$('quiz').hidden=false;
+    render(); $('quiz').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  function score(){return round.filter(function(r){return r.pick!==null&&r.order[r.pick]===r.q.a}).length}
+  function render(){
+    var r=round[idx], q=r.q, total=round.length;
+    $('qCount').textContent='Question '+(idx+1)+' / '+total;
+    $('qSess').textContent='Session '+q.s;
+    $('qBar').style.width=((idx+(r.locked||(mode==='exam'&&r.pick!==null)?1:0))/total*100)+'%';
+    $('runScore').textContent=mode==='practice'?'Score: '+score()+' / '+round.filter(function(x){return x.locked}).length:'';
+    $('qText').textContent=q.q;
+    if(q.o){$('qOut').innerHTML=q.o;$('qOut').hidden=false}else{$('qOut').hidden=true;$('qOut').innerHTML=''}
+    var box=$('opts'); box.innerHTML='';
+    r.order.forEach(function(orig,pos){
+      var b=document.createElement('button'); b.type='button'; b.className='opt'; b.id='opt-'+pos;
+      b.innerHTML='<span class="k">'+'ABCD'[pos]+'</span><span></span>';
+      b.lastChild.textContent=q.c[orig];
+      if(r.pick===pos)b.classList.add('sel');
+      if(mode==='practice'&&r.locked){
+        b.disabled=true;
+        if(orig===q.a)b.classList.add('ok');
+        else if(r.pick===pos)b.classList.add('bad');
+      }
+      b.addEventListener('click',function(){choose(pos)});
+      box.appendChild(b);
+    });
+    var fb=$('fb'); fb.innerHTML='';
+    if(mode==='practice'&&r.locked){
+      var good=r.order[r.pick]===q.a, d=document.createElement('div');
+      d.className='fb '+(good?'ok':'bad');
+      d.innerHTML='<b></b><span></span>';
+      d.firstChild.textContent=good?'Correct':'Not quite. Right answer: '+q.c[q.a];
+      d.lastChild.textContent=q.e; fb.appendChild(d);
+    }
+    $('prevBtn').disabled=idx===0;
+    var last=idx===total-1;
+    $('nextBtn').textContent=last?(mode==='exam'?'Finish and see my score':'See my score'):'Next →';
+    $('nextBtn').disabled=(mode==='practice'&&!r.locked)||(mode==='exam'&&r.pick===null);
+  }
+  function choose(pos){
+    var r=round[idx]; if(mode==='practice'&&r.locked)return;
+    r.pick=pos; if(mode==='practice')r.locked=true;
+    render();
+    if(mode==='practice'){var f=$('fb');if(f.firstChild)f.firstChild.scrollIntoView({behavior:'smooth',block:'nearest'})}
+  }
+  function next(){if(idx<round.length-1){idx++;render();$('quiz').scrollIntoView({behavior:'smooth',block:'start'})}else finish()}
+  function finish(){
+    var sc=score(), total=round.length;
+    $('quiz').hidden=true;$('results').hidden=false;
+    $('scoreBig').innerHTML=sc+'<small>/'+total+'</small>';
+    var pct=sc/total;
+    $('scoreMsg').textContent=pct>=.9?'Excellent, you are ready.':pct>=.7?'Good. Read the explanations of the ones you missed.':pct>=.5?'Halfway there. Revise the sessions where you lost points.':'Go back to the revision sheet, then try again.';
+    var by={}; round.forEach(function(r){var s=r.q.s;by[s]=by[s]||[0,0];by[s][1]++;if(r.order[r.pick]===r.q.a)by[s][0]++});
+    var bs=$('bySess'); bs.innerHTML='';
+    Object.keys(by).sort().forEach(function(s){var e=document.createElement('span');e.textContent='Session '+s+': '+by[s][0]+' / '+by[s][1];bs.appendChild(e)});
+    var rv=$('review'); rv.innerHTML='';
+    round.forEach(function(r,i){
+      var q=r.q, good=r.order[r.pick]===q.a, d=document.createElement('div');
+      d.className='ritem '+(good?'ok':'bad');
+      d.innerHTML='<p class="qtext"></p>'+(q.o?'<div class="qout"></div>':'')+'<p class="you"></p>'+(good?'':'<p class="right"></p>')+'<p class="hint"></p>';
+      d.querySelector('.qtext').textContent=(i+1)+'. '+q.q;
+      if(q.o)d.querySelector('.qout').innerHTML=q.o;
+      d.querySelector('.you').textContent=(good?'✓ Your answer: ':'✗ Your answer: ')+(r.pick===null?'no answer':q.c[r.order[r.pick]]);
+      if(!good)d.querySelector('.right').textContent='Correct answer: '+q.c[q.a];
+      d.querySelector('.hint').textContent=q.e;
+      rv.appendChild(d);
+    });
+    $('results').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  $('startBtn').addEventListener('click',start);
+  $('nextBtn').addEventListener('click',next);
+  $('prevBtn').addEventListener('click',function(){if(idx>0){idx--;render()}});
+  $('quitBtn').addEventListener('click',function(){$('quiz').hidden=true;$('setup').hidden=false});
+  $('againBtn').addEventListener('click',start);
+  $('setupBtn').addEventListener('click',function(){$('results').hidden=true;$('setup').hidden=false;$('setup').scrollIntoView({behavior:'smooth'})});
+  document.addEventListener('keydown',function(ev){
+    if($('quiz').hidden)return;
+    var k=ev.key.toUpperCase(), m='ABCD'.indexOf(k);
+    if(m<0&&'1234'.indexOf(k)>=0)m=+k-1;
+    if(m>=0&&m<round[idx].order.length&&!(ev.target&&ev.target.tagName==='INPUT')){choose(m)}
+    else if(ev.key==='Enter'&&!$('nextBtn').disabled&&document.activeElement.tagName!=='BUTTON'){next()}
+  });
+})();
+</script>
+
+</body>
+</html>
