@@ -314,7 +314,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <li><span>The buttons on the right side (<span class="btn">Statistics…</span>, <span class="btn">Options…</span>, <span class="btn">Post Hoc…</span>) open sub-dialogs. Tick what you need, then <span class="btn">Continue</span> brings you back.</span></li>
     <li><span><span class="btn">OK</span> runs the analysis. <span class="btn">Paste</span> writes the equivalent syntax into a Syntax window instead: handy to keep a record of what you did. <span class="btn">Reset</span> clears the dialog (SPSS remembers your last settings, which can trick you).</span></li>
   </ol>
-  <div class="note tip"><strong>Tip: show variable names in lists</strong><p>Once you add labels, SPSS lists variables by their long label. To see the short names (feel1, att1…) instead: <span class="path"><kbd>Edit</kbd><span class="sep">›</span><kbd>Options</kbd><span class="sep">›</span><kbd>General</kbd></span> (on Mac: <span class="path"><kbd>SPSS Statistics</kbd><span class="sep">›</span><kbd>Settings</kbd></span>) → Variable Lists: <strong>Display names</strong> and <strong>File</strong> order → <span class="btn">OK</span>.</p></div>
+  <div class="note tip"><strong>Tip: show variable names in lists</strong><p>Once you add labels, SPSS lists variables by their long label. To see the short names (feel1, att1…) instead: <span class="path"><kbd>Edit</kbd><span class="sep">›</span><kbd>Options</kbd><span class="sep">›</span><kbd>General</kbd></span> (on Mac: <span class="path"><kbd>SPSS Statistics</kbd><span class="sep">›</span><kbd>Settings</kbd></span>, called Preferences in older versions) → Variable Lists: <strong>Display names</strong> and <strong>File</strong> order → <span class="btn">OK</span>.</p></div>
 </section>
 
 <section id="data">
@@ -334,7 +334,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
       <tr><td>Q3–Q6 How often you eat</td><td><code>freq1–freq4</code></td><td>1 never … 7 more than once a day</td><td>chocolate, candy, salty snacks, cookies. <strong>freq3 has one “8”</strong></td></tr>
       <tr><td>Q7–Q10 Attractiveness</td><td><code>att1–att4</code></td><td>1–7</td><td>chocolate, candy, salty snacks, cookies</td></tr>
       <tr><td>Q11 Fit with time of day</td><td><code>f0401–f0407</code></td><td>1–7</td><td>breakfast … late at night</td></tr>
-      <tr><td>Q12 Fit with occasions</td><td><code>f0501–f0504, f0506, f0508</code></td><td>1–7</td><td><strong>f0502 has one “9”</strong>. f0508 (on my own) is empty for 536 people</td></tr>
+      <tr><td>Q12 Fit with occasions</td><td><code>f0501–f0504, f0506, f0508</code></td><td>1–7</td><td><strong>f0502 has one “9”</strong>. f0508 is empty for 536 people. The survey lists 6 occasions and the file has 6 variables, so f0508 = “when I am on my own” by order</td></tr>
       <tr><td>Q13 Where you buy</td><td><code>f0601–f0607</code></td><td>1–7</td><td>f0607 (other) is empty for 508 people</td></tr>
       <tr><td>Q14 Self-control</td><td><code>f0701–f0703</code></td><td>1–7 agree</td><td>Higher = easier to resist</td></tr>
       <tr><td>Q15 Why you eat it</td><td><code>mot1–mot9</code></td><td>0 / 1</td><td>habit, healthy, kill hunger, indulgence, share, no reason, dessert, kill time, lonely</td></tr>
@@ -463,7 +463,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
         <li><span>Click <span class="btn">OK</span>. The Output Viewer opens with one wide <em>Statistics</em> table.</span></li>
       </ol>
       <div class="read"><p>Read the output</p><dl>
-        <dt>Statistics › N Missing</dt><dd>How many people did not answer. Most are 0; f0508 and f0607 are very high (they were optional).</dd>
+        <dt>Statistics › N Missing</dt><dd>How many people did not answer. Most are 0 to 2; f0508 (536) and f0607 (508) are very high, so results on those two are based on few people.</dd>
         <dt>Statistics › Minimum</dt><dd>Should be 1 (or 0 for mot). f0407 has a minimum of 2: nobody chose 1. Not an error, just note it.</dd>
         <dt>Statistics › Maximum</dt><dd>Should be 7 (or 1 for mot). <strong>freq3 shows 8, f0502 shows 9</strong>: those are the impossible values.</dd>
       </dl></div>
@@ -492,16 +492,13 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
   <div class="step" data-step="a2-3">
     <div class="step-head"><div class="step-num">3</div><h3>Turn household size into a clean number</h3><label class="done"><input type="checkbox">done</label></div>
     <div class="step-body">
-      <div class="why"><p><code>q4501</code> is stored as <strong>text</strong> (Type = String). SPSS cannot compute a mean or run a test on text, so household size is useless for RQ1 until you convert it. You make a copy so the original answers are kept as proof.</p></div>
-      <p class="phase">Make the copy</p>
+      <div class="why"><p><code>q4501</code> is stored as <strong>text</strong> (Type = String). SPSS cannot compute a mean or run a test on text, so household size is useless for RQ1 until you convert it. You first clean the text, then let SPSS build a new <em>numeric</em> variable from it.</p></div>
+      <div class="note bad"><strong>Do not copy-paste the variable</strong><p>Copy → Paste of a row in <em>Variable View</em> only copies the variable's settings (name, type, labels), <strong>not the data</strong>. The new column is completely empty. Use Compute Variable (below) instead.</p></div>
+      <p class="phase">Fix the text answers in q4501</p>
       <ol class="clicks">
-        <li><span>Variable View: right-click the grey row number of <code>q4501</code> → <span class="btn">Copy</span>.</span></li>
-        <li><span>Scroll to the first empty row at the bottom → right-click its row number → <span class="btn">Paste Variables…</span> (or <span class="btn">Paste</span>) → name it <code>hhsize</code> → <span class="btn">OK</span>.</span></li>
-      </ol>
-      <p class="phase">Fix the text answers</p>
-      <ol class="clicks">
-        <li><span>Data View: right-click the column header <code>hhsize</code> → <span class="btn">Sort Descending</span>. Text answers come to the top.</span></li>
-        <li><span>Click each text cell and type the number from the table below, then press Enter.</span></li>
+        <li><span>See the list of all answers first: <span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Frequencies</kbd></span> → <code>q4501</code> → <span class="btn">OK</span>. The table shows every distinct answer, including the text ones.</span></li>
+        <li><span>Data View: click any cell of the <code>q4501</code> column, then <span class="path"><kbd>Edit</kbd><span class="sep">›</span><kbd>Find…</kbd></span> (Ctrl/⌘ + F). Type a text answer (e.g. <code>four</code>) → <span class="btn">Find Next</span>. SPSS jumps to that cell.<span class="hint">Sorting the column does not work well here: text is sorted alphabetically, so “4 + dog” ends up between the 4s, not at the top.</span></span></li>
+        <li><span>Click the cell, type the number from the table below, press Enter. Repeat for each text answer. Leave the “0” answers and the blanks as they are: they are handled below.</span></li>
       </ol>
       <div class="tbl"><table><thead><tr><th>Text answer</th><th class="num">Type</th><th>Text answer</th><th class="num">Type</th></tr></thead><tbody>
         <tr><td>1 (me)</td><td class="num">1</td><td>four</td><td class="num">4</td></tr>
@@ -510,11 +507,12 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
         <tr><td>3 myself included · 3, when I am home</td><td class="num">3</td><td>4/5 · / · '</td><td class="num">delete (empty)</td></tr>
         <tr><td>my husband and one child of 17 months</td><td class="num">3</td><td>3 fulltime + myself in the weekend</td><td class="num">3</td></tr>
       </tbody></table></div>
-      <p class="phase">Convert to numeric</p>
+      <p class="phase">Create the numeric variable hhsize</p>
       <ol class="clicks">
-        <li><span>Variable View: <code>hhsize</code> → <strong>Type</strong> cell → <span class="btn">…</span> → choose <strong>Numeric</strong>, Width 8, Decimal Places 0 → <span class="btn">OK</span>.<span class="hint">SPSS turns “3” into the number 3. Anything that is still text or blank becomes system-missing (a dot “.” in Data View).</span></span></li>
-        <li><span><strong>Missing</strong> cell → Discrete missing value <code>0</code> (0 people is impossible). <strong>Measure</strong> → Scale. <strong>Label</strong> → “Number of people in household”.</span></li>
-        <li><span>Data View: right-click <code>subject</code> → <span class="btn">Sort Ascending</span> to put the rows back in their original order.</span></li>
+        <li><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Compute Variable…</kbd></span> → <span class="btn">Reset</span>.</span></li>
+        <li><span>Target Variable: <code>hhsize</code>. Numeric Expression: <code>NUMBER(q4501, F8.0)</code> → <span class="btn">OK</span>.<span class="hint">NUMBER reads the text “3” as the number 3. Anything that is still text or blank becomes system-missing (a dot “.” in Data View). SPSS may print warnings in the Output about the blank cells: that is normal.</span></span></li>
+        <li><span>Check in Data View: the new <code>hhsize</code> column at the far right is filled with numbers next to <code>q4501</code>.</span></li>
+        <li><span>Variable View, row <code>hhsize</code>: <strong>Missing</strong> cell → Discrete missing value <code>0</code> (0 people is impossible). <strong>Decimals</strong> → 0. <strong>Measure</strong> → Scale. <strong>Label</strong> → “Number of people in household”.</span></li>
       </ol>
       <p>Result: 617 valid answers, mean 3.07 people (range 1–9).</p>
     </div>
@@ -582,7 +580,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
         <tr><td><strong>Positive, final</strong></td><td>feel1, 2, 5, 6, 8, 9, 14, 16</td><td class="num"><strong>.964</strong></td><td>All item-total r ≥ .79, no α-if-deleted above .964 <span class="pill ok">keep</span></td></tr>
         <tr><td><strong>Negative, final</strong></td><td>Dreary, Worried, Ugly, Bored, Irritated, Stressed, Lonely, Depressed</td><td class="num"><strong>.942</strong></td><td>All item-total r ≥ .71 <span class="pill ok">keep</span></td></tr>
       </tbody></table></div>
-      <div class="note warn"><strong>Something to mention</strong><p>Exceptional (feel6) and Special (feel14) also correlate strongly (~.65–.78) with the negative items. They still fit the positive scale statistically and logically, so they stay there. Do <em>not</em> make one 17-item scale: α would look high (.941) only because there are many items, while the two concepts are different.</p></div>
+      <div class="note warn"><strong>Something to mention</strong><p>Exceptional (feel6) and Special (feel14) also correlate strongly (.62–.78) with the negative items. They still fit the positive scale statistically and logically, so they stay there. Do <em>not</em> make one 17-item scale: α would look high (.941) only because there are many items, while the two concepts are different.</p></div>
     </div>
   </div>
 
@@ -655,7 +653,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
         <li><span><strong>Binned Variable</strong> (top): type <code>seg</code>; label “Health concern segment”.</span></li>
         <li><span>Click <span class="btn">Make Cutpoints…</span> → select <strong>Equal Percentiles Based on Scanned Cases</strong> → Number of Cutpoints: <code>2</code> (Width fills in as 33.33%) → <span class="btn">Apply</span>.<span class="hint">2 cutpoints = 3 groups. The grid now shows the two cut values and “HIGH”.</span></span></li>
         <li><span>Upper Endpoints: <strong>Included (&lt;=)</strong>. Tick <strong>Reverse scale</strong> so the highest concern gets code 1, as the instructions ask (1 = high, 2 = medium, 3 = low).</span></li>
-        <li><span>Click <span class="btn">Make Labels</span>, then click each Label cell in the grid and overwrite: High health concern / Medium health concern / Low health concern.</span></li>
+        <li><span>Click <span class="btn">Make Labels</span>, then overwrite each Label cell in the grid according to its <strong>Value</strong> column: value 1 → High health concern, 2 → Medium health concern, 3 → Low health concern.<span class="hint">With Reverse scale the rows stay in ascending order of the score, so the first row (lowest scores) has value 3.</span></span></li>
         <li><span><span class="btn">OK</span> → SPSS says “Binning specifications will create 1 variable” → <span class="btn">OK</span>.</span></li>
       </ol>
       <p>Cutpoints SPSS should find: <strong>2.33</strong> and <strong>3.67</strong>.</p>
@@ -756,7 +754,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <li><span class="path"><kbd>Graphs</kbd><span class="sep">›</span><kbd>Chart Builder…</kbd></span> → <span class="btn">OK</span> on the “define measurement level” message (you already did it in A1).</span></li>
     <li><span>Bottom half, Gallery tab → click <strong>Bar</strong> → drag the first icon (<em>Simple Bar</em>) or the second (<em>Clustered Bar</em>) onto the big canvas.</span></li>
     <li><span>From the variable list, drag the group variable (e.g. <code>seg</code>) to the <strong>X-Axis</strong> box and the DV (e.g. <code>freq1</code>) to the <strong>Y-Axis</strong> box. SPSS shows “Mean freq1”.</span></li>
-    <li><span>For a categorical DV (gender, mot4): use Clustered Bar, put <code>seg</code> on X, the DV in “Cluster on X”, and in Element Properties set Statistic to <strong>Percentage</strong>.</span></li>
+    <li><span>For a categorical DV (gender, mot4): use Clustered Bar, put <code>seg</code> on X, the DV in “Cluster on X”, and in Element Properties set Statistic to <strong>Percentage</strong> → <span class="btn">Set Parameters…</span> → Denominator: <strong>Total for Each X-Axis Category</strong>, so each segment adds up to 100%.</span></li>
     <li><span>Element Properties panel (right): tick <strong>Display error bars</strong> (95% CI) → <span class="btn">Apply</span> → <span class="btn">OK</span>.</span></li>
     <li><span>In the Output, double-click the chart to open the Chart Editor: change title, set the Y-axis to 1–7, change colours. Close it, then right-click → Copy to paste into Word/PowerPoint.</span></li>
   </ol>
@@ -805,8 +803,8 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
         <tr><td>Between lunch &amp; dinner (f0404)</td><td class="num">3.74</td><td class="num">3.48</td><td class="num">3.28</td><td>p = .803</td><td>F(2, 688) = 3.88, <span class="sig">p = .021</span></td><td>Low (p = .015)</td></tr>
         <tr><td>Dinner (f0405)</td><td class="num">1.89</td><td class="num">1.66</td><td class="num">1.50</td><td>p &lt; .001</td><td>Welch F(2, 407.1) = 6.51, <span class="sig">p = .002</span></td><td>Low (GH p = .001)</td></tr>
         <tr><td>After dinner (f0406)</td><td class="num">4.18</td><td class="num">3.87</td><td class="num">3.47</td><td>p = .316</td><td>F(2, 688) = 8.57, <span class="sig">p &lt; .001</span></td><td>Low (p &lt; .001)</td></tr>
-        <tr><td>Late at night (f0407)</td><td class="num">3.11</td><td class="num">2.58</td><td class="num">2.41</td><td>p &lt; .001</td><td>Welch F(2, 400.2) = 17.86, <span class="sig">p &lt; .001</span></td><td><strong>Both</strong> (GH p = .001, .001)</td></tr>
-        <tr><td>While working (f0501)</td><td class="num">3.12</td><td class="num">2.55</td><td class="num">2.36</td><td>p = .009</td><td>Welch F(2, 421.6) = 11.38, <span class="sig">p &lt; .001</span></td><td><strong>Both</strong> (GH p = .002, .001)</td></tr>
+        <tr><td>Late at night (f0407)</td><td class="num">3.11</td><td class="num">2.58</td><td class="num">2.41</td><td>p &lt; .001</td><td>Welch F(2, 400.2) = 17.86, <span class="sig">p &lt; .001</span></td><td><strong>Both</strong> (GH p &lt; .001, &lt; .001)</td></tr>
+        <tr><td>While working (f0501)</td><td class="num">3.12</td><td class="num">2.55</td><td class="num">2.36</td><td>p = .009</td><td>Welch F(2, 421.6) = 11.38, <span class="sig">p &lt; .001</span></td><td><strong>Both</strong> (GH p = .002, &lt; .001)</td></tr>
         <tr><td>After work (f0502)</td><td class="num">3.54</td><td class="num">3.38</td><td class="num">3.31</td><td>p = .050</td><td>F(2, 687) = 0.95, <span class="ns">p = .387</span></td><td>–</td></tr>
         <tr><td>Breaks at work (f0503)</td><td class="num">3.38</td><td class="num">3.05</td><td class="num">2.79</td><td>p = .747</td><td>F(2, 688) = 6.94, <span class="sig">p = .001</span></td><td>Low (p = .001)</td></tr>
         <tr><td>Home, week break (f0504)</td><td class="num">3.95</td><td class="num">3.71</td><td class="num">3.36</td><td>p = .905</td><td>F(2, 687) = 6.92, <span class="sig">p = .001</span></td><td>Low (p = .001)</td></tr>
@@ -814,10 +812,10 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
         <tr><td>On my own (f0508, n = 155)</td><td class="num">2.56</td><td class="num">2.15</td><td class="num">1.77</td><td>p = .009</td><td>Welch F(2, 78.6) = 2.44, <span class="ns">p = .094</span></td><td>–</td></tr>
         <tr><td>Small supermarket (f0601)</td><td class="num">3.06</td><td class="num">2.80</td><td class="num">2.89</td><td>p = .208</td><td>F(2, 688) = 1.00, <span class="ns">p = .367</span></td><td>–</td></tr>
         <tr><td>Large supermarket (f0602)</td><td class="num">4.50</td><td class="num">4.64</td><td class="num">4.49</td><td>p = .027</td><td>Welch F(2, 433.5) = 0.49, <span class="ns">p = .610</span></td><td>–</td></tr>
-        <tr><td>Vending machine (f0603)</td><td class="num">2.28</td><td class="num">1.92</td><td class="num">1.63</td><td>p &lt; .001</td><td>Welch F(2, 399.7) = 12.26, <span class="sig">p &lt; .001</span></td><td><strong>Both</strong> (GH p = .042, .001)</td></tr>
+        <tr><td>Vending machine (f0603)</td><td class="num">2.28</td><td class="num">1.92</td><td class="num">1.63</td><td>p &lt; .001</td><td>Welch F(2, 399.7) = 12.26, <span class="sig">p &lt; .001</span></td><td><strong>Both</strong> (GH p = .042, &lt; .001)</td></tr>
         <tr><td>Bookshop (f0604)</td><td class="num">1.97</td><td class="num">1.67</td><td class="num">1.54</td><td>p &lt; .001</td><td>Welch F(2, 405.9) = 6.77, <span class="sig">p = .001</span></td><td><strong>Both</strong> (GH p = .046, .001)</td></tr>
         <tr><td>Petrol station (f0605)</td><td class="num">1.94</td><td class="num">1.91</td><td class="num">1.60</td><td>p = .004</td><td>Welch F(2, 400.5) = 7.45, <span class="sig">p = .001</span></td><td>Low (GH p = .003)</td></tr>
-        <tr><td>Night shop (f0606)</td><td class="num">1.92</td><td class="num">1.50</td><td class="num">1.22</td><td>p &lt; .001</td><td>Welch F(2, 370.5) = 30.79, <span class="sig">p &lt; .001</span></td><td><strong>Both</strong> (GH p = .001, .001)</td></tr>
+        <tr><td>Night shop (f0606)</td><td class="num">1.92</td><td class="num">1.50</td><td class="num">1.22</td><td>p &lt; .001</td><td>Welch F(2, 370.5) = 30.79, <span class="sig">p &lt; .001</span></td><td><strong>Both</strong> (GH p &lt; .001, &lt; .001)</td></tr>
         <tr><td>Other place (f0607, n = 183)</td><td class="num">2.36</td><td class="num">1.80</td><td class="num">1.43</td><td>p &lt; .001</td><td>Welch F(2, 91.4) = 4.55, <span class="sig">p = .013</span></td><td>Low (GH p = .014)</td></tr>
       </tbody></table></div>
       <p class="small muted">Means on 1–7 scales, except age (years) and household size (people).</p>
@@ -1008,12 +1006,12 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
         <dt>One-Sample Test</dt><dd>t, df, Sig. (2-tailed), Mean Difference (= segment mean − 34.74). A negative difference means younger.</dd>
       </dl></div>
       <div class="tbl"><table><thead><tr><th class="num">n</th><th class="num">M</th><th class="num">SD</th><th class="num">Mean diff.</th><th>t-test</th></tr></thead><tbody>
-        <tr><td class="num">185</td><td class="num">33.22</td><td class="num">12.05</td><td class="num">−1.53</td><td>t(184) = −1.72, <span class="ns">p = .086</span></td></tr>
+        <tr><td class="num">185</td><td class="num">33.22</td><td class="num">12.05</td><td class="num">−1.52</td><td>t(184) = −1.72, <span class="ns">p = .087</span></td></tr>
       </tbody></table></div>
     </div>
   </div>
   <blockquote class="report"><p class="lbl">How to write it</p>
-    <p>A one-sample t-test showed that the mean age of highly concerned consumers (M = 33.22, SD = 12.05) does not differ significantly from the sample mean of 34.74 years, t(184) = −1.72, p = .086. H0 cannot be rejected: the target segment is about the same age as the average consumer, with only a non-significant tendency to be younger.</p>
+    <p>A one-sample t-test showed that the mean age of highly concerned consumers (M = 33.22, SD = 12.05) does not differ significantly from the sample mean of 34.74 years, t(184) = −1.72, p = .087. H0 cannot be rejected: the target segment is about the same age as the average consumer, with only a non-significant tendency to be younger.</p>
   </blockquote>
   <div class="note warn"><strong>Do not mix this up with RQ1</strong><p>In RQ1 the high segment <em>is</em> significantly younger than the <em>low</em> segment. Here the question compares it with the <em>whole</em> sample (which includes the high segment itself), and that difference is not significant. Both statements are true.</p></div>
 </section>
@@ -1118,7 +1116,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <tr><td>Welch ANOVA</td><td>Welch's F(2, 427.70) = 8.17, p &lt; .001 + Games-Howell</td></tr>
     <tr><td>Independent t-test</td><td>Levene F, p → t(df) = 3.64, p &lt; .001 + M and SD of both groups</td></tr>
     <tr><td>Paired t-test</td><td>t(187) = 9.82, p &lt; .001 + M and SD of both measures + mean difference</td></tr>
-    <tr><td>One-sample t-test</td><td>t(184) = −1.72, p = .086 + M, SD and test value</td></tr>
+    <tr><td>One-sample t-test</td><td>t(184) = −1.72, p = .087 + M, SD and test value</td></tr>
     <tr><td>Chi-square</td><td>χ²(2, N = 691) = 7.77, p = .021 + column % + expected count check</td></tr>
     <tr><td>Cronbach's α</td><td>α = .787 (3 items), item-total correlations, items removed and why</td></tr>
   </tbody></table></div>
