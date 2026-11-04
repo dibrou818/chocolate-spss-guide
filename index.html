@@ -221,6 +221,12 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);padding:14px 16px;bo
 
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
 .two > *{min-width:0}
+/* Switch between the two pages of the guide */
+.pageswitch{display:flex;flex-wrap:wrap;gap:4px;background:var(--sunk);border-radius:999px;padding:4px;margin:0 0 20px;width:fit-content;max-width:100%}
+.pageswitch a{padding:6px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500}
+.pageswitch a[aria-current="page"]{background:var(--surface);color:var(--cocoa);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.pageswitch a:hover{color:var(--fg)}
+.diff td:first-child{font-weight:600}
 hr.sep{border:0;border-top:1px solid var(--line);margin:48px 0 0}
 footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
 </style>
@@ -266,6 +272,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
 
 <main>
 <header class="hero" id="overview">
+  <nav class="pageswitch" aria-label="Guide pages"><a href="index.html" aria-current="page">Full guide</a><a href="course.html">Course methods only</a></nav>
   <p class="eyebrow">IÉSEG · Data Insights · SPSS group project</p>
   <h1>Healthy chocolate: who should we sell it to?</h1>
   <p class="lede">A click-by-click walkthrough of the whole project: cleaning the 691-respondent dataset, building the scales and the three health concern segments, then running and reporting the right test for each of the six research questions. Each step says what to click and why you are doing it.</p>
@@ -281,6 +288,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <a role="listitem" href="#rq1"><b>RQ1–RQ6</b>Run the tests</a>
     <a role="listitem" href="#report"><b>C</b>Report + slides</a>
   </div>
+  <div class="note tip"><strong>Two versions of this guide</strong><p>This page uses some techniques that are not in the course slides (Visual Binning, boxplots, Tukey/Games-Howell, item-total correlations). The <a href="course.html">Course methods only</a> page solves the project with the methods of sessions 1, 2, 4 and 5 only. It makes different choices, and several results change. If you hand in work for this course, follow that page.</p></div>
   <div class="note warn"><strong>Do Part A first</strong><p>The instructions are explicit: finish all of Part A <em>before</em> any research question. Every RQ uses the segment variable, and some use the scales.</p></div>
   <h3>What you hand in</h3>
   <div class="tbl"><table>
@@ -509,7 +517,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
       </tbody></table></div>
       <p class="phase">Create the numeric variable hhsize</p>
       <ol class="clicks">
-        <li><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Compute Variable…</kbd></span> → <span class="btn">Reset</span>.</span></li>
+        <li><span><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Compute Variable…</kbd></span> → <span class="btn">Reset</span>.</span></li>
         <li><span>Target Variable: <code>hhsize</code>. Numeric Expression: <code>NUMBER(q4501, F8.0)</code> → <span class="btn">OK</span>.<span class="hint">NUMBER reads the text “3” as the number 3. Anything that is still text or blank becomes system-missing (a dot “.” in Data View). SPSS may print warnings in the Output about the blank cells: that is normal.</span></span></li>
         <li><span>Check in Data View: the new <code>hhsize</code> column at the far right is filled with numbers next to <code>q4501</code>.</span></li>
         <li><span>Variable View, row <code>hhsize</code>: <strong>Missing</strong> cell → Discrete missing value <code>0</code> (0 people is impossible). <strong>Decimals</strong> → 0. <strong>Measure</strong> → Scale. <strong>Label</strong> → “Number of people in household”.</span></li>
@@ -648,7 +656,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <div class="step-head"><div class="step-num">1</div><h3>Visual Binning</h3><label class="done"><input type="checkbox">done</label></div>
     <div class="step-body">
       <ol class="clicks">
-        <li><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Visual Binning…</kbd></span> → move <code>health</code> to <strong>Variables to Bin</strong> → <span class="btn">Continue</span>.</span></li>
+        <li><span><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Visual Binning…</kbd></span> → move <code>health</code> to <strong>Variables to Bin</strong> → <span class="btn">Continue</span>.</span></li>
         <li><span>In the next window, click <code>health</code> in the left list. A histogram appears.</span></li>
         <li><span><strong>Binned Variable</strong> (top): type <code>seg</code>; label “Health concern segment”.</span></li>
         <li><span>Click <span class="btn">Make Cutpoints…</span> → select <strong>Equal Percentiles Based on Scanned Cases</strong> → Number of Cutpoints: <code>2</code> (Width fills in as 33.33%) → <span class="btn">Apply</span>.<span class="hint">2 cutpoints = 3 groups. The grid now shows the two cut values and “HIGH”.</span></span></li>
@@ -751,7 +759,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
   <h3>Making a graph (Chart Builder)</h3>
   <div class="why"><p>The instructions ask for a graph per RQ, and managers read a chart faster than a table.</p></div>
   <ol class="clicks">
-    <li><span class="path"><kbd>Graphs</kbd><span class="sep">›</span><kbd>Chart Builder…</kbd></span> → <span class="btn">OK</span> on the “define measurement level” message (you already did it in A1).</span></li>
+    <li><span><span class="path"><kbd>Graphs</kbd><span class="sep">›</span><kbd>Chart Builder…</kbd></span> → <span class="btn">OK</span> on the “define measurement level” message (you already did it in A1).</span></li>
     <li><span>Bottom half, Gallery tab → click <strong>Bar</strong> → drag the first icon (<em>Simple Bar</em>) or the second (<em>Clustered Bar</em>) onto the big canvas.</span></li>
     <li><span>From the variable list, drag the group variable (e.g. <code>seg</code>) to the <strong>X-Axis</strong> box and the DV (e.g. <code>freq1</code>) to the <strong>Y-Axis</strong> box. SPSS shows “Mean freq1”.</span></li>
     <li><span>For a categorical DV (gender, mot4): use Clustered Bar, put <code>seg</code> on X, the DV in “Cluster on X”, and in Element Properties set Statistic to <strong>Percentage</strong> → <span class="btn">Set Parameters…</span> → Denominator: <strong>Total for Each X-Axis Category</strong>, so each segment adds up to 100%.</span></li>
@@ -1089,7 +1097,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <div class="step-body">
       <ol class="clicks">
         <li><span>Check Filter Off (Select Cases → All cases).</span></li>
-        <li><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Compare Means</kbd><span class="sep">›</span><kbd>Independent-Samples T Test…</kbd></span> → <span class="btn">Reset</span>.</span></li>
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Compare Means</kbd><span class="sep">›</span><kbd>Independent-Samples T Test…</kbd></span> → <span class="btn">Reset</span>.</span></li>
         <li><span>Test Variable(s): <code>att1</code>, <code>selfcont</code>. Grouping Variable: <code>mot3</code> → <span class="btn">Define Groups…</span> → Group 1 = <code>1</code>, Group 2 = <code>0</code> → <span class="btn">Continue</span> → <span class="btn">OK</span>.<span class="hint">Putting 1 first means the Mean Difference = target group − others, easier to read.</span></span></li>
         <li><span>Read Levene for each DV and pick the right row (see RQ5 for the table layout).</span></li>
       </ol>

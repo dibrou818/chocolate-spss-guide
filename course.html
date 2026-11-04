@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Course Methods Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Young+Serif&display=swap">
+<style>
+/* Layout: sticky table of contents on the left, one reading column on the right; every step is a numbered card with "why → click path → what to read → expected result". */
+:root{
+  --bg:#f7f6f4; --surface:#ffffff; --sunk:#efece8; --line:#ddd7d0;
+  --fg:#231a15; --muted:#6b5f57;
+  --cocoa:#5b3420; --cocoa-soft:#f0e4dc; --accent:#9a4f22;
+  --spss:#1f5f9c; --spss-soft:#e3edf7;
+  --ok:#2f7a4a; --ok-soft:#e2f1e7; --warn:#9a6a0a; --warn-soft:#fbf0d6; --bad:#a3352a; --bad-soft:#f8e3e0;
+  --why:#5c4a8a; --why-soft:#eeeaf6;
+  --code-bg:#221a16; --code-fg:#f3e9e2;
+  --f-display:"Young Serif", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#171210; --surface:#211a17; --sunk:#2a221e; --line:#3d332d;
+  --fg:#f1e8e2; --muted:#b3a59b;
+  --cocoa:#e7b996; --cocoa-soft:#3a2a21; --accent:#e89a63;
+  --spss:#8cbcf0; --spss-soft:#1c2a3a;
+  --ok:#7ccf98; --ok-soft:#1a2e22; --warn:#e8c169; --warn-soft:#33290f; --bad:#f09a8e; --bad-soft:#3a1d19;
+  --why:#c4b5f0; --why-soft:#27213a;
+  --code-bg:#0f0b09; --code-fg:#f3e9e2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171210; --surface:#211a17; --sunk:#2a221e; --line:#3d332d;
+  --fg:#f1e8e2; --muted:#b3a59b;
+  --cocoa:#e7b996; --cocoa-soft:#3a2a21; --accent:#e89a63;
+  --spss:#8cbcf0; --spss-soft:#1c2a3a;
+  --ok:#7ccf98; --ok-soft:#1a2e22; --warn:#e8c169; --warn-soft:#33290f; --bad:#f09a8e; --bad-soft:#3a1d19;
+  --why:#c4b5f0; --why-soft:#27213a;
+  --code-bg:#0f0b09; --code-fg:#f3e9e2; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);gap:48px;max-width:1240px;margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:32px 96px}
+@media (max-width:960px){.wrap{grid-template-columns:minmax(0,1fr);gap:24px}}
+
+/* ---------- TOC ---------- */
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);align-self:start;max-height:calc(100vh - 32px);overflow:auto;font-size:14px;padding-right:4px}
+nav.toc .brand{font-family:var(--f-display);font-size:20px;line-height:1.2;color:var(--cocoa);margin:0 0 4px}
+nav.toc .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+nav.toc h4{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:18px 0 6px;font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+nav.toc a{display:flex;gap:8px;align-items:baseline;padding:4px 8px;border-radius:6px;color:var(--fg);text-decoration:none}
+nav.toc a:hover{background:var(--sunk)}
+nav.toc a .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);min-width:26px}
+nav.toc .progress{margin-top:18px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);font-size:13px}
+nav.toc .bar{height:6px;background:var(--sunk);border-radius:3px;margin-top:6px;overflow:hidden}
+nav.toc .bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+@media (max-width:960px){
+  nav.toc{position:static;max-height:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+  nav.toc ol{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
+
+/* ---------- Main ---------- */
+main{min-width:0}
+header.hero{padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:32px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 8px}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(32px,5vw,48px);line-height:1.1;margin:0 0 14px;text-wrap:balance;color:var(--cocoa)}
+.lede{font-size:18px;color:var(--muted);max-width:68ch;margin:0}
+h2{font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.2;margin:56px 0 8px;color:var(--cocoa);text-wrap:balance}
+h2 .tag{font-family:var(--f-mono);font-size:14px;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:.04em}
+h3{font-size:19px;line-height:1.35;margin:28px 0 8px;font-weight:600;text-wrap:balance}
+h4{font-size:15px;margin:18px 0 6px;font-weight:600}
+p,li{max-width:72ch}
+section > p{margin:8px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+strong{font-weight:600}
+
+/* Step cards */
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:18px 0;position:relative}
+.step-head{display:flex;gap:14px;align-items:flex-start}
+.step-num{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--cocoa);color:var(--surface);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:14px}
+.step-head h3{margin:4px 0 0;flex:1;min-width:0}
+.done{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap;margin-top:6px}
+.done input{width:17px;height:17px;accent-color:var(--ok);cursor:pointer}
+.step.is-done{border-color:var(--ok)}
+.step.is-done .step-num{background:var(--ok)}
+.step-body{margin-left:48px;min-width:0}
+@media (max-width:560px){.step-body{margin-left:0}.step{padding:16px}}
+
+/* "Why" box: the short explanation of what a step is for */
+.why{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;background:var(--why-soft);border-radius:6px;padding:10px 14px;margin:12px 0;font-size:15px}
+.why::before{content:"Why";font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--why);padding-top:3px}
+.why p{margin:0}
+.why p + p{margin-top:4px}
+
+/* Sub-headings inside a step */
+.phase{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+
+/* SPSS click paths */
+.path{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--f-mono);font-size:13.5px;line-height:1.3;vertical-align:middle}
+.path kbd{font:inherit;background:var(--spss-soft);color:var(--spss);border:1px solid color-mix(in srgb, var(--spss) 30%, transparent);border-radius:5px;padding:2px 7px;font-weight:500;white-space:nowrap}
+.path .sep{color:var(--muted)}
+.btn{font-family:var(--f-mono);font-size:13px;background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:1px 7px;white-space:nowrap;color:var(--fg)}
+.var{font-family:var(--f-mono);font-size:.9em;background:var(--cocoa-soft);color:var(--cocoa);padding:1px 6px;border-radius:4px;white-space:nowrap}
+
+ol.clicks{counter-reset:c;list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}
+ol.clicks[start="4"]{counter-reset:c 3}
+ol.clicks > li{counter-increment:c;display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;max-width:none}
+ol.clicks > li::before{content:counter(c);font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--spss);background:var(--spss-soft);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;margin-top:1px}
+ol.clicks > li > span{min-width:0}
+ol.clicks .hint{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+
+/* Callouts */
+.note{border-radius:var(--r);padding:12px 16px;margin:14px 0;font-size:15px;border:1px solid transparent}
+.note p{margin:4px 0}
+.note > strong:first-child{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.note.tip{background:var(--spss-soft);border-color:color-mix(in srgb, var(--spss) 25%, transparent)}
+.note.tip > strong:first-child{color:var(--spss)}
+.note.warn{background:var(--warn-soft);border-color:color-mix(in srgb, var(--warn) 30%, transparent)}
+.note.warn > strong:first-child{color:var(--warn)}
+.note.ok{background:var(--ok-soft);border-color:color-mix(in srgb, var(--ok) 30%, transparent)}
+.note.ok > strong:first-child{color:var(--ok)}
+.note.bad{background:var(--bad-soft);border-color:color-mix(in srgb, var(--bad) 30%, transparent)}
+.note.bad > strong:first-child{color:var(--bad)}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunk);font-weight:600;font-size:13px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+td code,th code{font-family:var(--f-mono);font-size:13px}
+.sig{color:var(--ok);font-weight:600}
+.ns{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.ns{background:var(--sunk);color:var(--muted)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* Reading the output: table name -> what to look at */
+.read{border:1px dashed var(--line);border-radius:var(--r);margin:12px 0;overflow:hidden}
+.read > p{margin:0;padding:8px 14px;background:var(--sunk);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.read dl{margin:0;display:grid;grid-template-columns:minmax(120px,210px) minmax(0,1fr)}
+.read dt,.read dd{margin:0;padding:8px 14px;border-top:1px solid var(--line);font-size:14.5px}
+.read dt{font-family:var(--f-mono);font-size:13px;color:var(--spss);font-weight:500}
+@media (max-width:560px){.read dl{grid-template-columns:minmax(0,1fr)}.read dd{border-top:0;padding-top:0}}
+
+/* RQ spec grid */
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:14px 0}
+.spec > div{background:var(--surface);padding:10px 14px;min-width:0}
+.spec .k{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.spec .v{font-size:14.5px;margin-top:2px}
+
+.hyp{display:grid;gap:6px;margin:12px 0}
+.hyp div{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;font-size:15px}
+.hyp b{font-family:var(--f-mono);color:var(--accent);font-weight:600}
+
+/* Report sentence */
+blockquote.report{margin:14px 0;padding:12px 16px;border-left:3px solid var(--cocoa);background:var(--cocoa-soft);border-radius:0 var(--r) var(--r) 0;font-size:15px}
+blockquote.report p{margin:4px 0}
+blockquote.report .lbl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--cocoa);font-weight:600}
+
+/* Code */
+details{margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+details > summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:14px;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details > summary::-webkit-details-marker{display:none}
+details > summary::after{content:"+";font-family:var(--f-mono);color:var(--muted)}
+details[open] > summary::after{content:"−"}
+details > .inner{padding:0 14px 14px;min-width:0}
+.code{position:relative}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);padding:14px 16px;border-radius:6px;overflow-x:auto;font-family:var(--f-mono);font-size:12.5px;line-height:1.55}
+.copy{position:absolute;top:8px;right:8px;font-family:var(--f-mono);font-size:11px;background:#3a2d27;color:#f3e9e2;border:0;border-radius:4px;padding:4px 8px;cursor:pointer}
+.copy:hover{background:#4d3c34}
+
+/* Flow diagram */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:18px 0}
+.flow a{flex:1 1 100px;text-decoration:none;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:14px}
+.flow a:hover{border-color:var(--cocoa)}
+.flow a b{display:block;font-family:var(--f-mono);font-size:11px;color:var(--accent);letter-spacing:.06em}
+
+/* SPSS window sketch */
+.windows{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.win{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
+.win .tb{background:var(--sunk);padding:6px 12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.win .tb i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.win .wb{padding:10px 14px;font-size:14.5px}
+.win .wb p{margin:4px 0}
+
+/* Dialog sketch */
+.dialog{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0;font-size:13.5px}
+.dialog .box{border:1px solid var(--line);border-radius:5px;padding:8px 10px;background:var(--bg);min-height:72px;font-family:var(--f-mono);font-size:12.5px;line-height:1.7}
+.dialog .box b{display:block;font-family:var(--f-body);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dialog .arrow{font-family:var(--f-mono);background:var(--spss-soft);color:var(--spss);border-radius:5px;padding:6px 10px;font-weight:600}
+.dialog .btns{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+
+/* Bar charts */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:14px 0}
+.chart h5{margin:0 0 10px;font-size:14px;font-weight:600}
+.bars{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 46px;gap:6px 10px;align-items:center;font-size:13.5px}
+.bars .track{height:16px;background:var(--sunk);border-radius:3px;position:relative}
+.bars .fill{position:absolute;inset:0 auto 0 0;background:var(--cocoa);border-radius:3px}
+.bars .fill.alt{background:var(--muted)}
+.bars .fill.hi{background:var(--accent)}
+.bars .val{font-family:var(--f-mono);font-size:12.5px;text-align:right}
+.axis{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 46px;gap:10px;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:4px}
+.axis span{display:flex;justify-content:space-between}
+.axis i{font-style:normal}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.two > *{min-width:0}
+/* Switch between the two pages of the guide */
+.pageswitch{display:flex;flex-wrap:wrap;gap:4px;background:var(--sunk);border-radius:999px;padding:4px;margin:0 0 20px;width:fit-content;max-width:100%}
+.pageswitch a{padding:6px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500}
+.pageswitch a[aria-current="page"]{background:var(--surface);color:var(--cocoa);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.pageswitch a:hover{color:var(--fg)}
+.diff td:first-child{font-weight:600}
+hr.sep{border:0;border-top:1px solid var(--line);margin:48px 0 0}
+footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <p class="brand">I Feel Like Chocolate Today</p>
+  <p class="sub">Course methods only (S1, S2, S4, S5)</p>
+  <h4>Start</h4>
+  <ol>
+    <li><a href="#overview"><span class="n">00</span>What changes vs the full guide</a></li>
+    <li><a href="#checklist-s2"><span class="n">01</span>The course checklist</a></li>
+  </ol>
+  <h4>Part A · Data preparation</h4>
+  <ol>
+    <li><a href="#a1"><span class="n">A1</span>Variable View (S1)</a></li>
+    <li><a href="#a2"><span class="n">A2</span>Impossible values (S2)</a></li>
+    <li><a href="#a3"><span class="n">A3</span>String → numeric (S1–S2)</a></li>
+    <li><a href="#a4"><span class="n">A4</span>Summated scales (S2)</a></li>
+    <li><a href="#a5"><span class="n">A5</span>3 segments (S2)</a></li>
+  </ol>
+  <h4>Part B · Tests (S4–S5)</h4>
+  <ol>
+    <li><a href="#b0"><span class="n">B0</span>Course rules for every test</a></li>
+    <li><a href="#rq1"><span class="n">RQ1</span>Profile of the segment</a></li>
+    <li><a href="#rq2"><span class="n">RQ2</span>Frequency &amp; attractiveness</a></li>
+    <li><a href="#rq3"><span class="n">RQ3</span>Chocolate vs other snacks</a></li>
+    <li><a href="#rq4"><span class="n">RQ4</span>Age vs overall average</a></li>
+    <li><a href="#rq5"><span class="n">RQ5</span>Men vs women</a></li>
+    <li><a href="#rq6"><span class="n">RQ6</span>"Kill hunger" target group</a></li>
+  </ol>
+  <h4>Part C</h4>
+  <ol>
+    <li><a href="#report"><span class="n">C1</span>Reporting templates</a></li>
+  </ol>
+  <div class="progress" aria-live="polite"><span id="progText">0 of 0 steps done</span><div class="bar"><i id="progBar"></i></div></div>
+</nav>
+
+<main>
+<header class="hero" id="overview">
+  <nav class="pageswitch" aria-label="Guide pages"><a href="index.html">Full guide</a><a href="course.html" aria-current="page">Course methods only</a></nav>
+  <p class="eyebrow">IÉSEG · Data Insights · Sessions 1, 2, 4, 5</p>
+  <h1>The chocolate project, solved the way the course teaches it</h1>
+  <p class="lede">Every step on this page uses a menu, a rule or a reporting format from the course slides. Each step names the session it comes from. Where the slides make a decision for you (which items to keep, where to cut the segments, which post hoc test), this page follows the slides, even when the full guide chose differently.</p>
+</header>
+
+<section>
+  <h3>What changes compared with the full guide</h3>
+  <div class="tbl"><table class="diff"><thead><tr><th>Topic</th><th>Full guide</th><th>Course method (this page)</th><th>Source</th></tr></thead><tbody>
+    <tr><td>Finding impossible values</td><td>Frequencies with Min/Max</td><td>Frequencies with <strong>frequency tables</strong></td><td>S2</td></tr>
+    <tr><td>Outliers</td><td>Boxplots (Explore)</td><td>Not in the course: only <strong>impossible values</strong> (out of range, extremely unlikely, unusable)</td><td>S2</td></tr>
+    <tr><td>Household size (text)</td><td>Compute with NUMBER()</td><td><strong>Recode into Different Variables</strong> (Old and New Values), then numeric</td><td>S1, S2</td></tr>
+    <tr><td>Feelings scale</td><td>“Cool” removed</td><td><strong>“Cool” kept</strong>: deleting it keeps α in the same level (excellent)</td><td>S2</td></tr>
+    <tr><td>Health concern scale</td><td>g1–g3 only</td><td><strong>All 5 items, g4 and g5 recoded</strong> (mirroring): small α difference → keep more items</td><td>S2</td></tr>
+    <tr><td>3 segments</td><td>Visual Binning</td><td><strong>Frequencies → cumulative %</strong> → Recode into Different Variables</td><td>S2</td></tr>
+    <tr><td>Post hoc tests</td><td>Tukey / Games-Howell</td><td><strong>Bonferroni / Tamhane</strong></td><td>S5</td></tr>
+    <tr><td>Effect sizes</td><td>Not reported</td><td><strong>Cramer's V, Cohen's d, eta²</strong> (“Estimate effect sizes”)</td><td>S4, S5</td></tr>
+    <tr><td>Reporting</td><td>M and SD</td><td><strong>M and SE</strong>, p with 3 decimals</td><td>S4, S5</td></tr>
+    <tr><td>One-sided tests</td><td>Mentioned for RQ6</td><td><strong>Two-sided significance only</strong></td><td>S4, S5</td></tr>
+  </tbody></table></div>
+  <div class="note warn"><strong>Results change</strong><p>Because the health scale and the cut-points are different, the segments are different (237 / 202 / 252 people instead of 188 / 221 / 282). Some conclusions change: for example in RQ4 the high-concern segment is now <strong>significantly younger</strong> than average, and in RQ5 the difference in negative feelings is <strong>no longer significant</strong>. Use the numbers on this page only together with the choices on this page.</p></div>
+</section>
+
+<section id="checklist-s2">
+  <h2><span class="tag">01</span>The course checklist for data preparation</h2>
+  <p>This is the checklist from the last slide of Session 2. Part A follows it in order.</p>
+  <div class="tbl"><table><thead><tr><th>#</th><th>Checklist item (S1 &amp; S2)</th><th>Where on this page</th></tr></thead><tbody>
+    <tr><td>1</td><td>Update type (order: recode into different variable, then string → numeric), measurement level, name and label</td><td><a href="#a1">A1</a>, <a href="#a3">A3</a></td></tr>
+    <tr><td>2</td><td>All value labels for categorical variables, end-point labels for invented metric variables</td><td><a href="#a1">A1</a></td></tr>
+    <tr><td>3</td><td>Impossible values: indicate as missing or fix, and report all</td><td><a href="#a2">A2</a></td></tr>
+    <tr><td>4</td><td>Items in one question that could be summated: check all requirements</td><td><a href="#a4">A4</a></td></tr>
+    <tr><td>5</td><td>New variables or summated scales (Compute Variable): report the calculation</td><td><a href="#a4">A4</a></td></tr>
+    <tr><td>6</td><td>Metric → categorical (Recode into Different Variables): how many categories? Report</td><td><a href="#a5">A5</a></td></tr>
+    <tr><td>7</td><td>Repeat 1–3 for every new variable</td><td>A3, A4, A5</td></tr>
+    <tr><td>8</td><td>Cases to exclude for some RQs (Data › Select Cases): report and turn back off</td><td><a href="#b0">B0</a></td></tr>
+  </tbody></table></div>
+</section>
+
+<hr class="sep">
+
+<!-- ============================ PART A ============================ -->
+<section id="a1">
+  <h2><span class="tag">PART A · A1 · Session 1</span>Variable View: name, label, values, measure</h2>
+  <div class="why"><p>Session 1: SPSS can only analyse numbers, and the numbers need a meaning. The Variable View holds that meaning: what each variable is (label), what each code means (values) and what kind of data it is (measure), which decides the test you may use.</p></div>
+
+  <div class="step" data-step="c-a1-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Open, save a copy, go to Variable View</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span><span class="path"><kbd>File</kbd><span class="sep">›</span><kbd>Open</kbd><span class="sep">›</span><kbd>Data…</kbd></span> → <em>Dataset Group Project SPSS.sav</em> → <span class="btn">Open</span> (S1, step 1–2).</span></li>
+        <li><span><span class="path"><kbd>File</kbd><span class="sep">›</span><kbd>Save As…</kbd></span> → <em>… CLEANED.sav</em>. This is the file you send at the end.</span></li>
+        <li><span>Click the <span class="btn">Variable View</span> tab (bottom-left).</span></li>
+      </ol>
+      <div class="note tip"><strong>If no output appears later (S1 troubleshooter)</strong><p>If “OMS” shows at the bottom of the window: <span class="path"><kbd>File</kbd><span class="sep">›</span><kbd>New</kbd><span class="sep">›</span><kbd>Syntax</kbd></span>, type <code>OMSEND.</code>, select it, click the green ▶, then rerun your analysis.</p></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a1-2">
+    <div class="step-head"><div class="step-num">2</div><h3>Names and labels</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <div class="why"><p>S1 rule for names: no symbols like “-”, no spaces, do not start with a number. The label has no restrictions and is the full description that appears in the output.</p></div>
+      <ol class="clicks">
+        <li><span><strong>Name</strong> column: double-click, type, Enter. Rename the codes that mean nothing: <code>q42</code> → <code>gender</code>, <code>q4301</code> → <code>age</code>, <code>q44</code> → <code>living</code>, <code>q46</code> → <code>education</code>, <code>q47</code> → <code>occupation</code>, <code>q48</code> → <code>native_lang</code>, <code>q49</code> → <code>province</code>, <code>q50</code> → <code>area</code>. The other names (feel, freq, att, f04–f07, mot, g) match the instructions, so keep them.</span></li>
+        <li><span><strong>Label</strong> column: type the survey question for every variable, e.g. <code>feel1</code> “Eat chocolate when feeling: Happy”, <code>f0603</code> “Buy: vending machine”, <code>mot3</code> “Why: to kill hunger between meals”.</span></li>
+      </ol>
+      <p class="small muted">The list of all labels is on the <a href="index.html#a1">full guide</a>, step A1.3.</p>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a1-3">
+    <div class="step-head"><div class="step-num">3</div><h3>Value labels (S1 rule: “values are tied to measurement levels”)</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <div class="why"><p>S1: categorical variables (nominal, ordinal) get a label for <strong>every</strong> category. Invented metric scales (Likert, semantic differential) get labels on the <strong>end-points</strong> only. Natural scales (age, number of people) get no labels.</p></div>
+      <ol class="clicks">
+        <li><span><strong>Values</strong> cell → blue <span class="btn">…</span> box → Value <code>1</code>, Label <code>Male</code> → <span class="btn">Add</span> → <code>2</code> <code>Female</code> → <span class="btn">Add</span> → <span class="btn">OK</span>.</span></li>
+        <li><span>Copy a finished Values cell (right-click › Copy) and paste it on the other variables with the same scale.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>Type</th><th>Variables</th><th>What to label</th></tr></thead><tbody>
+        <tr><td>Categorical</td><td>Lang, gender, living, education, occupation, native_lang, province, area, mot1–9</td><td>Every code (see survey Q1, Q15, Q17–Q25; mot: 0 Not applicable, 1 Applicable)</td></tr>
+        <tr><td>Invented metric</td><td>feel, att, f04, f05, f06, f07, g</td><td>1 and 7 (and 4 when the survey names the midpoint, e.g. “Neutral”)</td></tr>
+        <tr><td>freq1–4</td><td>Every point has a meaning in the survey</td><td>All 7 points (Never … More than once a day)</td></tr>
+        <tr><td>Natural scale</td><td>age, hhsize</td><td>No labels</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a1-4">
+    <div class="step-head"><div class="step-num">4</div><h3>Measure</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <div class="why"><p>S1: a scale of 7 points or more counts as <strong>interval</strong> (= Scale in SPSS); fewer than 7 points is ordinal. All Likert items in this survey have 7 points, so they are Scale. Age and household size are ratio (true zero), also Scale.</p></div>
+      <div class="tbl"><table><thead><tr><th>Measure</th><th>Variables</th></tr></thead><tbody>
+        <tr><td><span class="pill ok">Scale</span></td><td>feel1–17, freq1–4, att1–4, f0401–f0703, g1–g5, age, hhsize, all summated scales</td></tr>
+        <tr><td><span class="pill warn">Ordinal</span></td><td>education, seg (the 3 segments)</td></tr>
+        <tr><td><span class="pill ns">Nominal</span></td><td>subject, Lang, gender, living, occupation, native_lang, province, area, mot1–9</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<section id="a2">
+  <h2><span class="tag">PART A · A2 · Session 2</span>Impossible values</h2>
+  <div class="why"><p>S2: an impossible value is an answer outside the scale range, extremely unlikely or unusable. SPSS does <strong>not</strong> ignore it on its own. If it is an obvious mistake with only one possible fix, correct it in Data View; otherwise declare it as missing in Variable View. Report all of them.</p></div>
+
+  <div class="step" data-step="c-a2-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Frequency tables of all variables</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Frequencies…</kbd></span></li>
+        <li><span>Move <strong>all</strong> variables into the Variable(s) box (S2, step 2).</span></li>
+        <li><span>Keep <strong>Display frequency tables</strong> ticked (S2, step 3) → <span class="btn">OK</span>.</span></li>
+        <li><span>Go through each frequency table and look for a value outside the scale, an extremely unlikely value, or a “don't know” type answer.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>Variable</th><th>Found in the frequency table</th><th>Obvious single fix?</th><th>Course action</th></tr></thead><tbody>
+        <tr><td><code>freq3</code></td><td>One answer “8” on a 1–7 scale</td><td>No (could be 7, or anything)</td><td>Missing value 8</td></tr>
+        <tr><td><code>f0502</code></td><td>One answer “9” on a 1–7 scale</td><td>No</td><td>Missing value 9</td></tr>
+        <tr><td><code>q4501</code> household</td><td>Text answers, blanks, 19 × “0”</td><td>Some yes (“four” = 4), some no (“4/5”)</td><td>See A3</td></tr>
+        <tr><td><code>age</code></td><td>11 to 77 years</td><td>Nothing impossible: young respondents are possible</td><td>Keep</td></tr>
+        <tr><td>all other items</td><td>Only values 1–7 (or 0/1)</td><td>–</td><td>Nothing to do</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a2-2">
+    <div class="step-head"><div class="step-num">2</div><h3>Declare them missing in Variable View</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>Variable View → <code>freq3</code> → <strong>Missing</strong> cell → <span class="btn">…</span> → Discrete missing values: <code>8</code> → <span class="btn">OK</span>.</span></li>
+        <li><span><code>f0502</code> → same with <code>9</code>.</span></li>
+      </ol>
+      <blockquote class="report"><p class="lbl">Report it like S2</p><p>We prepared the dataset for analyses. We found 1 impossible value in the frequency of eating salty snacks (8 on a 1–7 scale) and 1 in the fit of chocolate after work/school (9 on a 1–7 scale); both were indicated as missing. For household size we … (see A3).</p></blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="a3">
+  <h2><span class="tag">PART A · A3 · Sessions 1 &amp; 2</span>Household size: string → numeric</h2>
+  <div class="why"><p>S1: SPSS can only analyse numbers, not words. <code>q4501</code> is a String variable. The S2 checklist gives the order: first <strong>Recode into Different Variables</strong> (the Old and New Values window turns strings into numbers), then make sure the new variable is numeric. The original text stays in <code>q4501</code>.</p></div>
+
+  <div class="step" data-step="c-a3-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Recode q4501 into a new variable hhsize</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Recode into Different Variables…</kbd></span></li>
+        <li><span>Move <code>q4501</code> into the box. Output Variable: Name <code>hhsize</code>, Label “Number of people in household” → click <span class="btn">Change</span> (S2: “give the new variable an appropriate name and click change”).</span></li>
+        <li><span>Click <span class="btn">Old and New Values…</span></span></li>
+        <li><span>First the missing values (S2 step 3.1): Old Value <strong>System- or user-missing</strong> → New Value <strong>System-missing</strong> → <span class="btn">Add</span>.</span></li>
+        <li><span>Then each text answer: Old Value <strong>Value:</strong> type the text exactly as in the data → New Value <strong>Value:</strong> the number → <span class="btn">Add</span>. Use the table below.<span class="hint">The text must match exactly (spaces, capitals). Tip: in Data View, double-click the cell, select the text, copy it, and paste it in the Old Value box.</span></span></li>
+        <li><span>Old Value <code>0</code> → New Value <strong>System-missing</strong> → <span class="btn">Add</span> (0 people is impossible: you count yourself).</span></li>
+        <li><span>Tick <strong>Convert numeric strings to numbers ('5'→5)</strong> at the bottom-right. This turns all the normal answers (“3”, “04”…) into numbers. Do <em>not</em> tick “Output variables are strings”.</span></li>
+        <li><span><span class="btn">Continue</span> → <span class="btn">OK</span>.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>Old value (text)</th><th class="num">New value</th><th>Old value (text)</th><th class="num">New value</th></tr></thead><tbody>
+        <tr><td>1 (me)</td><td class="num">1</td><td>four</td><td class="num">4</td></tr>
+        <tr><td>2 (child and I)</td><td class="num">2</td><td>4 + dog</td><td class="num">4</td></tr>
+        <tr><td>2 (me and partner)</td><td class="num">2</td><td>4 ( 5 in total, me included )</td><td class="num">5</td></tr>
+        <tr><td>2 me included</td><td class="num">2</td><td>my husband and one child of 17 months</td><td class="num">3</td></tr>
+        <tr><td>no one left, except my boyfriend</td><td class="num">2</td><td>3 fulltime + myself in the weekend</td><td class="num">3</td></tr>
+        <tr><td>3 myself included</td><td class="num">3</td><td>4/5 · / · '</td><td class="num">System-missing (no single fix)</td></tr>
+        <tr><td>3, when I am home</td><td class="num">3</td><td>0</td><td class="num">System-missing</td></tr>
+      </tbody></table></div>
+      <div class="note tip"><strong>Already replaced the text by hand in q4501?</strong><p>That is also a course method (S1: replace words by numbers in Data View). Then you only need steps 1–4, 6, 7 and 8: SPSS converts your typed numbers.</p></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a3-2">
+    <div class="step-head"><div class="step-num">2</div><h3>Check and update Variable View</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>Data View: the new <code>hhsize</code> column (far right) has numbers; “.” means missing (S2: “check quickly whether the right coding is made”).</span></li>
+        <li><span>Variable View, <code>hhsize</code>: Type Numeric, Decimals 0, Measure Scale.</span></li>
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Frequencies</kbd></span> on <code>hhsize</code>: values 1–9, <strong>617 valid</strong>, 74 missing. A household of 9 is possible, so it stays.</span></li>
+      </ol>
+      <blockquote class="report"><p class="lbl">Report</p><p>Household size was an open text question. We recoded it into a new numeric variable (hhsize): written answers were translated into numbers (e.g. “four” → 4), answers without a single interpretation (“4/5”, “/”) and impossible answers (0 people, 19 cases) were set to missing.</p></blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="a4">
+  <h2><span class="tag">PART A · A4 · Session 2</span>Summated scales</h2>
+  <div class="why"><p>S2: some concepts cannot be measured with one item, and analysing item per item gives confusing results. You may only summate items if <strong>all four requirements</strong> are met. If they are not met, you do not create a scale and analyse each item separately.</p></div>
+  <div class="tbl"><table><thead><tr><th>Requirement (S2)</th><th>Q2 Feelings (feel1–17)</th><th>Q14 Self-control (f0701–03)</th><th>Q16 Health concern (g1–g5)</th></tr></thead><tbody>
+    <tr><td>1. Same answering format</td><td>Yes, 1–7 very unfrequently–very frequently</td><td>Yes, 1–7 disagree–agree</td><td>Yes, 1–7 never–almost always</td></tr>
+    <tr><td>2. Asked together</td><td>Yes, one matrix question</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>3. Same construct (common sense)</td><td>Two sub-concepts: <strong>positive</strong> moods and <strong>negative</strong> moods</td><td>One concept: being able to resist chocolate</td><td>One concept: health concern. The instructions define it as “guiltiness, shame, <strong>lack of joy</strong>”, so g4–g5 (joy) belong to it, reversed</td></tr>
+    <tr><td>4. Internally reliable (α)</td><td>Check per sub-concept</td><td>Check</td><td>Check after recoding g4 and g5</td></tr>
+  </tbody></table></div>
+  <div class="tbl"><table><thead><tr><th>Cronbach's α (S2 rule of thumb)</th><th>Level</th></tr></thead><tbody>
+    <tr><td>α ≥ .90</td><td>Excellent</td></tr><tr><td>.80 ≤ α &lt; .90</td><td>Very good</td></tr><tr><td>.70 ≤ α &lt; .80</td><td>Good</td></tr><tr><td>.60 ≤ α &lt; .70</td><td>Acceptable</td></tr><tr><td>.50 ≤ α &lt; .60</td><td>Poor</td></tr><tr><td>α &lt; .50</td><td>Unacceptable</td></tr>
+  </tbody></table></div>
+  <div class="note warn"><strong>S2 rules for removing items</strong><p>Items must be phrased in the same direction (recode if needed). Minimum 3 items, maximum 10. If α only increases slightly when an item is deleted, keep it: <strong>only remove an item if α would move to another level</strong>. If you remove an item from the scale, do not delete it from the dataset.</p></div>
+
+  <div class="step" data-step="c-a4-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Recode g4 and g5 by mirroring</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <div class="why"><p>g1–g3 (worried, guilty, ashamed): a high score = high concern. g4–g5 (very satisfied, full of joy): a high score = <em>low</em> concern. They are phrased in the other direction, so S2 says: recode them so that 7 means the same thing for every item.</p></div>
+      <ol class="clicks">
+        <li><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Recode into Different Variables…</kbd></span></li>
+        <li><span>Click <code>g4</code> → arrow. Output Variable: Name <code>g4_recoded</code>, Label “After eating: very satisfied/happy (recoded)” → <span class="btn">Change</span>.</span></li>
+        <li><span>Do the same for <code>g5</code> → <code>g5_recoded</code> (both can be in the same dialog).</span></li>
+        <li><span><span class="btn">Old and New Values…</span> → first: System- or user-missing → System-missing → <span class="btn">Add</span>.</span></li>
+        <li><span>Then: 1 → 7, 2 → 6, 3 → 5, 4 → 4, 5 → 3, 6 → 2, 7 → 1 (<span class="btn">Add</span> each time) → <span class="btn">Continue</span> → <span class="btn">OK</span>.</span></li>
+        <li><span>Check in Data View that a 2 in g4 is now a 6 in g4_recoded. Variable View: Measure Scale, value labels 1 = Almost always, 7 = Never (the labels are mirrored too).</span></li>
+      </ol>
+      <blockquote class="report"><p class="lbl">Report</p><p>We recoded “very satisfied/happy” and “full of joy” after eating chocolate by mirroring them (1 = almost always – 7 = never instead of 1 = never – 7 = almost always).</p></blockquote>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a4-2">
+    <div class="step-head"><div class="step-num">2</div><h3>Check Cronbach's α per (sub-)concept</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Scale</kbd><span class="sep">›</span><kbd>Reliability Analysis…</kbd></span></li>
+        <li><span>Move the items of <strong>one</strong> sub-concept into Items. Model: Alpha.</span></li>
+        <li><span><span class="btn">Statistics…</span> → tick <strong>Scale if item deleted</strong> → <span class="btn">Continue</span> → <span class="btn">OK</span>.</span></li>
+        <li><span>Read <em>Reliability Statistics</em> (α) and, in <em>Item-Total Statistics</em>, the column <strong>Cronbach's Alpha if Item Deleted</strong>. Compare each value with the level of the current α.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>Scale</th><th>Items</th><th class="num">α</th><th>Highest “α if item deleted”</th><th>Course decision</th></tr></thead><tbody>
+        <tr><td>Positive feelings</td><td>Happy, Joyful, Relaxed, Exceptional, Cheerful, Energetic, Cool, Special, Playful (feel1, 2, 5, 6, 8, 9, 10, 14, 16)</td><td class="num">.925</td><td>Cool (feel10): .965</td><td>.925 and .965 are both <strong>excellent</strong> → same level → keep all 9 items</td></tr>
+        <tr><td>Negative feelings</td><td>Dreary, Worried, Ugly, Bored, Irritated, Stressed, Lonely, Depressed (feel3, 4, 7, 11, 12, 13, 15, 17)</td><td class="num">.942</td><td>Irritated (feel12): .939</td><td>Excellent, nothing goes up → keep all 8</td></tr>
+        <tr><td>Self-control</td><td>f0701, f0702, f0703</td><td class="num">.917</td><td>f0701: .920</td><td>Small increase, same level → keep all 3</td></tr>
+        <tr><td>Health concern</td><td>g1, g2, g3, g4_recoded, g5_recoded</td><td class="num">.772</td><td>g5_recoded: .774</td><td>Both <strong>good</strong> → same level → keep all 5</td></tr>
+      </tbody></table></div>
+      <div class="note bad"><strong>Forgot to recode?</strong><p>If you run g1–g5 without recoding g4 and g5, α = −.05. A negative α is the sign that some items go in the other direction.</p></div>
+      <div class="note tip"><strong>Worth one sentence in the report</strong><p>“Cool” increases α the most when deleted (.925 → .965). Following the course rule we keep it, because α stays excellent. You can mention that this item fits less well.</p></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a4-3">
+    <div class="step-head"><div class="step-num">3</div><h3>Create the summated scales (average)</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Compute Variable…</kbd></span></li>
+        <li><span>Target Variable: <code>health</code>. Numeric Expression: <code>MEAN(g1, g2, g3, g4_recoded, g5_recoded)</code> → <span class="btn">OK</span>.<span class="hint">Use the recoded items, never the original g4 and g5 (S2: “use recoded items”).</span></span></li>
+        <li><span>Repeat for the three others (table). Check Data View, then in Variable View add a label and set Measure to <strong>Scale</strong> (S2: “summated scales are ALWAYS interval”).</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>Target</th><th>Numeric expression</th><th class="num">M</th><th class="num">SD</th></tr></thead><tbody>
+        <tr><td><code>posfeel</code></td><td><code>MEAN(feel1, feel2, feel5, feel6, feel8, feel9, feel10, feel14, feel16)</code></td><td class="num">3.39</td><td class="num">1.20</td></tr>
+        <tr><td><code>negfeel</code></td><td><code>MEAN(feel3, feel4, feel7, feel11, feel12, feel13, feel15, feel17)</code></td><td class="num">3.37</td><td class="num">1.44</td></tr>
+        <tr><td><code>selfcont</code></td><td><code>MEAN(f0701, f0702, f0703)</code></td><td class="num">4.30</td><td class="num">1.74</td></tr>
+        <tr><td><code>health</code></td><td><code>MEAN(g1, g2, g3, g4_recoded, g5_recoded)</code></td><td class="num">3.47</td><td class="num">1.18</td></tr>
+      </tbody></table></div>
+      <blockquote class="report"><p class="lbl">Report like S2</p><p>Based on our multi-item scale analysis, we made four summated scales: positive feelings (α = .93), negative feelings (α = .94), self-control (α = .92) and health concern (α = .77). We calculated “health concern” as the average of worried about my health, guilty, ashamed, very satisfied/happy (recoded) and full of joy (recoded) …</p></blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="a5">
+  <h2><span class="tag">PART A · A5 · Session 2</span>The 3 health concern segments</h2>
+  <div class="why"><p>S2: to split a metric variable into 3 groups, each group should hold about 33.33% of the people. You read the <strong>cumulative percent</strong> in a frequency table and always split after the cumulative percentage <strong>closest to</strong> 33.33 and 66.66.</p></div>
+
+  <div class="step" data-step="c-a5-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Frequencies of health → find the cut-points</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Frequencies</kbd></span> → <code>health</code> → Display frequency tables → <span class="btn">OK</span>.</span></li>
+        <li><span>Look at the <strong>Cumulative Percent</strong> column around 33.33 and 66.66.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th class="num">health</th><th class="num">Frequency</th><th class="num">Cumulative %</th><th>Decision</th></tr></thead><tbody>
+        <tr><td class="num">2.60</td><td class="num">40</td><td class="num">28.4</td><td class="muted">33.33 − 28.4 = 4.9</td></tr>
+        <tr><td class="num"><strong>2.80</strong></td><td class="num">56</td><td class="num"><strong>36.5</strong></td><td>36.5 − 33.33 = 3.2 → <strong>closest: cut after 2.80</strong></td></tr>
+        <tr><td class="num">3.00</td><td class="num">42</td><td class="num">42.5</td><td></td></tr>
+        <tr><td class="num">3.60</td><td class="num">39</td><td class="num">59.3</td><td class="muted">66.66 − 59.3 = 7.4</td></tr>
+        <tr><td class="num"><strong>3.80</strong></td><td class="num">44</td><td class="num"><strong>65.7</strong></td><td>66.66 − 65.7 = 1.0 → <strong>closest: cut after 3.80</strong></td></tr>
+        <tr><td class="num">4.00</td><td class="num">35</td><td class="num">70.8</td><td class="muted">70.8 − 66.66 = 4.1</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a5-2">
+    <div class="step-head"><div class="step-num">2</div><h3>Recode into Different Variables → seg</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Recode into Different Variables…</kbd></span> → <span class="btn">Reset</span> → move <code>health</code> → Output Name <code>seg</code>, Label “Health concern segment” → <span class="btn">Change</span>.</span></li>
+        <li><span><span class="btn">Old and New Values…</span> → System- or user-missing → System-missing → <span class="btn">Add</span>.</span></li>
+        <li><span><strong>Range, LOWEST through value:</strong> <code>2.9</code> → New Value <code>3</code> → <span class="btn">Add</span>.</span></li>
+        <li><span><strong>Range:</strong> <code>2.9</code> through <code>3.9</code> → New Value <code>2</code> → <span class="btn">Add</span>.</span></li>
+        <li><span><strong>Range, value through HIGHEST:</strong> <code>3.9</code> → New Value <code>1</code> → <span class="btn">Add</span> → <span class="btn">Continue</span> → <span class="btn">OK</span>.<span class="hint">The scale only takes values in steps of 0.20 (2.80, 3.00 … 3.80, 4.00), so nobody has 2.9 or 3.9. Typing 2.9 and 3.9 gives exactly the groups “up to 2.80”, “3.00–3.80” and “4.00 and more”, and avoids decimal rounding problems.</span></span></li>
+        <li><span>The instructions want (1) high, (2) medium, (3) low: that is why the highest scores get code 1.</span></li>
+        <li><span>Variable View, <code>seg</code>: value labels 1 High health concern, 2 Medium, 3 Low; Measure Ordinal; Decimals 0. Then Frequencies on <code>seg</code> to check.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>Code</th><th>Segment</th><th>health score</th><th class="num">n</th><th class="num">%</th></tr></thead><tbody>
+        <tr><td>1</td><td><strong>High concern</strong></td><td>4.00 and more</td><td class="num">237</td><td class="num">34.3</td></tr>
+        <tr><td>2</td><td>Medium concern</td><td>3.00 – 3.80</td><td class="num">202</td><td class="num">29.2</td></tr>
+        <tr><td>3</td><td>Low concern</td><td>up to 2.80</td><td class="num">252</td><td class="num">36.5</td></tr>
+      </tbody></table></div>
+      <blockquote class="report"><p class="lbl">Report like S2</p><p>We made 3 health concern segments based on the cumulative percentages: low (up to 2.80 → 3), medium (3.00 to 3.80 → 2) and high (4.00 and more → 1).</p></blockquote>
+      <p class="small">Then save the file (<span class="path"><kbd>File</kbd><span class="sep">›</span><kbd>Save</kbd></span>) and take the Variable View screenshot for the report.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ============================ PART B ============================ -->
+<section id="b0">
+  <h2><span class="tag">PART B · B0 · Sessions 2, 4, 5</span>Course rules for every test</h2>
+
+  <h3>1. Choose the test (S5 decision tree)</h3>
+  <div class="tbl"><table><thead><tr><th>DV measurement level</th><th>Categories in the IV to compare</th><th>Test</th><th>Session</th></tr></thead><tbody>
+    <tr><td>Nominal / ordinal</td><td>any</td><td>Chi² test (Crosstabs)</td><td>S4</td></tr>
+    <tr><td>Interval / ratio</td><td>1 category</td><td>One-sample t-test</td><td>S4</td></tr>
+    <tr><td>Interval / ratio</td><td>2 independent categories</td><td>Independent samples t-test</td><td>S5</td></tr>
+    <tr><td>Interval / ratio</td><td>2 dependent categories (same people)</td><td>Paired samples t-test</td><td>S5</td></tr>
+    <tr><td>Interval / ratio</td><td>&gt; 2 independent categories</td><td>One-way ANOVA</td><td>S5</td></tr>
+  </tbody></table></div>
+
+  <h3>2. Write the hypotheses (S4 structure)</h3>
+  <p><strong>H1</strong> = cause → effect, a specific DV, a benchmark in the IV (“than…”), a clear direction (more / less), testable. <strong>H0</strong> = same structure but “equal / the same / similar” (not “not bigger”).</p>
+
+  <h3>3. Select respondents when needed (S2)</h3>
+  <ol class="clicks">
+    <li><span><span class="path"><kbd>Data</kbd><span class="sep">›</span><kbd>Select Cases…</kbd></span> → If condition is satisfied → <span class="btn">If…</span> → <code>seg = 1</code> → <span class="btn">Continue</span> → <span class="btn">OK</span>.</span></li>
+    <li><span>Check quickly in Data View that the right rows are selected (others are crossed out).</span></li>
+    <li><span>After the analysis: <span class="path"><kbd>Data</kbd><span class="sep">›</span><kbd>Select Cases</kbd></span> → <strong>All cases</strong> → <span class="btn">OK</span> (or delete the filter variable). Report the selection with its coding (e.g. “seg = 1”).</span></li>
+  </ol>
+
+  <h3>4. Read significance and effect size (S4, S5)</h3>
+  <ul>
+    <li>Always read the <strong>two-sided</strong> significance. p ≤ .050 → significant, H0 rejected. p &gt; .050 → not significant: say the groups are <strong>equal</strong> in the population, never that one is higher.</li>
+    <li>Only if significant: look at the means (direction) and the effect size (size). Tick <strong>Estimate effect sizes</strong> in every t-test and ANOVA dialog.</li>
+  </ul>
+  <div class="two">
+    <div class="tbl" style="margin:0"><table><thead><tr><th colspan="2">Cramer's V / Phi (Chi²)</th></tr></thead><tbody>
+      <tr><td>≥ .70</td><td>Very big</td></tr><tr><td>.40 – .69</td><td>Big</td></tr><tr><td>.30 – .39</td><td>Moderate</td></tr><tr><td>.20 – .29</td><td>Small</td></tr><tr><td>.01 – .19</td><td>Negligible</td></tr></tbody></table></div>
+    <div class="tbl" style="margin:0"><table><thead><tr><th colspan="2">Cohen's d (t-tests)</th></tr></thead><tbody>
+      <tr><td>≥ .80</td><td>Big</td></tr><tr><td>.21 – .79</td><td>Moderate</td></tr><tr><td>.01 – .20</td><td>Small</td></tr></tbody></table></div>
+    <div class="tbl" style="margin:0"><table><thead><tr><th colspan="2">eta² (ANOVA)</th></tr></thead><tbody>
+      <tr><td>≥ .14</td><td>Large</td></tr><tr><td>.04 – .14</td><td>Medium</td></tr><tr><td>.01 – .04</td><td>Small</td></tr></tbody></table></div>
+  </div>
+
+  <h3>5. Graphs (S5)</h3>
+  <ul>
+    <li><strong>Independent groups:</strong> <span class="path"><kbd>Graphs</kbd><span class="sep">›</span><kbd>Chart Builder</kbd></span> → double-click the Simple Bar icon → DV on the Y-axis, IV on the X-axis → tick Display error bars → <span class="btn">OK</span>.</li>
+    <li><strong>Paired:</strong> Simple Bar → drag the first variable on the Y-axis, then the second onto the “+” of the same box.</li>
+  </ul>
+</section>
+
+<!-- RQ1 -->
+<section id="rq1">
+  <h2><span class="tag">RQ1 · S4 + S5</span>How is the high-concern segment different?</h2>
+  <div class="spec">
+    <div><div class="k">Respondents</div><div class="v">Whole dataset (All cases)</div></div>
+    <div><div class="k">IV</div><div class="v"><code>seg</code>, 3 independent categories</div></div>
+    <div><div class="k">DV categorical</div><div class="v">gender, Lang, living, education, occupation, native_lang, province, area, mot1–9 → <strong>Chi²</strong></div></div>
+    <div><div class="k">DV metric</div><div class="v">age, hhsize, f0401–f0508 (when), f0601–f0607 (where) → <strong>One-way ANOVA</strong></div></div>
+  </div>
+  <div class="hyp">
+    <div><b>H0</b><span>Consumers with high health concern have the same [DV] as consumers with medium and low health concern.</span></div>
+    <div><b>H1</b><span>Consumers with high health concern have a higher/lower [DV] (or a different distribution) than consumers with medium and low health concern.</span></div>
+  </div>
+
+  <div class="step" data-step="c-rq1-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Chi² for the categorical DVs (S4)</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Crosstabs…</kbd></span></li>
+        <li><span>S4 rule: <strong>Rows = DV</strong> (gender, living …, mot1–9), <strong>Columns = IV</strong> (seg).</span></li>
+        <li><span><span class="btn">Cells…</span> → <strong>Observed</strong>, <strong>Expected</strong>, <strong>Column</strong> → <span class="btn">Continue</span>.</span></li>
+        <li><span><span class="btn">Statistics…</span> → <strong>Chi-square</strong> and <strong>Phi and Cramer's V</strong> → <span class="btn">Continue</span> → <span class="btn">OK</span>.</span></li>
+        <li><span>For each table, first check the condition (S4): table larger than 2×2 → <strong>all expected counts &gt; 1 and max 20% below 5</strong>. Read it in footnote a of the Chi-Square Tests table.</span></li>
+        <li><span>If the condition fails: merge categories (Recode into Different Variables) or stop.</span></li>
+        <li><span>If p ≤ .050: read Cramer's V (3 segments = more than 2 categories, so Cramer's V, not Phi) and compare the column % horizontally.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>DV</th><th>Condition</th><th>Result</th><th>High / Medium / Low (column %)</th></tr></thead><tbody>
+        <tr><td>Gender</td><td>OK</td><td>χ²(2) = 9.15, <span class="sig">p = .010</span>, V = .12 (negligible)</td><td>Women: 59.1% / 54.5% / 45.6%</td></tr>
+        <tr><td>Living situation</td><td>OK (min E = 6.14)</td><td>χ²(10) = 28.84, <span class="sig">p = .001</span>, V = .14 (negligible)</td><td>With parents: 34.6% / 26.7% / 17.9% · With partner + kids: 29.5% / 30.7% / 41.7%</td></tr>
+        <tr><td>Occupation (10 codes)</td><td><span class="pill bad">fails</span> 30% &lt; 5</td><td>Merge → Student (1) / Working (2–6) / Not working or other (7–10)</td><td></td></tr>
+        <tr><td>Occupation, merged</td><td>OK</td><td>χ²(4) = 26.03, <span class="sig">p &lt; .001</span>, V = .14 (negligible)</td><td>Students: 31.6% / 26.2% / 14.3%</td></tr>
+        <tr><td>Education (9 codes)</td><td><span class="pill bad">fails</span> min E = .88</td><td>Merge → Secondary or less (1–4) / Bachelor, non-university master (5–6) / University master, PhD (7–8); “Other” (9, n = 3) set missing</td><td></td></tr>
+        <tr><td>Education, merged</td><td>OK</td><td>χ²(4) = 2.12, <span class="ns">p = .713</span></td><td>No difference</td></tr>
+        <tr><td>Native language (4 codes)</td><td><span class="pill bad">fails</span> 25% &lt; 5</td><td>Merge → Dutch / French / Bilingual or other: χ²(4) = 4.28, <span class="ns">p = .369</span></td><td>No difference</td></tr>
+        <tr><td>Survey language</td><td>OK</td><td>χ²(2) = 1.65, <span class="ns">p = .437</span></td><td>No difference</td></tr>
+        <tr><td>Province</td><td>OK (7%, min 4.09)</td><td>χ²(18) = 18.01, <span class="ns">p = .455</span></td><td>No difference</td></tr>
+        <tr><td>Living area</td><td>OK (17%, min 1.46)</td><td>χ²(10) = 10.18, <span class="ns">p = .425</span></td><td>No difference</td></tr>
+        <tr><td>Why: pure indulgence (mot4)</td><td>OK</td><td>χ²(2) = 15.55, <span class="sig">p &lt; .001</span>, V = .15 (negligible)</td><td>Applicable: 47.3% / 41.6% / 30.2%</td></tr>
+        <tr><td>Why: when lonely (mot9)</td><td>OK</td><td>χ²(2) = 13.92, <span class="sig">p &lt; .001</span>, V = .14 (negligible)</td><td>Applicable: 24.5% / 11.9% / 14.7%</td></tr>
+        <tr><td>Other motives (mot1, 2, 3, 5, 6, 7, 8)</td><td>OK</td><td>all <span class="ns">p &gt; .050</span> (kill hunger p = .074, kill time p = .091)</td><td>No difference</td></tr>
+      </tbody></table></div>
+      <details><summary>How to merge categories (Recode into Different Variables)</summary><div class="inner">
+        <ol class="clicks">
+          <li><span><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Recode into Different Variables</kbd></span> → <code>occupation</code> → Output Name <code>occupation3</code> → <span class="btn">Change</span>.</span></li>
+          <li><span>Old and New Values: missing → system-missing; Value 1 → 1; Range 2 through 6 → 2; Range 7 through 10 → 3 → <span class="btn">Continue</span> → <span class="btn">OK</span>.</span></li>
+          <li><span>Value labels 1 Student, 2 Working, 3 Not working / other; Measure Nominal. Rerun Crosstabs with <code>occupation3</code>. Report the merge with old and new values.</span></li>
+          <li><span>Education: Range 1–4 → 1, 5–6 → 2, 7–8 → 3, 9 → System-missing (Ordinal). Native language: 1 → 1, 2 → 2, 3–4 → 3.</span></li>
+        </ol>
+      </div></details>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-rq1-2">
+    <div class="step-head"><div class="step-num">2</div><h3>One-way ANOVA for the metric DVs (S5)</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Compare Means and Proportions</kbd><span class="sep">›</span><kbd>One-Way ANOVA…</kbd></span><span class="hint">In SPSS versions before 29 the menu is called “Compare Means”.</span></span></li>
+        <li><span>Dependent List: age, hhsize, f0401 … f0607. Factor: <code>seg</code>. Tick <strong>Estimate effect size for overall tests</strong>.</span></li>
+        <li><span><span class="btn">Post Hoc…</span> → <strong>Bonferroni</strong> and <strong>Tamhane's T2</strong> → <span class="btn">Continue</span>.</span></li>
+        <li><span><span class="btn">Options…</span> → <strong>Descriptive</strong>, <strong>Homogeneity of variance test</strong>, <strong>Welch</strong> → <span class="btn">Continue</span> → <span class="btn">OK</span>.</span></li>
+        <li><span>Per DV: Levene p &gt; .050 → <strong>ANOVA + Bonferroni</strong>; p ≤ .050 → <strong>Welch + Tamhane</strong>. Only if that test is significant: post hoc (all 3 pairs), means and eta².</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>DV</th><th class="num">High M (SE)</th><th class="num">Med. M (SE)</th><th class="num">Low M (SE)</th><th>Test (after Levene)</th><th class="num">η²</th><th>Post hoc</th></tr></thead><tbody>
+        <tr><td>Age</td><td class="num">31.47 (.75)</td><td class="num">33.35 (.88)</td><td class="num">39.02 (.85)</td><td>Welch's F(2, 433.23) = 22.99, <span class="sig">p &lt; .001</span></td><td class="num">.07</td><td>Tamhane: H &lt; L (p &lt; .001), M &lt; L (p &lt; .001), H = M (p &gt; .050)</td></tr>
+        <tr><td>Household size</td><td class="num">3.20 (.09)</td><td class="num">3.09 (.10)</td><td class="num">2.94 (.09)</td><td>F(2, 614) = 2.10, <span class="ns">p = .123</span></td><td class="num">–</td><td>–</td></tr>
+        <tr><td>Breakfast</td><td class="num">2.68 (.12)</td><td class="num">2.53 (.13)</td><td class="num">2.36 (.11)</td><td>F(2, 688) = 1.91, <span class="ns">p = .149</span></td><td class="num">–</td><td>–</td></tr>
+        <tr><td>Between breakfast &amp; lunch</td><td class="num">2.54 (.10)</td><td class="num">2.27 (.10)</td><td class="num">2.19 (.10)</td><td>F(2, 688) = 3.62, <span class="sig">p = .027</span></td><td class="num">.01</td><td>Bonferroni: H &gt; L (p = .028); others p &gt; .050</td></tr>
+        <tr><td>Lunch</td><td class="num">1.89 (.08)</td><td class="num">1.85 (.09)</td><td class="num">1.64 (.08)</td><td>F(2, 688) = 2.99, <span class="ns">p = .051</span></td><td class="num">–</td><td>–</td></tr>
+        <tr><td>Between lunch &amp; dinner</td><td class="num">3.84 (.11)</td><td class="num">3.46 (.13)</td><td class="num">3.13 (.11)</td><td>F(2, 688) = 9.67, <span class="sig">p &lt; .001</span></td><td class="num">.03</td><td>Bonferroni: H &gt; L (p &lt; .001); others p &gt; .050</td></tr>
+        <tr><td>Dinner</td><td class="num">1.85 (.08)</td><td class="num">1.70 (.08)</td><td class="num">1.44 (.06)</td><td>Welch's F(2, 433.81) = 8.67, <span class="sig">p &lt; .001</span></td><td class="num">.02</td><td>Tamhane: H &gt; L (p &lt; .001), M &gt; L (p = .039), H = M</td></tr>
+        <tr><td>After dinner</td><td class="num">4.24 (.12)</td><td class="num">3.71 (.12)</td><td class="num">3.43 (.12)</td><td>F(2, 688) = 11.93, <span class="sig">p &lt; .001</span></td><td class="num">.03</td><td>Bonferroni: H &gt; M (p = .008), H &gt; L (p &lt; .001), M = L</td></tr>
+        <tr><td>Late at night</td><td class="num">3.05 (.09)</td><td class="num">2.57 (.08)</td><td class="num">2.35 (.06)</td><td>Welch's F(2, 435.03) = 22.61, <span class="sig">p &lt; .001</span></td><td class="num">.07</td><td>Tamhane: H &gt; M, H &gt; L (both p &lt; .001), M = L</td></tr>
+        <tr><td>While working</td><td class="num">2.99 (.12)</td><td class="num">2.60 (.11)</td><td class="num">2.30 (.10)</td><td>Welch's F(2, 450.52) = 9.99, <span class="sig">p &lt; .001</span></td><td class="num">.03</td><td>Tamhane: H &gt; L (p &lt; .001); H vs M p = .050 (just above: not significant, no asterisk)</td></tr>
+        <tr><td>After work/school</td><td class="num">3.63 (.11)</td><td class="num">3.39 (.12)</td><td class="num">3.18 (.12)</td><td>F(2, 687) = 4.00, <span class="sig">p = .019</span></td><td class="num">.01</td><td>Bonferroni: H &gt; L (p = .014); others p &gt; .050</td></tr>
+        <tr><td>Breaks at work/school</td><td class="num">3.41 (.11)</td><td class="num">3.05 (.12)</td><td class="num">2.65 (.11)</td><td>F(2, 688) = 12.39, <span class="sig">p &lt; .001</span></td><td class="num">.03</td><td>Bonferroni: H &gt; L (p &lt; .001), M &gt; L (p = .037), H = M</td></tr>
+        <tr><td>At home, break in the week</td><td class="num">4.07 (.11)</td><td class="num">3.68 (.12)</td><td class="num">3.18 (.11)</td><td>F(2, 687) = 16.92, <span class="sig">p &lt; .001</span></td><td class="num">.05</td><td>Bonferroni: H &gt; M (p = .050, just below: asterisk), H &gt; L (p &lt; .001), M &gt; L (p = .006)</td></tr>
+        <tr><td>Not at home, weekend</td><td class="num">3.18 (.11)</td><td class="num">2.99 (.11)</td><td class="num">2.60 (.10)</td><td>F(2, 688) = 8.83, <span class="sig">p &lt; .001</span></td><td class="num">.03</td><td>Bonferroni: H &gt; L (p &lt; .001), M &gt; L (p = .025), H = M</td></tr>
+        <tr><td>On my own (n = 155)</td><td class="num">2.57 (.28)</td><td class="num">1.95 (.26)</td><td class="num">1.80 (.17)</td><td>Welch's F(2, 84.28) = 2.78, <span class="ns">p = .068</span></td><td class="num">–</td><td>–</td></tr>
+        <tr><td>Small supermarket</td><td class="num">2.95 (.12)</td><td class="num">3.00 (.13)</td><td class="num">2.79 (.12)</td><td>F(2, 688) = 0.90, <span class="ns">p = .408</span></td><td class="num">–</td><td>–</td></tr>
+        <tr><td>Large supermarket</td><td class="num">4.60 (.12)</td><td class="num">4.60 (.13)</td><td class="num">4.44 (.13)</td><td>Welch's F(2, 453.45) = 0.57, <span class="ns">p = .566</span></td><td class="num">–</td><td>–</td></tr>
+        <tr><td>Vending machine</td><td class="num">2.18 (.10)</td><td class="num">2.04 (.10)</td><td class="num">1.52 (.06)</td><td>Welch's F(2, 415.43) = 18.96, <span class="sig">p &lt; .001</span></td><td class="num">.04</td><td>Tamhane: H &gt; L, M &gt; L (both p &lt; .001), H = M</td></tr>
+        <tr><td>Bookshop</td><td class="num">1.89 (.08)</td><td class="num">1.82 (.09)</td><td class="num">1.42 (.06)</td><td>Welch's F(2, 423.39) = 12.98, <span class="sig">p &lt; .001</span></td><td class="num">.03</td><td>Tamhane: H &gt; L (p &lt; .001), M &gt; L (p = .001), H = M</td></tr>
+        <tr><td>Petrol station</td><td class="num">1.96 (.08)</td><td class="num">1.92 (.10)</td><td class="num">1.53 (.06)</td><td>Welch's F(2, 415.89) = 12.34, <span class="sig">p &lt; .001</span></td><td class="num">.03</td><td>Tamhane: H &gt; L (p &lt; .001), M &gt; L (p = .002), H = M</td></tr>
+        <tr><td>Night shop</td><td class="num">1.89 (.07)</td><td class="num">1.41 (.06)</td><td class="num">1.22 (.04)</td><td>Welch's F(2, 405.96) = 32.46, <span class="sig">p &lt; .001</span></td><td class="num">.09</td><td>Tamhane: H &gt; M, H &gt; L (both p &lt; .001), M &gt; L (p = .033)</td></tr>
+        <tr><td>Other place (n = 183)</td><td class="num">2.20 (.24)</td><td class="num">1.78 (.22)</td><td class="num">1.44 (.14)</td><td>Welch's F(2, 98.41) = 3.66, <span class="sig">p = .029</span></td><td class="num">.04</td><td>Tamhane: H &gt; L (p = .028); others p &gt; .050</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+  <blockquote class="report"><p class="lbl">Conclusion in plain words</p>
+    <p>Compared with the low-concern segment, highly concerned consumers are more often <strong>women</strong>, <strong>younger</strong> (31 vs 39 years), more often <strong>students living with their parents</strong>, and eat chocolate more for <strong>pure indulgence</strong> and <strong>when lonely</strong>. Chocolate fits better for them at almost every moment, especially <strong>late at night</strong> and <strong>after dinner</strong> (where they also beat the medium segment). They buy more in <strong>impulse channels</strong> (vending machines, bookshops, petrol stations and above all night shops), not more in supermarkets. All effects are small (η² ≤ .09, Cramer's V ≤ .15).</p>
+  </blockquote>
+</section>
+
+<!-- RQ2 -->
+<section id="rq2">
+  <h2><span class="tag">RQ2 · S5</span>Do they eat more chocolate and find it more attractive?</h2>
+  <div class="spec">
+    <div><div class="k">Respondents</div><div class="v">Whole dataset</div></div>
+    <div><div class="k">IV</div><div class="v"><code>seg</code>, 3 independent categories</div></div>
+    <div><div class="k">DV</div><div class="v"><code>freq1</code>, <code>att1</code> (interval, 7 points)</div></div>
+    <div><div class="k">Test</div><div class="v">One-way ANOVA</div></div>
+  </div>
+  <div class="hyp">
+    <div><b>H0</b><span>Highly concerned consumers eat chocolate as often as / find chocolate as attractive as medium and low concerned consumers (M<sub>H</sub> = M<sub>M</sub> = M<sub>L</sub>).</span></div>
+    <div><b>H1</b><span>Highly concerned consumers eat chocolate more often / find it more attractive than medium and low concerned consumers (M<sub>H</sub> &gt; M<sub>M</sub> &amp; M<sub>L</sub>).</span></div>
+  </div>
+  <div class="step" data-step="c-rq2-1">
+    <div class="step-head"><div class="step-num">1</div><h3>One-way ANOVA</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>All cases. <span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Compare Means and Proportions</kbd><span class="sep">›</span><kbd>One-Way ANOVA</kbd></span> → <span class="btn">Reset</span>.</span></li>
+        <li><span>Dependent List: <code>freq1</code>, <code>att1</code>. Factor: <code>seg</code>. Tick Estimate effect size.</span></li>
+        <li><span>Post Hoc: Bonferroni + Tamhane's T2. Options: Descriptive, Homogeneity of variance test, Welch → <span class="btn">OK</span>.</span></li>
+        <li><span>Levene: freq1 p = .048, att1 p = .020 → both ≤ .050 → read <strong>Welch</strong> and <strong>Tamhane</strong>.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>DV</th><th class="num">High M (SE)</th><th class="num">Medium M (SE)</th><th class="num">Low M (SE)</th><th>Welch</th><th class="num">η²</th><th>Tamhane</th></tr></thead><tbody>
+        <tr><td>Frequency</td><td class="num">4.97 (.09)</td><td class="num">4.55 (.10)</td><td class="num">4.12 (.10)</td><td>F(2, 450.91) = 20.25, <span class="sig">p &lt; .001</span></td><td class="num">.06</td><td>H &gt; M (p = .007), H &gt; L (p &lt; .001), M &gt; L (p = .008)</td></tr>
+        <tr><td>Attractiveness</td><td class="num">5.84 (.09)</td><td class="num">5.53 (.11)</td><td class="num">5.27 (.11)</td><td>F(2, 450.85) = 8.29, <span class="sig">p &lt; .001</span></td><td class="num">.02</td><td>H &gt; L (p &lt; .001); H = M (p &gt; .050); M = L (p &gt; .050)</td></tr>
+      </tbody></table></div>
+      <div class="chart" role="img" aria-label="Mean chocolate frequency and attractiveness per segment, course method">
+        <h5>Mean per segment (1–7)</h5>
+        <div class="bars">
+          <span>Frequency · High</span><div class="track"><div class="fill hi" style="width:71.0%"></div></div><span class="val">4.97</span>
+          <span>Frequency · Medium</span><div class="track"><div class="fill" style="width:65.0%"></div></div><span class="val">4.55</span>
+          <span>Frequency · Low</span><div class="track"><div class="fill alt" style="width:58.9%"></div></div><span class="val">4.12</span>
+          <span>Attractive · High</span><div class="track"><div class="fill hi" style="width:83.4%"></div></div><span class="val">5.84</span>
+          <span>Attractive · Medium</span><div class="track"><div class="fill" style="width:79.0%"></div></div><span class="val">5.53</span>
+          <span>Attractive · Low</span><div class="track"><div class="fill alt" style="width:75.3%"></div></div><span class="val">5.27</span>
+        </div>
+        <div class="axis"><span></span><span><i>0</i><i>3.5</i><i>7</i></span><span></span></div>
+      </div>
+    </div>
+  </div>
+  <blockquote class="report"><p class="lbl">Report like S5</p>
+    <p>An Anova indicated that there was a significant effect of health concern on chocolate consumption frequency (Welch's F(2, 450.91) = 20.25, p &lt; .001). Tamhane post-hoc tests showed that highly concerned consumers (M = 4.97, SE = .09) eat chocolate significantly more often than medium (M = 4.55, SE = .10, p = .007) and low concerned consumers (M = 4.12, SE = .10, p &lt; .001), and medium more than low (p = .008). The difference is medium (η² = .06). H1 is supported.</p>
+    <p>For attractiveness (Welch's F(2, 450.85) = 8.29, p &lt; .001, η² = .02, small), highly concerned consumers (M = 5.84, SE = .09) find chocolate more attractive than low concerned consumers (M = 5.27, SE = .11, p &lt; .001), but equally attractive as medium concerned consumers (M = 5.53, SE = .11, p &gt; .050). H1 is partially supported.</p>
+  </blockquote>
+</section>
+
+<!-- RQ3 -->
+<section id="rq3">
+  <h2><span class="tag">RQ3 · S5</span>Chocolate vs other snacks in the high segment</h2>
+  <div class="spec">
+    <div><div class="k">Respondents</div><div class="v">Select Cases: <code>seg = 1</code> (n = 237)</div></div>
+    <div><div class="k">IV</div><div class="v">Type of snack: 2 dependent categories (same people)</div></div>
+    <div><div class="k">DV</div><div class="v">Frequency / attractiveness</div></div>
+    <div><div class="k">Test</div><div class="v">Paired samples t-test (3 + 3 pairs)</div></div>
+  </div>
+  <div class="hyp">
+    <div><b>H0</b><span>Highly concerned consumers eat chocolate as often as [candy / salty snacks / cookies] (and find it equally attractive).</span></div>
+    <div><b>H1</b><span>Highly concerned consumers eat chocolate more often than [candy / salty snacks / cookies] (and find it more attractive).</span></div>
+  </div>
+  <div class="step" data-step="c-rq3-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Select the segment, run the paired t-tests</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>Data › Select Cases → If <code>seg = 1</code> → OK. Check Data View.</span></li>
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Compare Means and Proportions</kbd><span class="sep">›</span><kbd>Paired-Samples T Test…</kbd></span></span></li>
+        <li><span>S5 “how to”: click <code>freq1</code> → arrow (left box of Pair 1), click <code>freq2</code> → arrow (right box, <strong>same line</strong>). Repeat for freq1–freq3, freq1–freq4, att1–att2, att1–att3, att1–att4.</span></li>
+        <li><span>Tick <strong>Estimate effect sizes</strong> → <span class="btn">OK</span>. Read the two-sided p, then means and Cohen's d.</span></li>
+        <li><span>Data › Select Cases → All cases.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>Pair</th><th class="num">Chocolate M (SE)</th><th class="num">Other M (SE)</th><th>t-test</th><th class="num">d</th></tr></thead><tbody>
+        <tr><td>Frequency vs candy</td><td class="num">4.97 (.09)</td><td class="num">3.59 (.10)</td><td>t(236) = 11.00, <span class="sig">p &lt; .001</span></td><td class="num">.71 moderate</td></tr>
+        <tr><td>Frequency vs salty snacks</td><td class="num">4.97 (.09)</td><td class="num">3.64 (.08)</td><td>t(235) = 11.58, <span class="sig">p &lt; .001</span></td><td class="num">.75 moderate</td></tr>
+        <tr><td>Frequency vs cookies</td><td class="num">4.97 (.09)</td><td class="num">4.32 (.09)</td><td>t(236) = 5.77, <span class="sig">p &lt; .001</span></td><td class="num">.37 moderate</td></tr>
+        <tr><td>Attractiveness vs candy</td><td class="num">5.84 (.09)</td><td class="num">4.43 (.11)</td><td>t(236) = 9.90, <span class="sig">p &lt; .001</span></td><td class="num">.64 moderate</td></tr>
+        <tr><td>Attractiveness vs salty snacks</td><td class="num">5.84 (.09)</td><td class="num">4.96 (.10)</td><td>t(236) = 6.02, <span class="sig">p &lt; .001</span></td><td class="num">.39 moderate</td></tr>
+        <tr><td>Attractiveness vs cookies</td><td class="num">5.84 (.09)</td><td class="num">4.99 (.08)</td><td>t(236) = 7.62, <span class="sig">p &lt; .001</span></td><td class="num">.49 moderate</td></tr>
+      </tbody></table></div>
+      <p class="small muted">Salty snacks: n = 236 because of the impossible “8” declared missing.</p>
+    </div>
+  </div>
+  <blockquote class="report"><p class="lbl">Report like S5</p><p>A dependent sample t-test indicated that highly concerned consumers eat chocolate (M = 4.97, SE = .09) significantly more often than candy (M = 3.59, SE = .10; t(236) = 11.00, p &lt; .001). The difference is moderate (d = .71) … [same for the 5 other pairs]. H1 is supported for all comparisons: for this segment, chocolate is the most eaten and the most attractive snack. + graph (Simple Bar with freq1 and freq2 on the same Y-axis).</p></blockquote>
+</section>
+
+<!-- RQ4 -->
+<section id="rq4">
+  <h2><span class="tag">RQ4 · S1 + S4</span>Are they older or younger than average?</h2>
+  <div class="spec">
+    <div><div class="k">Respondents</div><div class="v">Step 1 all cases, step 2 <code>seg = 1</code></div></div>
+    <div><div class="k">IV</div><div class="v">1 category (the high segment)</div></div>
+    <div><div class="k">DV</div><div class="v"><code>age</code> (ratio)</div></div>
+    <div><div class="k">Test</div><div class="v">One-sample t-test, test value = mean age of all</div></div>
+  </div>
+  <div class="hyp">
+    <div><b>H0</b><span>Highly concerned consumers have the same age as the average consumer in the dataset (M = 34.74).</span></div>
+    <div><b>H1</b><span>Highly concerned consumers are younger / older than the average consumer (M ≠ 34.74).</span></div>
+  </div>
+  <div class="step" data-step="c-rq4-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Mean age of everyone, then one-sample t-test</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>All cases. S1: <span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Frequencies</kbd></span> → <code>age</code> → <span class="btn">Statistics…</span> → Mean → <span class="btn">OK</span>. Result: <strong>M = 34.74</strong> (N = 667).</span></li>
+        <li><span>Select Cases → If <code>seg = 1</code>.</span></li>
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Compare Means and Proportions</kbd><span class="sep">›</span><kbd>One-Sample T Test…</kbd></span> → Test Variable: <code>age</code>, <strong>Test Value: 34.74</strong>, tick <strong>Estimate effect sizes</strong> → <span class="btn">OK</span>.</span></li>
+        <li><span>Select Cases → All cases.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th class="num">n</th><th class="num">M (SE)</th><th>t-test</th><th class="num">d</th></tr></thead><tbody>
+        <tr><td class="num">232</td><td class="num">31.47 (.75)</td><td>t(231) = −4.36, <span class="sig">p &lt; .001</span></td><td class="num">−.29 moderate</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+  <blockquote class="report"><p class="lbl">Report like S4</p><p>One-sample t-test indicated that highly concerned consumers were significantly younger than the average age of 34.74 years in the dataset (M = 31.47, SE = .75; t(231) = −4.36, p &lt; .001). The difference is moderate (d = −.29). Therefore H1 is supported: the target segment is about 3 years younger than the average consumer.</p></blockquote>
+</section>
+
+<!-- RQ5 -->
+<section id="rq5">
+  <h2><span class="tag">RQ5 · S5</span>Men vs women in the high segment</h2>
+  <div class="spec">
+    <div><div class="k">Respondents</div><div class="v"><code>seg = 1</code> (97 men, 140 women)</div></div>
+    <div><div class="k">IV</div><div class="v"><code>gender</code>, 2 independent categories</div></div>
+    <div><div class="k">DV</div><div class="v"><code>selfcont</code>, <code>posfeel</code>, <code>negfeel</code> (summated scales: interval)</div></div>
+    <div><div class="k">Test</div><div class="v">Independent samples t-test</div></div>
+  </div>
+  <div class="hyp">
+    <div><b>H0</b><span>Among highly concerned consumers, men and women have the same self-control (and the same positive / negative feelings that drive them to eat chocolate).</span></div>
+    <div><b>H1</b><span>Among highly concerned consumers, women have less self-control than men (and eat chocolate more when feeling positive / negative).</span></div>
+  </div>
+  <div class="step" data-step="c-rq5-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Select the segment, run the t-test</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>Select Cases → If <code>seg = 1</code>.</span></li>
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Compare Means and Proportions</kbd><span class="sep">›</span><kbd>Independent-Samples T Test…</kbd></span></span></li>
+        <li><span>Test Variable(s): <code>selfcont</code>, <code>posfeel</code>, <code>negfeel</code>. Grouping Variable: <code>gender</code> → <span class="btn">Define Groups…</span> → 1 and 2 → <span class="btn">Continue</span>. Tick <strong>Estimate effect sizes</strong> → <span class="btn">OK</span>.</span></li>
+        <li><span>S5: first Levene to choose the row (p &gt; .050 top, p ≤ .050 bottom), then the two-sided p.</span></li>
+        <li><span>Select Cases → All cases.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>DV</th><th class="num">Men M (SE)</th><th class="num">Women M (SE)</th><th>Levene → row</th><th>t-test</th><th class="num">d</th></tr></thead><tbody>
+        <tr><td>Self-control</td><td class="num">4.32 (.16)</td><td class="num">3.70 (.14)</td><td>p = .441 → top</td><td>t(235) = 2.84, <span class="sig">p = .005</span></td><td class="num">.37 moderate</td></tr>
+        <tr><td>Positive feelings</td><td class="num">3.52 (.11)</td><td class="num">3.81 (.09)</td><td>p = .703 → top</td><td>t(235) = −2.08, <span class="sig">p = .039</span></td><td class="num">−.27 moderate</td></tr>
+        <tr><td>Negative feelings</td><td class="num">3.99 (.13)</td><td class="num">4.21 (.09)</td><td>p = .244 → top</td><td>t(235) = −1.39, <span class="ns">p = .166</span></td><td class="num">–</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+  <blockquote class="report"><p class="lbl">Report like S5</p><p>Independent sample t-test indicated that, among highly concerned consumers, men (M = 4.32, SE = .16) have significantly more self-control than women (M = 3.70, SE = .14; t(235) = 2.84, p = .005), a moderate difference (d = .37). Women (M = 3.81, SE = .09) also eat chocolate significantly more when feeling positive than men (M = 3.52, SE = .11; t(235) = −2.08, p = .039, d = −.27). For negative feelings, men (M = 3.99, SE = .13) and women (M = 4.21, SE = .09) are equal (t(235) = −1.39, p = .166). H1 is supported for self-control and positive feelings, H0 for negative feelings.</p></blockquote>
+</section>
+
+<!-- RQ6 -->
+<section id="rq6">
+  <h2><span class="tag">RQ6 · S5</span>The “kill hunger between meals” target group</h2>
+  <div class="spec">
+    <div><div class="k">Respondents</div><div class="v">Whole dataset</div></div>
+    <div><div class="k">IV</div><div class="v"><code>mot3</code>: 1 = target group (n = 113), 0 = others (n = 578)</div></div>
+    <div><div class="k">DV</div><div class="v"><code>att1</code>; <code>selfcont</code> (low = less easy to resist)</div></div>
+    <div><div class="k">Test</div><div class="v">Independent samples t-test</div></div>
+  </div>
+  <div class="hyp">
+    <div><b>H0</b><span>People who eat chocolate to kill hunger between meals find chocolate as attractive and as easy to resist as other people.</span></div>
+    <div><b>H1</b><span>People who eat chocolate to kill hunger between meals find chocolate more attractive and less easy to resist (lower self-control) than other people.</span></div>
+  </div>
+  <div class="step" data-step="c-rq6-1">
+    <div class="step-head"><div class="step-num">1</div><h3>Independent samples t-test on all cases</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>Check All cases.</span></li>
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Compare Means and Proportions</kbd><span class="sep">›</span><kbd>Independent-Samples T Test…</kbd></span> → Test Variables: <code>att1</code>, <code>selfcont</code>. Grouping: <code>mot3</code> → Define Groups 1 and 0. Estimate effect sizes → <span class="btn">OK</span>.</span></li>
+      </ol>
+      <div class="tbl"><table><thead><tr><th>DV</th><th class="num">Target M (SE)</th><th class="num">Others M (SE)</th><th>Levene → row</th><th>t-test (two-sided)</th><th class="num">d</th></tr></thead><tbody>
+        <tr><td>Attractiveness</td><td class="num">5.78 (.12)</td><td class="num">5.49 (.07)</td><td>p = .002 → <strong>bottom</strong></td><td>t(184.21) = 2.02, <span class="sig">p = .045</span></td><td class="num">.18 small</td></tr>
+        <tr><td>Self-control</td><td class="num">4.01 (.17)</td><td class="num">4.36 (.07)</td><td>p = .686 → top</td><td>t(689) = −1.93, <span class="ns">p = .054</span></td><td class="num">–</td></tr>
+      </tbody></table></div>
+      <div class="note warn"><strong>Read the right row</strong><p>Attractiveness is only significant on the bottom row (Levene p = .002). The top row would give p = .078.</p></div>
+    </div>
+  </div>
+  <blockquote class="report"><p class="lbl">Report like S5</p><p>Independent sample t-test indicated that people who eat chocolate to kill hunger between meals (M = 5.78, SE = .12) find chocolate significantly more attractive than other people (M = 5.49, SE = .07; t(184.21) = 2.02, p = .045), but the difference is small (d = .18). They find chocolate equally easy to resist as other people (M = 4.01, SE = .17 vs M = 4.36, SE = .07; t(689) = −1.93, p = .054). H1 is supported for attractiveness, H0 for self-control. For the manager: this positioning reaches people who like chocolate only slightly more, and only 16% of consumers eat chocolate for that reason.</p></blockquote>
+</section>
+
+<hr class="sep">
+
+<section id="report">
+  <h2><span class="tag">PART C · Sessions 1, 4, 5</span>Reporting templates from the slides</h2>
+  <div class="tbl"><table><thead><tr><th>Test</th><th>Template (fill in)</th></tr></thead><tbody>
+    <tr><td>Descriptives (S1)</td><td>Mo = …, Md = …, M = …, SD = … (2 decimals, drop the 0 below 1: .50)</td></tr>
+    <tr><td>Chi² (S4)</td><td>The chi-square test is (not) significant with a … effect of IV on DV (χ²(df) = x.xx, p = .xxx, Cramer's V = .xx) + crosstab interpretation + hypothesis + managerial conclusion</td></tr>
+    <tr><td>One-sample t-test (S4)</td><td>One-sample t-test indicated that … was (not) significantly higher/lower than [test value] (M = x.xx, SE = .xx; t(df) = x.xx, p = .xxx). The difference is … (d = .xx).</td></tr>
+    <tr><td>Paired t-test (S5)</td><td>Dependent sample t-test indicated that group 1 (M, SE) was significantly higher/lower/not different from group 2 (M, SE; t(df) = x.xx, p = .xxx). The difference is … (d = .xx) + graph</td></tr>
+    <tr><td>Independent t-test (S5)</td><td>Same as paired; read the top or bottom row depending on Levene; df with 0 or 2 decimals</td></tr>
+    <tr><td>ANOVA (S5)</td><td>An Anova indicated … (F(df1, df2) = x.xx, p = .xxx / Welch's F(df1, df2) = x.xx, p = .xxx). Bonferroni/Tamhane post-hoc tests showed … (M, SE for every group; all comparisons: exact p if significant, p &gt; .050 if not). The difference is … (η² = .xx) + graph</td></tr>
+  </tbody></table></div>
+  <ul>
+    <li>p with <strong>3 decimals</strong>; p = .000 → write p &lt; .001.</li>
+    <li>Means and SE with 2 decimals; effect size only if the test is significant.</li>
+    <li>Never say one group is higher if the test is not significant: say they are equal in the population.</li>
+    <li>Always end with the hypothesis conclusion and a managerial conclusion.</li>
+  </ul>
+  <div class="note tip"><strong>The numbers on this page</strong><p>I computed them from your .sav file with the course choices above (Python, same formulas as SPSS). Small differences in the last decimal are possible in SPSS. Sessions 3 and 6 were not in the slides I received, so nothing here comes from them.</p></div>
+</section>
+
+<footer>
+  Based on the course slides of sessions 1, 2, 4 and 5, the project instructions, the survey and the dataset (691 respondents). Menu names follow the slides (“Compare Means and Proportions”, SPSS 29+).
+</footer>
+</main>
+</div>
+
+<script>
+(function(){
+  var KEY='choc-spss-course-steps';
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){saved={}}
+  var steps=[].slice.call(document.querySelectorAll('.step[data-step]')).filter(function(s){return s.querySelector('.done input')});
+  function update(){
+    var n=0;
+    steps.forEach(function(s){var cb=s.querySelector('.done input');s.classList.toggle('is-done',cb.checked);if(cb.checked)n++});
+    document.getElementById('progText').textContent=n+' of '+steps.length+' steps done';
+    document.getElementById('progBar').style.width=(steps.length?n/steps.length*100:0)+'%';
+  }
+  steps.forEach(function(s){
+    var id=s.getAttribute('data-step'),cb=s.querySelector('.done input');
+    cb.id='done-'+id;
+    cb.checked=!!saved[id];
+    cb.addEventListener('change',function(){
+      saved[id]=cb.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}
+      update();
+    });
+  });
+  update();
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var pre=b.parentNode.querySelector('pre'),txt=pre.textContent;
+      function sel(){var r=document.createRange();r.selectNodeContents(pre);var s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected';}
+      try{
+        navigator.clipboard.writeText(txt).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1500)},sel);
+      }catch(e){sel()}
+    });
+  });
+})();
+</script>
+</body>
+</html>
