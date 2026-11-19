@@ -8,6 +8,7 @@ Step-by-step guide for the IÉSEG Data Insights SPSS group project: data cleanin
 - `qcm.html`: MCQ practice
 - `report.html`: how to write the report, with example text
 - `slides.html`: how to build the presentation slides
+- `steps.html`: the whole project in SPSS click by click, with the predicted output of every step
 - `chocolate_project_syntax.sps`: the same steps as SPSS syntax
 
 The dataset itself is not included.
