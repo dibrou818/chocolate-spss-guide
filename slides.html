@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Presentation Slides Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Young+Serif&display=swap">
+<style>
+/* Layout: sticky table of contents on the left, one reading column on the right; every step is a numbered card with "why → click path → what to read → expected result". */
+:root{
+  --bg:#f7f6f4; --surface:#ffffff; --sunk:#efece8; --line:#ddd7d0;
+  --fg:#231a15; --muted:#6b5f57;
+  --cocoa:#5b3420; --cocoa-soft:#f0e4dc; --accent:#9a4f22;
+  --spss:#1f5f9c; --spss-soft:#e3edf7;
+  --ok:#2f7a4a; --ok-soft:#e2f1e7; --warn:#9a6a0a; --warn-soft:#fbf0d6; --bad:#a3352a; --bad-soft:#f8e3e0;
+  --why:#5c4a8a; --why-soft:#eeeaf6;
+  --code-bg:#221a16; --code-fg:#f3e9e2;
+  --f-display:"Young Serif", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#171210; --surface:#211a17; --sunk:#2a221e; --line:#3d332d;
+  --fg:#f1e8e2; --muted:#b3a59b;
+  --cocoa:#e7b996; --cocoa-soft:#3a2a21; --accent:#e89a63;
+  --spss:#8cbcf0; --spss-soft:#1c2a3a;
+  --ok:#7ccf98; --ok-soft:#1a2e22; --warn:#e8c169; --warn-soft:#33290f; --bad:#f09a8e; --bad-soft:#3a1d19;
+  --why:#c4b5f0; --why-soft:#27213a;
+  --code-bg:#0f0b09; --code-fg:#f3e9e2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171210; --surface:#211a17; --sunk:#2a221e; --line:#3d332d;
+  --fg:#f1e8e2; --muted:#b3a59b;
+  --cocoa:#e7b996; --cocoa-soft:#3a2a21; --accent:#e89a63;
+  --spss:#8cbcf0; --spss-soft:#1c2a3a;
+  --ok:#7ccf98; --ok-soft:#1a2e22; --warn:#e8c169; --warn-soft:#33290f; --bad:#f09a8e; --bad-soft:#3a1d19;
+  --why:#c4b5f0; --why-soft:#27213a;
+  --code-bg:#0f0b09; --code-fg:#f3e9e2; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);gap:48px;max-width:1240px;margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:32px 96px}
+@media (max-width:960px){.wrap{grid-template-columns:minmax(0,1fr);gap:24px}}
+
+/* ---------- TOC ---------- */
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);align-self:start;max-height:calc(100vh - 32px);overflow:auto;font-size:14px;padding-right:4px}
+nav.toc .brand{font-family:var(--f-display);font-size:20px;line-height:1.2;color:var(--cocoa);margin:0 0 4px}
+nav.toc .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+nav.toc h4{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:18px 0 6px;font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+nav.toc a{display:flex;gap:8px;align-items:baseline;padding:4px 8px;border-radius:6px;color:var(--fg);text-decoration:none}
+nav.toc a:hover{background:var(--sunk)}
+nav.toc a .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);min-width:26px}
+nav.toc .progress{margin-top:18px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);font-size:13px}
+nav.toc .bar{height:6px;background:var(--sunk);border-radius:3px;margin-top:6px;overflow:hidden}
+nav.toc .bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+@media (max-width:960px){
+  nav.toc{position:static;max-height:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+  nav.toc ol{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
+
+/* ---------- Main ---------- */
+main{min-width:0}
+header.hero{padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:32px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 8px}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(32px,5vw,48px);line-height:1.1;margin:0 0 14px;text-wrap:balance;color:var(--cocoa)}
+.lede{font-size:18px;color:var(--muted);max-width:68ch;margin:0}
+h2{font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.2;margin:56px 0 8px;color:var(--cocoa);text-wrap:balance}
+h2 .tag{font-family:var(--f-mono);font-size:14px;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:.04em}
+h3{font-size:19px;line-height:1.35;margin:28px 0 8px;font-weight:600;text-wrap:balance}
+h4{font-size:15px;margin:18px 0 6px;font-weight:600}
+p,li{max-width:72ch}
+section > p{margin:8px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+strong{font-weight:600}
+
+/* Step cards */
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:18px 0;position:relative}
+.step-head{display:flex;gap:14px;align-items:flex-start}
+.step-num{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--cocoa);color:var(--surface);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:14px}
+.step-head h3{margin:4px 0 0;flex:1;min-width:0}
+.done{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap;margin-top:6px}
+.done input{width:17px;height:17px;accent-color:var(--ok);cursor:pointer}
+.step.is-done{border-color:var(--ok)}
+.step.is-done .step-num{background:var(--ok)}
+.step-body{margin-left:48px;min-width:0}
+@media (max-width:560px){.step-body{margin-left:0}.step{padding:16px}}
+
+/* "Why" box: the short explanation of what a step is for */
+.why{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;background:var(--why-soft);border-radius:6px;padding:10px 14px;margin:12px 0;font-size:15px}
+.why::before{content:"Why";font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--why);padding-top:3px}
+.why p{margin:0}
+.why p + p{margin-top:4px}
+
+/* Sub-headings inside a step */
+.phase{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+
+/* SPSS click paths */
+.path{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--f-mono);font-size:13.5px;line-height:1.3;vertical-align:middle}
+.path kbd{font:inherit;background:var(--spss-soft);color:var(--spss);border:1px solid color-mix(in srgb, var(--spss) 30%, transparent);border-radius:5px;padding:2px 7px;font-weight:500;white-space:nowrap}
+.path .sep{color:var(--muted)}
+.btn{font-family:var(--f-mono);font-size:13px;background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:1px 7px;white-space:nowrap;color:var(--fg)}
+.var{font-family:var(--f-mono);font-size:.9em;background:var(--cocoa-soft);color:var(--cocoa);padding:1px 6px;border-radius:4px;white-space:nowrap}
+
+ol.clicks{counter-reset:c;list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}
+ol.clicks[start="4"]{counter-reset:c 3}
+ol.clicks > li{counter-increment:c;display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;max-width:none}
+ol.clicks > li::before{content:counter(c);font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--spss);background:var(--spss-soft);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;margin-top:1px}
+ol.clicks > li > span{min-width:0}
+ol.clicks .hint{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+
+/* Callouts */
+.note{border-radius:var(--r);padding:12px 16px;margin:14px 0;font-size:15px;border:1px solid transparent}
+.note p{margin:4px 0}
+.note > strong:first-child{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.note.tip{background:var(--spss-soft);border-color:color-mix(in srgb, var(--spss) 25%, transparent)}
+.note.tip > strong:first-child{color:var(--spss)}
+.note.warn{background:var(--warn-soft);border-color:color-mix(in srgb, var(--warn) 30%, transparent)}
+.note.warn > strong:first-child{color:var(--warn)}
+.note.ok{background:var(--ok-soft);border-color:color-mix(in srgb, var(--ok) 30%, transparent)}
+.note.ok > strong:first-child{color:var(--ok)}
+.note.bad{background:var(--bad-soft);border-color:color-mix(in srgb, var(--bad) 30%, transparent)}
+.note.bad > strong:first-child{color:var(--bad)}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunk);font-weight:600;font-size:13px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+td code,th code{font-family:var(--f-mono);font-size:13px}
+.sig{color:var(--ok);font-weight:600}
+.ns{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.ns{background:var(--sunk);color:var(--muted)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* Reading the output: table name -> what to look at */
+.read{border:1px dashed var(--line);border-radius:var(--r);margin:12px 0;overflow:hidden}
+.read > p{margin:0;padding:8px 14px;background:var(--sunk);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.read dl{margin:0;display:grid;grid-template-columns:minmax(120px,210px) minmax(0,1fr)}
+.read dt,.read dd{margin:0;padding:8px 14px;border-top:1px solid var(--line);font-size:14.5px}
+.read dt{font-family:var(--f-mono);font-size:13px;color:var(--spss);font-weight:500}
+@media (max-width:560px){.read dl{grid-template-columns:minmax(0,1fr)}.read dd{border-top:0;padding-top:0}}
+
+/* RQ spec grid */
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:14px 0}
+.spec > div{background:var(--surface);padding:10px 14px;min-width:0}
+.spec .k{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.spec .v{font-size:14.5px;margin-top:2px}
+
+.hyp{display:grid;gap:6px;margin:12px 0}
+.hyp div{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;font-size:15px}
+.hyp b{font-family:var(--f-mono);color:var(--accent);font-weight:600}
+
+/* Report sentence */
+blockquote.report{margin:14px 0;padding:12px 16px;border-left:3px solid var(--cocoa);background:var(--cocoa-soft);border-radius:0 var(--r) var(--r) 0;font-size:15px}
+blockquote.report p{margin:4px 0}
+blockquote.report .lbl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--cocoa);font-weight:600}
+
+/* Code */
+details{margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+details > summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:14px;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details > summary::-webkit-details-marker{display:none}
+details > summary::after{content:"+";font-family:var(--f-mono);color:var(--muted)}
+details[open] > summary::after{content:"−"}
+details > .inner{padding:0 14px 14px;min-width:0}
+.code{position:relative}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);padding:14px 16px;border-radius:6px;overflow-x:auto;font-family:var(--f-mono);font-size:12.5px;line-height:1.55}
+.copy{position:absolute;top:8px;right:8px;font-family:var(--f-mono);font-size:11px;background:#3a2d27;color:#f3e9e2;border:0;border-radius:4px;padding:4px 8px;cursor:pointer}
+.copy:hover{background:#4d3c34}
+
+/* Flow diagram */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:18px 0}
+.flow a{flex:1 1 100px;text-decoration:none;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:14px}
+.flow a:hover{border-color:var(--cocoa)}
+.flow a b{display:block;font-family:var(--f-mono);font-size:11px;color:var(--accent);letter-spacing:.06em}
+
+/* SPSS window sketch */
+.windows{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.win{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
+.win .tb{background:var(--sunk);padding:6px 12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.win .tb i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.win .wb{padding:10px 14px;font-size:14.5px}
+.win .wb p{margin:4px 0}
+
+/* Dialog sketch */
+.dialog{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0;font-size:13.5px}
+.dialog .box{border:1px solid var(--line);border-radius:5px;padding:8px 10px;background:var(--bg);min-height:72px;font-family:var(--f-mono);font-size:12.5px;line-height:1.7}
+.dialog .box b{display:block;font-family:var(--f-body);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dialog .arrow{font-family:var(--f-mono);background:var(--spss-soft);color:var(--spss);border-radius:5px;padding:6px 10px;font-weight:600}
+.dialog .btns{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+
+/* Bar charts */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:14px 0}
+.chart h5{margin:0 0 10px;font-size:14px;font-weight:600}
+.bars{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 46px;gap:6px 10px;align-items:center;font-size:13.5px}
+.bars .track{height:16px;background:var(--sunk);border-radius:3px;position:relative}
+.bars .fill{position:absolute;inset:0 auto 0 0;background:var(--cocoa);border-radius:3px}
+.bars .fill.alt{background:var(--muted)}
+.bars .fill.hi{background:var(--accent)}
+.bars .val{font-family:var(--f-mono);font-size:12.5px;text-align:right}
+.axis{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 46px;gap:10px;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:4px}
+.axis span{display:flex;justify-content:space-between}
+.axis i{font-style:normal}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.two > *{min-width:0}
+/* Switch between the two pages of the guide */
+.pageswitch{display:flex;flex-wrap:wrap;gap:4px;background:var(--sunk);border-radius:999px;padding:4px;margin:0 0 20px;width:fit-content;max-width:100%}
+.pageswitch a{padding:6px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500}
+.pageswitch a[aria-current="page"]{background:var(--surface);color:var(--cocoa);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.pageswitch a:hover{color:var(--fg)}
+.diff td:first-child{font-weight:600}
+.dlg{border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:12px 0;background:var(--surface);max-width:620px}
+.dlg-title{background:var(--sunk);padding:6px 12px;font-size:13px;font-weight:600;border-bottom:1px solid var(--line)}
+.dlg-body{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:12px;padding:12px}
+.dlg-lbl{font-size:13px;margin-bottom:4px}
+.dlg-list pre{margin:0;background:var(--bg);border:1px solid var(--line);padding:8px 10px;font-family:var(--f-mono);font-size:12.5px;line-height:1.45;overflow-x:auto;color:var(--fg)}
+.dlg-checks p{margin:4px 0;font-size:13px}
+.dlg-note{color:var(--warn);font-weight:500}
+@media (max-width:560px){.dlg-body{grid-template-columns:1fr}}
+hr.sep{border:0;border-top:1px solid var(--line);margin:48px 0 0}
+footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
+
+.slides3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:14px 0}
+.slide{position:relative;aspect-ratio:16/9;background:#fffdfb;color:#2a1d16;border:1px solid var(--line);border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:4% 5%;display:flex;flex-direction:column;gap:6px;overflow:hidden;font-size:12px;line-height:1.35}
+.slide.wide{aspect-ratio:auto;min-height:300px;font-size:14px;margin:14px 0;padding:22px 26px}
+.slide.back{background:#f4f1ee}
+.s-num{position:absolute;right:10px;bottom:6px;font-size:10px;color:#9a8a80;font-family:var(--f-mono)}
+.s-kicker{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#9a4f22;font-weight:600}
+.s-title{font-family:var(--f-display);font-size:1.35em;color:#5b3420;line-height:1.2}
+.s-title.big{font-size:1.9em;margin-top:auto}
+.s-sub{color:#6b5f57}
+.s-foot{margin-top:auto;font-size:.85em;color:#6b5f57}
+.s-list{margin:2px 0 0;padding-left:1.1em}
+.s-list li{margin:2px 0}
+.s-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;flex:1;align-items:start}
+.s-box{background:#f6efe9;border-radius:5px;padding:8px 10px}
+.s-box b{display:block;font-size:.8em;letter-spacing:.08em;text-transform:uppercase;color:#9a4f22;margin:2px 0 4px}
+.s-box p{margin:4px 0}
+.s-box .h{font-family:var(--f-mono);font-weight:600;color:#9a4f22;margin-right:4px}
+.s-box.method i{font-style:normal;font-weight:600;display:inline-block;min-width:88px}
+.s-box.reco{background:#e9f2ec}
+.s-seg{display:flex;gap:6px;align-items:stretch}
+.s-seg span{flex:1;background:#d8cfc8;border-radius:5px;padding:6px;text-align:center;font-size:.85em}
+.s-seg span b{display:block;font-size:1.4em}
+.s-seg .hi{background:#5b3420;color:#fff}
+.s-mono{font-family:var(--f-mono);font-size:.82em;margin:0}
+.s-chart{min-width:0}
+.vb{display:flex;align-items:flex-end;gap:6px;height:170px;border-bottom:1.5px solid #6b5f57;padding:0 4px}
+.vb .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.vb .col em{font-style:normal;font-size:.75em;color:#6b5f57;position:relative;top:18px;height:0}
+.vb .bar{width:100%;background:#cfc5bd;border-radius:3px 3px 0 0;position:relative}
+.vb .bar.hi{background:#5b3420}
+.vb .bar.lo{background:#e2dbd5}
+.vb .bar span{position:absolute;top:-17px;left:0;right:0;text-align:center;font-size:.8em;font-weight:600}
+.vb .gap{width:14px;flex:0 0 14px}
+.vb-cap{display:flex;justify-content:space-around;margin-top:22px;font-size:.78em;color:#6b5f57;gap:8px;text-align:center}
+.timing{display:flex;gap:3px;margin:14px 0;border-radius:6px;overflow:hidden}
+.timing div{padding:10px 12px;color:#fff;min-width:0}
+.timing b{display:block;font-family:var(--f-mono);font-size:16px}
+.timing span{font-size:13px}
+.t-a{background:#8a6a58}.t-b{background:#5b3420}.t-c{background:#9a4f22}.t-d{background:#6b5f57}
+.rqcard{border:1px solid var(--line);border-radius:var(--r);padding:4px 18px 10px;margin:16px 0;background:var(--surface)}
+.rqcard p{font-size:15px}
+@media (max-width:560px){.timing span{display:none}.slide{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <p class="brand">I Feel Like Chocolate Today</p>
+  <p class="sub">Presentation slides guide</p>
+  <h4>Start</h4>
+  <ol>
+    <li><a href="#rules"><span class="n">00</span>The rules (what is graded)</a></li>
+    <li><a href="#deck"><span class="n">01</span>The deck, slide by slide</a></li>
+    <li><a href="#timing"><span class="n">02</span>Timing for 10 minutes</a></li>
+  </ol>
+  <h4>Part A · Slide models</h4>
+  <ol>
+    <li><a href="#s-open"><span class="n">A1</span>Title, context, segments</a></li>
+    <li><a href="#s-rq"><span class="n">A2</span>RQ slide: question + H0/H1 + method</a></li>
+    <li><a href="#s-res"><span class="n">A3</span>Results slide: graph</a></li>
+    <li><a href="#s-int"><span class="n">A4</span>Interpretation + recommendation</a></li>
+    <li><a href="#s-close"><span class="n">A5</span>Final recommendations, Q&amp;A</a></li>
+  </ol>
+  <h4>Part B · Your 2 RQs</h4>
+  <ol>
+    <li><a href="#cards"><span class="n">B1</span>Content for each RQ (1–6)</a></li>
+    <li><a href="#words"><span class="n">B2</span>Stats → manager language</a></li>
+    <li><a href="#graphs"><span class="n">B3</span>Graph rules</a></li>
+  </ol>
+  <h4>Part C · Delivery</h4>
+  <ol>
+    <li><a href="#design"><span class="n">C1</span>Design rules</a></li>
+    <li><a href="#qa"><span class="n">C2</span>Questions to prepare</a></li>
+    <li><a href="#check"><span class="n">C3</span>Final checklist</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <nav class="pageswitch" aria-label="Guide pages"><a href="index.html">Full guide</a><a href="course.html">Course methods only</a><a href="revision.html">Revision sheet</a><a href="qcm.html">MCQ practice</a><a href="report.html">Report guide</a><a href="slides.html" aria-current="page">Slides guide</a></nav>
+  <p class="eyebrow">IÉSEG · Data Insights · Group presentation (Session 8)</p>
+  <h1>The perfect presentation, slide by slide</h1>
+  <p class="lede">This page turns the “Guidelines for the presentation” of the instructions, the project slides and the course rules into a ready-to-build deck. It covers what goes on each slide, models of every slide type, the content for each of the 6 RQs (you will present 2), how to translate statistics for managers, timing, and the questions to prepare. The numbers come from the <a href="course.html">Course methods only</a> page.</p>
+</header>
+
+<section id="rules">
+  <h2><span class="tag">00</span>The rules: everything the professor asks for</h2>
+  <div class="spec">
+    <div><div class="k">Length</div><div class="v"><strong>10 minutes maximum</strong></div></div>
+    <div><div class="k">Content</div><div class="v"><strong>Only the 2 RQs</strong> assigned by the professor (sent by email)</div></div>
+    <div><div class="k">When</div><div class="v">Session 8. Send the slides <strong>by email</strong> before the deadline the professor gives.</div></div>
+    <div><div class="k">Audience</div><div class="v">Imagine <strong>managers</strong> who do not necessarily know much about statistics</div></div>
+    <div><div class="k">Weight</div><div class="v">10% of the course grade, adjusted by the peer evaluation</div></div>
+  </div>
+
+  <div class="tbl"><table class="diff"><thead><tr><th>Requirement (instructions)</th><th>What it means on your slides</th><th>Slide</th></tr></thead><tbody>
+    <tr><td>Answer only the 2 assigned RQs</td><td>No other RQs, not even “bonus” ones. All your time goes to those two.</td><td>All</td></tr>
+    <tr><td>H0 and H1 for each of the 2 RQs</td><td>Write them on the RQ slide, in plain sentences, with the S4 structure: cause → effect, specific DV, benchmark, direction.</td><td><a href="#s-rq">A2</a></td></tr>
+    <tr><td>Say which variables were IV and DV</td><td>A small “method” box: IV = …, DV = … (with the survey question in words).</td><td><a href="#s-rq">A2</a></td></tr>
+    <tr><td>Say which respondents you used</td><td>“All 691 respondents” or “only the 237 highly concerned consumers”.</td><td><a href="#s-rq">A2</a></td></tr>
+    <tr><td>Say which test you used</td><td>Name it in the method box (“One-way ANOVA (Welch) + Tamhane post hoc”).</td><td><a href="#s-rq">A2</a></td></tr>
+    <tr><td>Analyse the entire test</td><td>Show <em>every</em> DV and every comparison of the RQ, including the non-significant ones (“no difference”).</td><td><a href="#s-res">A3</a></td></tr>
+    <tr><td>Very visual, for non-statisticians, graphs where possible</td><td>One graph per results slide. The slide title states the conclusion.</td><td><a href="#s-res">A3</a></td></tr>
+    <tr><td>Report only means, percentages, coefficients and significance values</td><td>On the slide: M, %, p (or “significant”), effect size. No F, t, df, SE tables; keep those for backup or the report.</td><td><a href="#words">B2</a></td></tr>
+    <tr><td>Interpret in your own words</td><td>Who does more, less or the same? What is the impact of X on Y?</td><td><a href="#s-int">A4</a></td></tr>
+    <tr><td>Recommendations for the product manager</td><td>What can they do with this? Link to marketing principles (targeting, positioning, 4P).</td><td><a href="#s-int">A4</a>, <a href="#s-close">A5</a></td></tr>
+    <tr><td><strong>Do NOT</strong> include steps before the analyses</td><td>No data cleaning, impossible values or recoding…</td><td>–</td></tr>
+    <tr><td>…<strong>but</strong> briefly explain how you built the 3 segments or the scales you use</td><td>One simple slide: “we measured health concern with 5 questions and split people into 3 equal groups”.</td><td><a href="#s-open">A1</a></td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="deck">
+  <h2><span class="tag">01</span>The deck: 11 to 13 slides</h2>
+  <p>Use this structure whatever your 2 RQs are. Each RQ gets the same 3 slides, so the audience knows what comes next.</p>
+  <div class="tbl"><table><thead><tr><th>#</th><th>Slide</th><th>Must contain</th></tr></thead><tbody>
+    <tr><td>1</td><td><strong>Title</strong></td><td>“I Feel Like Chocolate Today”, subtitle with your 2 RQ topics, group number, names, date</td></tr>
+    <tr><td>2</td><td><strong>Context and objective</strong></td><td>Healthy chocolate launched; we must find who to target; 691 Belgian consumers surveyed; agenda (RQ x, RQ y)</td></tr>
+    <tr><td>3</td><td><strong>How we built the 3 segments</strong> (and the scales you use)</td><td>Health concern = 5 questions on feelings after eating chocolate → average score → 3 groups of about one third</td></tr>
+    <tr><td>4</td><td><strong>RQ A: question, hypotheses, method</strong></td><td>RQ in plain words, H0, H1, respondents, IV, DV, test</td></tr>
+    <tr><td>5</td><td><strong>RQ A: results</strong></td><td>Graph(s) with all groups and DVs, key numbers (M or %, significance, effect size)</td></tr>
+    <tr><td>6</td><td><strong>RQ A: what it means</strong></td><td>Hypothesis conclusion, interpretation in own words, recommendation for the product manager</td></tr>
+    <tr><td>7</td><td><strong>RQ B: question, hypotheses, method</strong></td><td>Same as 4</td></tr>
+    <tr><td>8</td><td><strong>RQ B: results</strong></td><td>Same as 5</td></tr>
+    <tr><td>9</td><td><strong>RQ B: what it means</strong></td><td>Same as 6</td></tr>
+    <tr><td>10</td><td><strong>Recommendations</strong></td><td>3–4 actions for the product manager combining both RQs (target, positioning, place, promotion)</td></tr>
+    <tr><td>11</td><td><strong>Key takeaways + thank you / questions</strong></td><td>3 bullet answers, one per line</td></tr>
+    <tr><td>+</td><td><em>Backup slides</em> (after the end, not presented)</td><td>Full statistics (F/t, df, p, all post hoc tests) and the α of the scales, ready if the professor asks</td></tr>
+  </tbody></table></div>
+  <div class="note tip"><strong>If one RQ has many DVs (RQ1)</strong><p>RQ1 needs 2 results slides: one for “who they are” (socio-demographics, Chi²) and one for “when, why, where” (ANOVAs). Take that time from the context slide, not from the other RQ.</p></div>
+</section>
+
+<section id="timing">
+  <h2><span class="tag">02</span>Timing for 10 minutes</h2>
+  <div class="timing" role="img" aria-label="Time split: opening 1.5 min, RQ A 3.5 min, RQ B 3.5 min, closing 1.5 min">
+    <div style="flex:1.5" class="t-a"><b>1:30</b><span>Title, context, segments</span></div>
+    <div style="flex:3.5" class="t-b"><b>3:30</b><span>RQ A (3 slides)</span></div>
+    <div style="flex:3.5" class="t-c"><b>3:30</b><span>RQ B (3 slides)</span></div>
+    <div style="flex:1.5" class="t-d"><b>1:30</b><span>Recommendations, takeaways</span></div>
+  </div>
+  <ul>
+    <li>About <strong>1 minute per slide</strong>. More than 13 slides means you will rush.</li>
+    <li>Split the speaking: for example, one person per RQ plus one for the opening and closing. Plan the hand-overs (“Now X will show you…”).</li>
+    <li><strong>Rehearse with a timer</strong> at least twice. Aim for 9 minutes, because live it always takes longer.</li>
+  </ul>
+</section>
+
+<hr class="sep">
+
+<section id="s-open">
+  <h2><span class="tag">A1 · Model</span>Opening slides: title, context, segments</h2>
+  <div class="slides3">
+    <div class="slide">
+      <div class="s-num">1</div>
+      <div class="s-title big">I Feel Like Chocolate Today</div>
+      <div class="s-sub">Who should we target with the new healthy chocolate?<br>RQ2 · Attractiveness of the segment &nbsp;|&nbsp; RQ5 · Men vs women</div>
+      <div class="s-foot">Group 7 · Names · Data Insights · IÉSEG · Date</div>
+    </div>
+    <div class="slide">
+      <div class="s-num">2</div>
+      <div class="s-title">A tasty <em>and</em> healthy chocolate: who will buy it?</div>
+      <ul class="s-list">
+        <li>New chocolate with an added antioxidant: same taste, healthier</li>
+        <li>Target: consumers concerned about their health</li>
+        <li>Data: survey of <b>691 Belgian consumers</b></li>
+        <li>Today: RQ2 and RQ5</li>
+      </ul>
+    </div>
+    <div class="slide">
+      <div class="s-num">3</div>
+      <div class="s-title">We split the market into 3 health-concern segments</div>
+      <div class="s-row">
+        <div class="s-box"><b>How</b>5 questions: after eating chocolate, do you feel worried about your health, guilty, ashamed, (not) satisfied, (not) full of joy? → average score (reliable: α = .77) → 3 groups of about one third</div>
+        <div class="s-seg"><span class="hi">High concern<b>34%</b></span><span>Medium<b>29%</b></span><span class="lo">Low<b>37%</b></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="note warn"><strong>Slide 3 is required, but keep it short</strong><p>The instructions forbid data-cleaning details but ask you to “shortly explain how you built the 3 health concern segments or summated scales when used”. If your RQ uses another scale (self-control, positive or negative feelings in RQ5 and RQ6), add one line about it here: “Self-control = average of 3 questions such as ‘it is easy for me not to eat chocolate’.”</p></div>
+</section>
+
+<section id="s-rq">
+  <h2><span class="tag">A2 · Model</span>RQ slide: question, hypotheses, method</h2>
+  <div class="slide wide">
+    <div class="s-num">4</div>
+    <div class="s-kicker">RQ2</div>
+    <div class="s-title">Do highly concerned consumers eat more chocolate and like it more?</div>
+    <div class="s-row">
+      <div class="s-box">
+        <b>Hypotheses</b>
+        <p><span class="h">H0</span> Highly concerned consumers eat chocolate <u>as often</u> and find it <u>as attractive</u> as medium and low concerned consumers.</p>
+        <p><span class="h">H1</span> Highly concerned consumers eat chocolate <u>more often</u> and find it <u>more attractive</u> than medium and low concerned consumers.</p>
+      </div>
+      <div class="s-box method">
+        <b>Method</b>
+        <p><i>Respondents</i> All 691</p>
+        <p><i>IV</i> Health-concern segment (high / medium / low)</p>
+        <p><i>DV</i> How often you eat chocolate (1–7) · How attractive chocolate is (1–7)</p>
+        <p><i>Test</i> One-way ANOVA (Welch) + Tamhane post hoc</p>
+      </div>
+    </div>
+  </div>
+  <div class="two">
+    <div class="note ok"><strong>Good hypothesis (S4)</strong><p>Cause (segment) → effect (frequency), specific DV, benchmark (“than medium and low”), direction (“more”), testable. H0 says “as often / the same”.</p></div>
+    <div class="note bad"><strong>Avoid</strong><p>“Concerned people are different” (no direction). “H0: they don’t eat more” (that could mean equal <em>or</em> less). A DV like “like chocolate” without saying how it was measured.</p></div>
+  </div>
+</section>
+
+<section id="s-res">
+  <h2><span class="tag">A3 · Model</span>Results slide: the graph tells the story</h2>
+  <div class="slide wide">
+    <div class="s-num">5</div>
+    <div class="s-kicker">RQ2 · Results</div>
+    <div class="s-title">Highly concerned consumers eat chocolate the most often</div>
+    <div class="s-row">
+      <div class="s-chart">
+        <div class="vb">
+          <div class="col"><div class="bar hi" style="height:71%"><span>4.97</span></div><em>High</em></div>
+          <div class="col"><div class="bar" style="height:65%"><span>4.55</span></div><em>Medium</em></div>
+          <div class="col"><div class="bar lo" style="height:59%"><span>4.12</span></div><em>Low</em></div>
+          <div class="gap"></div>
+          <div class="col"><div class="bar hi" style="height:83%"><span>5.84</span></div><em>High</em></div>
+          <div class="col"><div class="bar" style="height:79%"><span>5.53</span></div><em>Medium</em></div>
+          <div class="col"><div class="bar lo" style="height:75%"><span>5.27</span></div><em>Low</em></div>
+        </div>
+        <div class="vb-cap"><span>How often (1 = never … 7 = more than once a day)</span><span>Attractiveness (1–7)</span></div>
+      </div>
+      <div class="s-box">
+        <b>Key numbers</b>
+        <p><strong>Frequency:</strong> significant (<i>p</i> &lt; .001), medium effect (η² = .06). High &gt; Medium &gt; Low: all 3 differences significant.</p>
+        <p><strong>Attractiveness:</strong> significant (<i>p</i> &lt; .001), small effect (η² = .02). High &gt; Low; High = Medium; Medium = Low.</p>
+      </div>
+    </div>
+  </div>
+  <ul>
+    <li><strong>Title = the conclusion</strong> (“… eat chocolate the most often”), not the topic (“Results RQ2”).</li>
+    <li><strong>All groups and all DVs</strong> of the RQ are on the graph, including the parts that are not significant.</li>
+    <li>Show only means or percentages, significance and effect size, as the instructions ask. Put the full Welch/Tamhane numbers in a backup slide.</li>
+    <li>Highlight the target segment in one strong colour and keep the others grey.</li>
+  </ul>
+</section>
+
+<section id="s-int">
+  <h2><span class="tag">A4 · Model</span>“What it means” slide: conclusion + recommendation</h2>
+  <div class="slide wide">
+    <div class="s-num">6</div>
+    <div class="s-kicker">RQ2 · What it means</div>
+    <div class="s-title">The high-concern segment is the most valuable target</div>
+    <div class="s-row">
+      <div class="s-box">
+        <b>Hypotheses</b>
+        <p><span class="pill ok">H1 supported</span> Frequency: they eat chocolate more often than both other segments.</p>
+        <p><span class="pill warn">H1 partially supported</span> Attractiveness: more than low, equal to medium.</p>
+        <b>In our words</b>
+        <p>Health concern does not stop them from eating chocolate: they eat it the most, about a couple of times a week, and feel guilty about it.</p>
+      </div>
+      <div class="s-box reco">
+        <b>For the product manager</b>
+        <p>→ <strong>Target</strong> this segment first: high volume and a clear need.</p>
+        <p>→ <strong>Position</strong> as “all the pleasure, less guilt”.</p>
+        <p>→ Convince them to <strong>switch from their usual chocolate</strong>, not to start eating chocolate.</p>
+      </div>
+    </div>
+  </div>
+  <div class="note tip"><strong>Link to marketing principles</strong><p>The instructions ask for recommendations “in the light of more general marketing principles”. Use words managers know: <strong>segmentation, targeting, positioning</strong> (STP), the <strong>4P</strong> (product, price, place, promotion), heavy users, impulse buying, substitutes. Each recommendation must come from a result on the previous slide.</p></div>
+</section>
+
+<section id="s-close">
+  <h2><span class="tag">A5 · Model</span>Closing slides</h2>
+  <div class="slides3">
+    <div class="slide">
+      <div class="s-num">10</div>
+      <div class="s-title">Our recommendations</div>
+      <ul class="s-list">
+        <li><b>Target</b> the high-concern segment: heavy users (RQ2)</li>
+        <li><b>Position</b> as guilt-free indulgence (RQ2)</li>
+        <li><b>Promotion</b> aimed at women, with joyful messages (RQ5)</li>
+        <li><b>Product</b> in small portions to help self-control (RQ5)</li>
+      </ul>
+    </div>
+    <div class="slide">
+      <div class="s-num">11</div>
+      <div class="s-title">Key takeaways</div>
+      <ul class="s-list">
+        <li>The most concerned consumers eat the most chocolate</li>
+        <li>Women in this segment resist chocolate less than men</li>
+        <li>Healthy chocolate = the answer to their guilt</li>
+      </ul>
+      <div class="s-foot">Thank you · Questions?</div>
+    </div>
+    <div class="slide back">
+      <div class="s-num">B1</div>
+      <div class="s-title">Backup · RQ2 full statistics</div>
+      <p class="s-mono">Levene p = .048 / .020 → Welch<br>Freq: Welch’s F(2, 450.91) = 20.25, p &lt; .001, η² = .06<br>H 4.97 (.09) · M 4.55 (.10) · L 4.12 (.10)<br>Tamhane: H&gt;M p = .007; H&gt;L p &lt; .001; M&gt;L p = .008<br>Att: Welch’s F(2, 450.85) = 8.29, p &lt; .001, η² = .02 …</p>
+    </div>
+  </div>
+  <p>Backup slides come after “Questions?”. Don’t present them; show them only if the professor asks “how did you get that?”. They prove that you analysed the entire test.</p>
+</section>
+
+<hr class="sep">
+
+<section id="cards">
+  <h2><span class="tag">B1</span>What to put for each RQ</h2>
+  <p>Find your 2 assigned RQs below. Each card gives the method box, the hypotheses, the graph, the key numbers and the recommendation.</p>
+
+  <div class="rqcard" id="c1">
+    <h3>RQ1 · Profile of the high-concern segment</h3>
+    <div class="spec">
+      <div><div class="k">Respondents</div><div class="v">All 691</div></div>
+      <div><div class="k">IV</div><div class="v">Segment (3 groups)</div></div>
+      <div><div class="k">DV</div><div class="v">Socio-demographics, motives (categorical) · moments, places, age, household size (metric)</div></div>
+      <div><div class="k">Test</div><div class="v">Chi² + Cramer’s V · One-way ANOVA + post hoc</div></div>
+    </div>
+    <div class="hyp"><div><b>H0</b><span>Highly concerned consumers have the same profile (who they are, when and why they eat, where they buy) as medium and low concerned consumers.</span></div><div><b>H1</b><span>Highly concerned consumers have a different profile from medium and low concerned consumers.</span></div></div>
+    <p><strong>Slides:</strong> 2 results slides. (1) “Who are they?”: % women 59 / 55 / 46, % students 32 / 26 / 14, % living with parents 35 / 27 / 18, mean age 31 / 33 / 39, motives “pure indulgence” 47 / 42 / 30% and “when lonely” 25 / 12 / 15%. (2) “When and where?”: bars for the significant moments (late at night, after dinner, breaks) and places (night shop, vending machine, petrol station, bookshop). Add one line for the non-significant results: “Same education, language, region, household size, and the same supermarket purchases.”</p>
+    <p><strong>Graph:</strong> grouped bars per segment (high in colour). Effects are small (V ≤ .15, η² ≤ .09): say so.</p>
+    <p><strong>Recommendation:</strong> young women and students, evening indulgence moments; distribute in impulse channels (night shops, vending machines on campuses) as well as supermarkets.</p>
+  </div>
+
+  <div class="rqcard" id="c2">
+    <h3>RQ2 · Do they eat more and like it more?</h3>
+    <p>The full model is in <a href="#s-rq">A2</a>–<a href="#s-int">A4</a> above. Key numbers: frequency 4.97 / 4.55 / 4.12, all pairs different, η² = .06 (medium); attractiveness 5.84 / 5.53 / 5.27, high &gt; low only, η² = .02 (small).</p>
+  </div>
+
+  <div class="rqcard" id="c3">
+    <h3>RQ3 · Chocolate vs other snacks (high segment)</h3>
+    <div class="spec">
+      <div><div class="k">Respondents</div><div class="v">Only the 237 highly concerned</div></div>
+      <div><div class="k">IV</div><div class="v">Type of snack (same people rate each)</div></div>
+      <div><div class="k">DV</div><div class="v">Frequency (1–7), attractiveness (1–7)</div></div>
+      <div><div class="k">Test</div><div class="v">6 paired-samples t-tests + Cohen’s d</div></div>
+    </div>
+    <div class="hyp"><div><b>H0</b><span>Highly concerned consumers eat chocolate as often as candy, salty snacks and cookies, and find it equally attractive.</span></div><div><b>H1</b><span>Highly concerned consumers eat chocolate more often than candy, salty snacks and cookies, and find it more attractive.</span></div></div>
+    <p><strong>Graph:</strong> 2 bar charts (frequency, attractiveness) with 4 bars each: chocolate highlighted. Frequency: chocolate 4.97 · cookies 4.32 · salty 3.64 · candy 3.59. Attractiveness: chocolate 5.84 · cookies 4.99 · salty 4.96 · candy 4.43.</p>
+    <p><strong>Key numbers:</strong> all 6 differences significant (<i>p</i> &lt; .001), moderate effects (<i>d</i> from .37 to .75). H1 supported.</p>
+    <p><strong>Recommendation:</strong> chocolate is their favourite snack, so the competitor is <em>their usual chocolate</em>. Communicate “same taste as your favourite chocolate, less guilt”. Shelf placement next to regular chocolate.</p>
+  </div>
+
+  <div class="rqcard" id="c4">
+    <h3>RQ4 · Older or younger than average?</h3>
+    <div class="spec">
+      <div><div class="k">Respondents</div><div class="v">Only the highly concerned (232 with an age)</div></div>
+      <div><div class="k">IV</div><div class="v">1 group, compared with the average of all (34.74 years)</div></div>
+      <div><div class="k">DV</div><div class="v">Age</div></div>
+      <div><div class="k">Test</div><div class="v">One-sample t-test + Cohen’s d</div></div>
+    </div>
+    <div class="hyp"><div><b>H0</b><span>Highly concerned consumers have the same age as the average consumer (34.74 years).</span></div><div><b>H1</b><span>Highly concerned consumers are younger than the average consumer.</span></div></div>
+    <p class="small muted">Choose the direction of H1 before looking at the results, based on reasoning (e.g. young people are more image- and health-conscious). If you choose “older”, the result is significant in the other direction and H1 is not supported.</p>
+    <p><strong>Graph:</strong> 2 bars (high concern 31.47 vs all respondents 34.74) or one bar with a line at 34.74.</p>
+    <p><strong>Key numbers:</strong> significant (<i>p</i> &lt; .001), about 3 years younger, moderate effect (<i>d</i> = −.29).</p>
+    <p><strong>Recommendation:</strong> young-adult targeting: social media, student cities, tone of voice for 25–35-year-olds.</p>
+  </div>
+
+  <div class="rqcard" id="c5">
+    <h3>RQ5 · Men vs women (high segment)</h3>
+    <div class="spec">
+      <div><div class="k">Respondents</div><div class="v">Only the 237 highly concerned (97 men, 140 women)</div></div>
+      <div><div class="k">IV</div><div class="v">Gender (2 independent groups)</div></div>
+      <div><div class="k">DV</div><div class="v">Self-control · positive feelings · negative feelings (scales, 1–7)</div></div>
+      <div><div class="k">Test</div><div class="v">3 independent-samples t-tests + Cohen’s d</div></div>
+    </div>
+    <div class="hyp"><div><b>H0</b><span>Among highly concerned consumers, men and women have the same self-control and eat chocolate equally when they feel positive or negative.</span></div><div><b>H1</b><span>Among highly concerned consumers, women have less self-control than men and eat chocolate more when they feel positive or negative.</span></div></div>
+    <p><strong>Graph:</strong> 3 pairs of bars (men / women). Self-control 4.32 / 3.70 · positive 3.52 / 3.81 · negative 3.99 / 4.21.</p>
+    <p><strong>Key numbers:</strong> self-control significant (<i>p</i> = .005, moderate, <i>d</i> = .37); positive feelings significant (<i>p</i> = .039, moderate, <i>d</i> = −.27); negative feelings <strong>no difference</strong> (<i>p</i> = .166). H1 partially supported.</p>
+    <p><strong>Recommendation:</strong> women resist less and eat for happy moods → joyful “treat yourself without guilt” messages aimed at women; small portions to help control.</p>
+    <p class="small muted">On slide 3, explain the 3 scales in one line each (e.g. “Positive feelings = how often you eat chocolate when happy, joyful, relaxed…”).</p>
+  </div>
+
+  <div class="rqcard" id="c6">
+    <h3>RQ6 · The “kill hunger between meals” group</h3>
+    <div class="spec">
+      <div><div class="k">Respondents</div><div class="v">All 691 (113 in the target group, 578 others)</div></div>
+      <div><div class="k">IV</div><div class="v">Eats chocolate “to kill hunger between meals” (yes / no)</div></div>
+      <div><div class="k">DV</div><div class="v">Attractiveness (1–7) · self-control (scale)</div></div>
+      <div><div class="k">Test</div><div class="v">2 independent-samples t-tests + Cohen’s d</div></div>
+    </div>
+    <div class="hyp"><div><b>H0</b><span>People who eat chocolate to kill hunger find chocolate as attractive and as easy to resist as other people.</span></div><div><b>H1</b><span>People who eat chocolate to kill hunger find chocolate more attractive and less easy to resist than other people.</span></div></div>
+    <p><strong>Graph:</strong> 2 pairs of bars. Attractiveness 5.78 vs 5.49 · self-control 4.01 vs 4.36.</p>
+    <p><strong>Key numbers:</strong> attractiveness significant but a small effect (<i>p</i> = .045, <i>d</i> = .18); self-control <strong>no difference</strong> (<i>p</i> = .054). H1 partially supported. Only 16% of consumers are in this group.</p>
+    <p><strong>Recommendation:</strong> a weak basis for the brand. Use it as a secondary message or a snack-size format, not as the main positioning.</p>
+  </div>
+</section>
+
+<section id="words">
+  <h2><span class="tag">B2</span>Statistics → manager language</h2>
+  <p>The instructions say: tell the story “in human language”. Keep the number small on the slide and say the sentence out loud.</p>
+  <div class="tbl"><table><thead><tr><th>Statistic</th><th>On the slide</th><th>What you say</th></tr></thead><tbody>
+    <tr><td><i>p</i> ≤ .050</td><td>“significant (<i>p</i> = .005)”</td><td>“This difference is real: it also exists in the whole market, not just in our sample.”</td></tr>
+    <tr><td><i>p</i> &gt; .050</td><td>“no difference (<i>p</i> = .166)”</td><td>“Men and women are the same here. The small gap in our sample is due to chance.” Never say one is higher.</td></tr>
+    <tr><td>Mean on 1–7</td><td>“4.97 / 7”</td><td>Translate the scale: “about a couple of times a week”, “rather attractive to attractive”.</td></tr>
+    <tr><td>% (crosstab)</td><td>“59% women vs 46%”</td><td>“Out of 10 highly concerned consumers, 6 are women.”</td></tr>
+    <tr><td>η², <i>d</i>, Cramer’s V</td><td>“medium effect”, “small effect”</td><td>“The difference is clear but moderate: the groups still overlap.” A small effect is worth saying, because it tempers the recommendation.</td></tr>
+    <tr><td>Post hoc tests</td><td>“High &gt; Medium &gt; Low”</td><td>“Each step up in health concern means more chocolate.”</td></tr>
+    <tr><td>Levene / Welch</td><td>Only in the method box (“ANOVA (Welch)”)</td><td>Nothing, unless someone asks: then “the groups were not equally spread, so we used the corrected version of the test”.</td></tr>
+    <tr><td>Cronbach’s α</td><td>Slide 3 only: “reliable (α = .77)”</td><td>“The 5 questions measure the same thing, so we can average them.”</td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="graphs">
+  <h2><span class="tag">B3</span>Which graph for which test</h2>
+  <div class="tbl"><table><thead><tr><th>Test</th><th>Graph</th><th>How (SPSS or Excel)</th></tr></thead><tbody>
+    <tr><td>One-way ANOVA</td><td>Bar per segment, one chart per DV (or grouped)</td><td>Chart Builder › Simple Bar: DV on Y, seg on X, error bars (S5)</td></tr>
+    <tr><td>Independent t-test</td><td>2 bars (groups) per DV</td><td>Chart Builder › Simple Bar: DV on Y, IV on X, error bars (S5)</td></tr>
+    <tr><td>Paired t-test</td><td>Bars of the paired variables side by side</td><td>Chart Builder › Simple Bar: drag both variables onto the same Y-axis box (S5)</td></tr>
+    <tr><td>One-sample t-test</td><td>Bar of the group + line at the test value</td><td>Simple Bar, then add a reference line in the Chart Editor; or Excel</td></tr>
+    <tr><td>Chi²</td><td>Bars of the column % per segment (e.g. % women)</td><td>Excel from the crosstab %, or Chart Builder (the course shows no Chi² graph)</td></tr>
+  </tbody></table></div>
+  <div class="two">
+    <div class="note ok"><strong>Make the graph readable</strong><p>Value labels on the bars (4.97); the axis goes from 1 to 7 (or 0), not zoomed in to exaggerate; short labels (“High”, not “seg = 1”); the target group in colour and the others grey; font at least 18 pt.</p></div>
+    <div class="note bad"><strong>Avoid</strong><p>Raw SPSS output tables on a slide; 3D or pie charts; graphs without a title or unit; showing only the significant DV and hiding the others.</p></div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<section id="design">
+  <h2><span class="tag">C1</span>Design rules</h2>
+  <ul>
+    <li><strong>One message per slide</strong>, written as the title (a full short sentence).</li>
+    <li>Maximum <strong>~30 words</strong> of text per slide (except the RQ slide with H0/H1); text at least 18 pt.</li>
+    <li><strong>Same layout for both RQs</strong>: question → results → meaning.</li>
+    <li>One colour for the target segment on every slide (e.g. chocolate brown), grey for the others.</li>
+    <li>Slide numbers, so the professor can say “go back to slide 5”.</li>
+    <li>Use the variable meaning, not SPSS names: “how often you eat chocolate”, not <code>freq1</code>.</li>
+    <li>Export to <strong>PDF</strong> as well as PPTX before sending by email: fonts and layout won’t move.</li>
+  </ul>
+</section>
+
+<section id="qa">
+  <h2><span class="tag">C2</span>Questions the professor may ask</h2>
+  <div class="tbl"><table><thead><tr><th>Question</th><th>Prepared answer</th></tr></thead><tbody>
+    <tr><td>Why this test?</td><td>Name the DV level and the number of IV groups, and follow the S5 decision tree (e.g. “metric DV, 3 independent groups → ANOVA”).</td></tr>
+    <tr><td>Why Welch / Tamhane and not the normal ANOVA?</td><td>“Levene’s test was significant (p ≤ .050), so the variances are not equal.”</td></tr>
+    <tr><td>How did you make the segments?</td><td>Average of the 5 items (2 reversed), α = .77, cut at the cumulative % closest to 33.33 and 66.66.</td></tr>
+    <tr><td>Why did you use only some respondents?</td><td>The RQ is about the high-concern segment only → Select Cases seg = 1.</td></tr>
+    <tr><td>The effect is small: does it matter?</td><td>Significant = real in the population; small = groups overlap, so we combine it with other results before acting.</td></tr>
+    <tr><td>Is H1 supported?</td><td>Say clearly: supported, partially supported or not supported, and for which DV.</td></tr>
+    <tr><td>What would you do as product manager?</td><td>Repeat the recommendation slide, linked to a number.</td></tr>
+  </tbody></table></div>
+</section>
+
+<section id="check">
+  <h2><span class="tag">C3</span>Final checklist</h2>
+  <div class="tbl"><table><thead><tr><th>✓</th><th>Check</th></tr></thead><tbody>
+    <tr><td>☐</td><td>Only the 2 assigned RQs</td></tr>
+    <tr><td>☐</td><td>H0 and H1 for each RQ, with direction and benchmark</td></tr>
+    <tr><td>☐</td><td>For each RQ: respondents, IV, DV and test named</td></tr>
+    <tr><td>☐</td><td>One short slide on how the segments (and any scale used) were built; no data-cleaning details</td></tr>
+    <tr><td>☐</td><td>Every DV and every comparison shown, non-significant ones too (“no difference”)</td></tr>
+    <tr><td>☐</td><td>Only means / %, significance and effect sizes on the slides; full statistics in backup</td></tr>
+    <tr><td>☐</td><td>A graph for each results slide, with the title stating the conclusion</td></tr>
+    <tr><td>☐</td><td>Hypothesis conclusion and interpretation in own words</td></tr>
+    <tr><td>☐</td><td>Recommendations for the product manager, linked to results and to marketing principles</td></tr>
+    <tr><td>☐</td><td>Rehearsed under 10 minutes; everyone knows their part</td></tr>
+    <tr><td>☐</td><td>Slides sent by email (PPTX + PDF) before the deadline</td></tr>
+  </tbody></table></div>
+</section>
+
+<footer>
+  Based on the project instructions (“Guidelines for the presentation”), the project slides (Deliverables), the course slides of sessions 1, 4 and 5, and the results on the Course methods only page. Example slides use RQ2 and RQ5; replace them with your assigned RQs.
+</footer>
+</main>
+</div>
+
+</body>
+</html>
