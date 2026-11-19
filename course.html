@@ -227,6 +227,14 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);padding:14px 16px;bo
 .pageswitch a[aria-current="page"]{background:var(--surface);color:var(--cocoa);box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .pageswitch a:hover{color:var(--fg)}
 .diff td:first-child{font-weight:600}
+.dlg{border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:12px 0;background:var(--surface);max-width:620px}
+.dlg-title{background:var(--sunk);padding:6px 12px;font-size:13px;font-weight:600;border-bottom:1px solid var(--line)}
+.dlg-body{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:12px;padding:12px}
+.dlg-lbl{font-size:13px;margin-bottom:4px}
+.dlg-list pre{margin:0;background:var(--bg);border:1px solid var(--line);padding:8px 10px;font-family:var(--f-mono);font-size:12.5px;line-height:1.45;overflow-x:auto;color:var(--fg)}
+.dlg-checks p{margin:4px 0;font-size:13px}
+.dlg-note{color:var(--warn);font-weight:500}
+@media (max-width:560px){.dlg-body{grid-template-columns:1fr}}
 hr.sep{border:0;border-top:1px solid var(--line);margin:48px 0 0}
 footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
 </style>
@@ -404,43 +412,174 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
 
 <section id="a3">
   <h2><span class="tag">PART A · A3 · Sessions 1 &amp; 2</span>Household size: string → numeric</h2>
-  <div class="why"><p>S1: SPSS can only analyse numbers, not words. <code>q4501</code> is a String variable. The S2 checklist gives the order: first <strong>Recode into Different Variables</strong> (the Old and New Values window turns strings into numbers), then make sure the new variable is numeric. The original text stays in <code>q4501</code>.</p></div>
+  <div class="why"><p>S1: SPSS can only analyse numbers, not words. In the dataset, household size (<code>q4501</code>) is a <strong>String</strong> variable: people typed free text, such as “3”, “four” or “4 + dog”. SPSS cannot compute a mean on text. We make a <strong>new numeric variable</strong> called <code>hhsize</code> with <strong>Recode into Different Variables</strong>. The S2 hint says the Old and New Values window “helps transforming string into numeric variable automatically”. Using a <em>different</em> variable keeps the original answers in <code>q4501</code>, so you can always check or redo.</p></div>
 
-  <div class="step" data-step="c-a3-1">
-    <div class="step-head"><div class="step-num">1</div><h3>Recode q4501 into a new variable hhsize</h3><label class="done"><input type="checkbox">done</label></div>
+  <div class="step" data-step="c-a3-0">
+    <div class="step-head"><div class="step-num">1</div><h3>Look at all the answers first</h3><label class="done"><input type="checkbox">done</label></div>
     <div class="step-body">
       <ol class="clicks">
-        <li><span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Recode into Different Variables…</kbd></span></li>
-        <li><span>Move <code>q4501</code> into the box. Output Variable: Name <code>hhsize</code>, Label “Number of people in household” → click <span class="btn">Change</span> (S2: “give the new variable an appropriate name and click change”).</span></li>
-        <li><span>Click <span class="btn">Old and New Values…</span></span></li>
-        <li><span>First the missing values (S2 step 3.1): Old Value <strong>System- or user-missing</strong> → New Value <strong>System-missing</strong> → <span class="btn">Add</span>.</span></li>
-        <li><span>Then each text answer: Old Value <strong>Value:</strong> type the text exactly as in the data → New Value <strong>Value:</strong> the number → <span class="btn">Add</span>. Use the table below.<span class="hint">The text must match exactly (spaces, capitals). Tip: in Data View, double-click the cell, select the text, copy it, and paste it in the Old Value box.</span></span></li>
-        <li><span>Old Value <code>0</code> → New Value <strong>System-missing</strong> → <span class="btn">Add</span> (0 people is impossible: you count yourself).</span></li>
-        <li><span>Tick <strong>Convert numeric strings to numbers ('5'→5)</strong> at the bottom-right. This turns all the normal answers (“3”, “04”…) into numbers. Do <em>not</em> tick “Output variables are strings”.</span></li>
-        <li><span><span class="btn">Continue</span> → <span class="btn">OK</span>.</span></li>
+        <li><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Frequencies…</kbd></span></li>
+        <li><span>If the left list already contains variables from a previous analysis, click <span class="btn">Reset</span>.</span></li>
+        <li><span>Find <code>q4501</code> in the left list. If you see labels instead of names, right-click the list and choose <strong>Display Variable Names</strong> (S1 hint). Click it once, then click the <strong>arrow</strong> to move it into <strong>Variable(s)</strong>.</span></li>
+        <li><span>Check that <strong>Display frequency tables</strong> is ticked → <span class="btn">OK</span>.</span></li>
+        <li><span>The Output window opens. The table lists the <strong>27 different answers</strong> and how many people gave each one. Keep this window open: you will compare it with the table in step 3.</span></li>
       </ol>
-      <div class="tbl"><table><thead><tr><th>Old value (text)</th><th class="num">New value</th><th>Old value (text)</th><th class="num">New value</th></tr></thead><tbody>
-        <tr><td>1 (me)</td><td class="num">1</td><td>four</td><td class="num">4</td></tr>
-        <tr><td>2 (child and I)</td><td class="num">2</td><td>4 + dog</td><td class="num">4</td></tr>
-        <tr><td>2 (me and partner)</td><td class="num">2</td><td>4 ( 5 in total, me included )</td><td class="num">5</td></tr>
-        <tr><td>2 me included</td><td class="num">2</td><td>my husband and one child of 17 months</td><td class="num">3</td></tr>
-        <tr><td>no one left, except my boyfriend</td><td class="num">2</td><td>3 fulltime + myself in the weekend</td><td class="num">3</td></tr>
-        <tr><td>3 myself included</td><td class="num">3</td><td>4/5 · / · '</td><td class="num">System-missing (no single fix)</td></tr>
-        <tr><td>3, when I am home</td><td class="num">3</td><td>0</td><td class="num">System-missing</td></tr>
+      <div class="tbl"><table><thead><tr><th>What you see in the frequency table</th><th class="num">People</th><th>What it means</th></tr></thead><tbody>
+        <tr><td>(empty first row)</td><td class="num">52</td><td>Blank: no answer</td></tr>
+        <tr><td><code>'</code> &nbsp; <code>/</code> &nbsp; <code>4/5</code></td><td class="num">1 each</td><td>No single number possible → will be missing</td></tr>
+        <tr><td><code>0</code></td><td class="num">19</td><td>Impossible: you count yourself → will be missing</td></tr>
+        <tr><td><code>04</code>, <code>1</code>, <code>2</code> … <code>9</code></td><td class="num">605</td><td>Normal numbers, but stored as text</td></tr>
+        <tr><td>12 sentences (“four”, “1 (me)”, “4 + dog”…)</td><td class="num">1 each</td><td>A number can be read from them</td></tr>
       </tbody></table></div>
-      <div class="note tip"><strong>Already replaced the text by hand in q4501?</strong><p>That is also a course method (S1: replace words by numbers in Data View). Then you only need steps 1–4, 6, 7 and 8: SPSS converts your typed numbers.</p></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a3-1">
+    <div class="step-head"><div class="step-num">2</div><h3>Open Recode into Different Variables and create hhsize</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>Go back to the Data Editor window (the one with the data). Click <span class="path"><kbd>Transform</kbd><span class="sep">›</span><kbd>Recode into Different Variables…</kbd></span></span><span class="hint">Not “Recode into <em>Same</em> Variables”: that would overwrite the original text.</span></li>
+        <li><span>A window opens with three zones: the variable list on the <strong>left</strong>, a big box in the <strong>middle</strong> (called <strong>Input Variable → Output Variable</strong>, or “String Variable → Output Variable” in some versions), and an <strong>Output Variable</strong> zone on the <strong>right</strong> with Name and Label. If the middle box is not empty, click <span class="btn">Reset</span>.</span></li>
+        <li><span>Click <code>q4501</code> in the left list → click the <strong>arrow</strong>. The middle box now shows <code>q4501 --&gt; ?</code>. The “?” means “no new variable yet”.</span></li>
+        <li><span>In the right zone, click in <strong>Name</strong> and type <code>hhsize</code> (no spaces, does not start with a number: S1 naming rule).</span></li>
+        <li><span>Click in <strong>Label</strong> and type <code>Number of people in household</code>.</span></li>
+        <li><span>Click <span class="btn">Change</span>. <strong>Important:</strong> the middle box must now say <code>q4501 --&gt; hhsize</code>. If it still says “?”, you forgot this click and SPSS will refuse to continue.</span></li>
+        <li><span>Click <span class="btn">Old and New Values…</span> (under the middle box).</span></li>
+      </ol>
     </div>
   </div>
 
   <div class="step" data-step="c-a3-2">
-    <div class="step-head"><div class="step-num">2</div><h3>Check and update Variable View</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-head"><div class="step-num">3</div><h3>Old and New Values: type every line</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <p>The new window has two halves. The <strong>left half, “Old Value”</strong>, is what is in <code>q4501</code> now. The <strong>right half, “New Value”</strong>, is what you want in <code>hhsize</code>. At the bottom right is the <strong>Old --&gt; New</strong> list, where each rule appears after you click <span class="btn">Add</span>.</p>
+
+      <h4>How to add one line (example: “four” becomes 4)</h4>
+      <ol class="clicks">
+        <li><span>Left half: click the radio button <strong>Value</strong> (the first one), then click in its box and type <code>four</code>.</span></li>
+        <li><span>Right half: click the radio button <strong>Value</strong>, then click in its box and type <code>4</code>.</span></li>
+        <li><span>Click <span class="btn">Add</span>. The list shows <code>'four' --&gt; 4</code> and both boxes empty. You are ready for the next line.</span></li>
+      </ol>
+      <p>Repeat this for <strong>each of the 22 lines</strong> in the table below. Do not type the quotes: SPSS adds them.</p>
+
+      <div class="tbl"><table><thead><tr><th>#</th><th>Left: Old Value › Value (type exactly)</th><th>Right: New Value</th><th>Why</th></tr></thead><tbody>
+        <tr><td colspan="4"><strong>a) The normal numbers, stored as text</strong></td></tr>
+        <tr><td>1</td><td><code>1</code></td><td>Value <code>1</code></td><td rowspan="9">Text “3” is not the number 3 for SPSS. Each one must be translated.</td></tr>
+        <tr><td>2</td><td><code>2</code></td><td>Value <code>2</code></td></tr>
+        <tr><td>3</td><td><code>3</code></td><td>Value <code>3</code></td></tr>
+        <tr><td>4</td><td><code>4</code></td><td>Value <code>4</code></td></tr>
+        <tr><td>5</td><td><code>04</code></td><td>Value <code>4</code></td></tr>
+        <tr><td>6</td><td><code>5</code></td><td>Value <code>5</code></td></tr>
+        <tr><td>7</td><td><code>6</code></td><td>Value <code>6</code></td></tr>
+        <tr><td>8</td><td><code>7</code></td><td>Value <code>7</code></td></tr>
+        <tr><td>9</td><td><code>9</code></td><td>Value <code>9</code></td></tr>
+        <tr><td colspan="4"><strong>b) The sentences that contain a clear number</strong></td></tr>
+        <tr><td>10</td><td><code>1 (me)</code></td><td>Value <code>1</code></td><td>Lives alone</td></tr>
+        <tr><td>11</td><td><code>2 (child and I)</code></td><td>Value <code>2</code></td><td>2 people</td></tr>
+        <tr><td>12</td><td><code>2 (me and partner)</code></td><td>Value <code>2</code></td><td>2 people</td></tr>
+        <tr><td>13</td><td><code>2 me included</code></td><td>Value <code>2</code></td><td>2 people</td></tr>
+        <tr><td>14</td><td><code>no one left, except my boyfriend</code></td><td>Value <code>2</code></td><td>Respondent + boyfriend</td></tr>
+        <tr><td>15</td><td><code>3 myself included</code></td><td>Value <code>3</code></td><td>3 people</td></tr>
+        <tr><td>16</td><td><code>3, when I am home</code></td><td>Value <code>3</code></td><td>3 people</td></tr>
+        <tr><td>17</td><td><code>3 fulltime + myself in the weekend</code></td><td>Value <code>3</code></td><td>The respondent is counted in “3”</td></tr>
+        <tr><td>18</td><td><code>my husband and one child of 17 months</code></td><td>Value <code>3</code></td><td>Respondent + husband + child</td></tr>
+        <tr><td>19</td><td><code>four</code></td><td>Value <code>4</code></td><td>Written in letters</td></tr>
+        <tr><td>20</td><td><code>4 + dog</code></td><td>Value <code>4</code></td><td>A dog is not a person</td></tr>
+        <tr><td>21</td><td><code>4 ( 5 in total, me included )</code></td><td>Value <code>5</code></td><td>The respondent says 5 in total</td></tr>
+        <tr><td colspan="4"><strong>c) Everything else becomes missing</strong></td></tr>
+        <tr><td>22</td><td>Click the radio button <strong>All other values</strong> (bottom of the left half; no typing)</td><td>Click the radio button <strong>System-missing</strong></td><td>Catches <code>0</code>, the blanks, <code>4/5</code>, <code>/</code> and <code>'</code>. They have no single correct number (S2: not an obvious mistake → missing).</td></tr>
+      </tbody></table></div>
+
+      <div class="note warn"><strong>Type the text exactly as it is in the data</strong>
+        <p><strong>Spaces count:</strong> line 21 has a space after “(” and before “)”, line 20 has a space on both sides of “+”, and line 16 has a comma right after the 3.</p>
+        <p><strong>Capitals count:</strong> “four” is lowercase. “Four” would not match.</p>
+        <p><strong>Safest:</strong> copy instead of typing. In the Output window, double-click the frequency table of step 1, double-click the cell with the answer, select the text with <kbd>Cmd</kbd>+<kbd>A</kbd> (Windows <kbd>Ctrl</kbd>+<kbd>A</kbd>), copy with <kbd>Cmd</kbd>+<kbd>C</kbd>, press <kbd>Esc</kbd>, then paste it in the Old Value box with <kbd>Cmd</kbd>+<kbd>V</kbd>.</p>
+      </div>
+
+      <h4>Before clicking Continue: check the window</h4>
+      <div class="dlg" role="img" aria-label="Old and New Values list with 22 lines">
+        <div class="dlg-title">Recode into Different Variables: Old and New Values</div>
+        <div class="dlg-body">
+          <div class="dlg-list"><div class="dlg-lbl">Old --&gt; New:</div>
+<pre>'1' --&gt; 1
+'2' --&gt; 2
+'3' --&gt; 3
+'4' --&gt; 4
+'04' --&gt; 4
+'5' --&gt; 5
+'6' --&gt; 6
+'7' --&gt; 7
+'9' --&gt; 9
+'1 (me)' --&gt; 1
+'2 (child and I)' --&gt; 2
+'2 (me and partner)' --&gt; 2
+'2 me included' --&gt; 2
+'no one left, except my boyfriend' --&gt; 2
+'3 myself included' --&gt; 3
+'3, when I am home' --&gt; 3
+'3 fulltime + myself in the weekend' --&gt; 3
+'my husband and one child of 17 months' --&gt; 3
+'four' --&gt; 4
+'4 + dog' --&gt; 4
+'4 ( 5 in total, me included )' --&gt; 5
+ELSE --&gt; SYSMIS</pre></div>
+          <div class="dlg-checks">
+            <p>☐ Output variables are strings</p>
+            <p>☐ Convert numeric strings to numbers ('5'-&gt;5)</p>
+            <p class="dlg-note">Leave <strong>both</strong> boxes unticked.</p>
+          </div>
+        </div>
+      </div>
+      <ol class="clicks">
+        <li><span>Count the lines: <strong>22</strong>, with <code>ELSE --&gt; SYSMIS</code> as the last one (“ELSE” is SPSS’s word for “All other values”).</span></li>
+        <li><span><strong>Made a typo?</strong> Click the wrong line in the list → <span class="btn">Remove</span>, then add it again correctly. Or click it, fix the boxes and click <span class="btn">Change</span>.</span></li>
+        <li><span>Leave <strong>Output variables are strings</strong> unticked: we want a <em>numeric</em> variable. Leave <strong>Convert numeric strings to numbers</strong> unticked too: lines 1–9 already do that job, and line 22 makes sure “0” becomes missing.</span></li>
+        <li><span><span class="btn">Continue</span> → back in the first window, <span class="btn">OK</span>.</span></li>
+      </ol>
+      <div class="note tip"><strong>Already replaced the text by hand in Data View?</strong><p>That is also a course method (S1: replace words by numbers by clicking the cell and typing). Then <code>q4501</code> only contains plain numbers and blanks. You still do steps 2 and 3, but only lines 1–9 and line 22 (and line 5 only if “04” is still there).</p></div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a3-3">
+    <div class="step-head"><div class="step-num">4</div><h3>Check the result (S2: “check quickly whether the right coding is made”)</h3><label class="done"><input type="checkbox">done</label></div>
     <div class="step-body">
       <ol class="clicks">
-        <li><span>Data View: the new <code>hhsize</code> column (far right) has numbers; “.” means missing (S2: “check quickly whether the right coding is made”).</span></li>
-        <li><span>Variable View, <code>hhsize</code>: Type Numeric, Decimals 0, Measure Scale.</span></li>
-        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Frequencies</kbd></span> on <code>hhsize</code>: values 1–9, <strong>617 valid</strong>, 74 missing. A household of 9 is possible, so it stays.</span></li>
+        <li><span><strong>Data View:</strong> scroll to the far right. The new column <code>hhsize</code> is the last one. Next to a “four” in <code>q4501</code> you should see <code>4.00</code> in <code>hhsize</code>. A blank or a 0 in <code>q4501</code> gives a dot <code>.</code> in <code>hhsize</code>, which means missing.</span></li>
+        <li><span><span class="path"><kbd>Analyze</kbd><span class="sep">›</span><kbd>Descriptive Statistics</kbd><span class="sep">›</span><kbd>Frequencies…</kbd></span> → <span class="btn">Reset</span> → move <code>hhsize</code> → <span class="btn">OK</span>. Compare with this table:</span></li>
       </ol>
-      <blockquote class="report"><p class="lbl">Report</p><p>Household size was an open text question. We recoded it into a new numeric variable (hhsize): written answers were translated into numbers (e.g. “four” → 4), answers without a single interpretation (“4/5”, “/”) and impossible answers (0 people, 19 cases) were set to missing.</p></blockquote>
+      <div class="tbl"><table><thead><tr><th class="num">hhsize</th><th class="num">Frequency</th><th>Where the people come from</th></tr></thead><tbody>
+        <tr><td class="num">1</td><td class="num">76</td><td>75 × “1” + “1 (me)”</td></tr>
+        <tr><td class="num">2</td><td class="num">143</td><td>139 × “2” + 4 sentences</td></tr>
+        <tr><td class="num">3</td><td class="num">162</td><td>158 × “3” + 4 sentences</td></tr>
+        <tr><td class="num">4</td><td class="num">157</td><td>154 × “4” + “04” + “four” + “4 + dog”</td></tr>
+        <tr><td class="num">5</td><td class="num">57</td><td>56 × “5” + “4 ( 5 in total… )”</td></tr>
+        <tr><td class="num">6</td><td class="num">20</td><td></td></tr>
+        <tr><td class="num">7</td><td class="num">1</td><td></td></tr>
+        <tr><td class="num">9</td><td class="num">1</td><td>Big household, but possible: keep it</td></tr>
+        <tr><td><strong>Valid</strong></td><td class="num"><strong>617</strong></td><td></td></tr>
+        <tr><td><strong>Missing (System)</strong></td><td class="num"><strong>74</strong></td><td>52 blank + 19 × “0” + “4/5” + “/” + “'”</td></tr>
+      </tbody></table></div>
+      <div class="note bad"><strong>The numbers are different?</strong>
+        <p><strong>A count is 1 too low</strong> (for example 156 instead of 157 for 4): one sentence did not match, usually a missing space or a capital. Fix that line in the dialog and rerun.</p>
+        <p><strong>You see a 0 row:</strong> you ticked “Convert numeric strings to numbers” or forgot line 22.</p>
+        <p><strong>To redo:</strong> in Variable View, click the row number of <code>hhsize</code> → right-click › <strong>Clear</strong>, then start again from step 2. SPSS remembers the lines from last time, so check them with the 22-line list above.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="step" data-step="c-a3-4">
+    <div class="step-head"><div class="step-num">5</div><h3>Finish hhsize in Variable View</h3><label class="done"><input type="checkbox">done</label></div>
+    <div class="step-body">
+      <ol class="clicks">
+        <li><span>Click the <strong>Variable View</strong> tab (bottom left) and go to the last row, <code>hhsize</code>.</span></li>
+        <li><span><strong>Type</strong> should already say <strong>Numeric</strong>. If it says String, you ticked “Output variables are strings”: clear the variable and redo step 3.</span></li>
+        <li><span><strong>Decimals:</strong> click the cell and set it to <code>0</code> (nobody has 2.5 people). Data View then shows 4 instead of 4.00.</span></li>
+        <li><span><strong>Label:</strong> check that it says “Number of people in household”.</span></li>
+        <li><span><strong>Values:</strong> leave <strong>None</strong>. Number of people is a natural scale, so it needs no value labels (S1).</span></li>
+        <li><span><strong>Measure:</strong> choose <strong>Scale</strong> (ratio: 0 would mean nobody, and 4 people is twice 2 people).</span></li>
+        <li><span>Do not delete <code>q4501</code>: it keeps the original answers. Save the file (<span class="path"><kbd>File</kbd><span class="sep">›</span><kbd>Save</kbd></span>).</span></li>
+      </ol>
+      <blockquote class="report"><p class="lbl">Report it like S2 (old and new values)</p><p>Household size (Q20) was an open question stored as text. We recoded it into a new numeric variable, hhsize (Recode into Different Variables). Numbers typed as text were converted into numbers (e.g. “04” → 4), and written answers were translated into the number of people they describe (e.g. “four” → 4, “4 + dog” → 4, “my husband and one child of 17 months” → 3). Answers without a single interpretation (“4/5”, “/”, “'”), impossible answers (0 people, 19 respondents) and blanks (52) were set to missing. hhsize has 617 valid answers, from 1 to 9 people.</p></blockquote>
     </div>
   </div>
 </section>
