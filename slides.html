@@ -277,6 +277,18 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
 .timing b{display:block;font-family:var(--f-mono);font-size:16px}
 .timing span{font-size:13px}
 .t-a{background:#8a6a58}.t-b{background:#5b3420}.t-c{background:#9a4f22}.t-d{background:#6b5f57}
+.hb{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 8px;align-items:center;font-size:.85em}
+.hb-l{text-align:right;color:#2a1d16;white-space:nowrap}
+.hb-g{display:flex;flex-direction:column;gap:2px}
+.hb-g i{display:block;height:12px;background:#cfc5bd;font-style:normal;font-size:9.5px;line-height:12px;color:#2a1d16;padding-left:3px;border-radius:0 2px 2px 0;white-space:nowrap;min-width:26px}
+.hb-g i.hi{background:#5b3420;color:#fff}
+.hb-g i.lo{background:#e6dfd9}
+.hb-legend{font-size:.75em;color:#6b5f57;margin-bottom:6px}
+.hb-legend .k{display:inline-block;width:10px;height:10px;background:#cfc5bd;margin:0 3px 0 8px;vertical-align:-1px}
+.hb-legend .k:first-child{margin-left:0}
+.hb-legend .k.hi{background:#5b3420}.hb-legend .k.lo{background:#e6dfd9}
+.rqcard.mine{border:2px solid var(--cocoa);box-shadow:0 0 0 3px var(--cocoa-soft)}
+.rqcard.mine h3::after{content:"  ← your RQ";color:var(--accent);font-size:.8em}
 .rqcard{border:1px solid var(--line);border-radius:var(--r);padding:4px 18px 10px;margin:16px 0;background:var(--surface)}
 .rqcard p{font-size:15px}
 @media (max-width:560px){.timing span{display:none}.slide{font-size:11px}}
@@ -290,15 +302,15 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
   <h4>Start</h4>
   <ol>
     <li><a href="#rules"><span class="n">00</span>The rules (what is graded)</a></li>
-    <li><a href="#deck"><span class="n">01</span>The deck, slide by slide</a></li>
+    <li><a href="#deck"><span class="n">01</span>Your deck (RQ1 + RQ6)</a></li>
     <li><a href="#timing"><span class="n">02</span>Timing for 10 minutes</a></li>
   </ol>
   <h4>Part A · Slide models</h4>
   <ol>
     <li><a href="#s-open"><span class="n">A1</span>Title, context, segments</a></li>
-    <li><a href="#s-rq"><span class="n">A2</span>RQ slide: question + H0/H1 + method</a></li>
-    <li><a href="#s-res"><span class="n">A3</span>Results slide: graph</a></li>
-    <li><a href="#s-int"><span class="n">A4</span>Interpretation + recommendation</a></li>
+    <li><a href="#s-rq"><span class="n">A2</span>RQ1 &amp; RQ6: question + H0/H1</a></li>
+    <li><a href="#s-res"><span class="n">A3</span>RQ1 &amp; RQ6: results</a></li>
+    <li><a href="#s-int"><span class="n">A4</span>RQ1 &amp; RQ6: what it means</a></li>
     <li><a href="#s-close"><span class="n">A5</span>Final recommendations, Q&amp;A</a></li>
   </ol>
   <h4>Part B · Your 2 RQs</h4>
@@ -320,7 +332,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
   <nav class="pageswitch" aria-label="Guide pages"><a href="index.html">Full guide</a><a href="course.html">Course methods only</a><a href="revision.html">Revision sheet</a><a href="qcm.html">MCQ practice</a><a href="report.html">Report guide</a><a href="slides.html" aria-current="page">Slides guide</a></nav>
   <p class="eyebrow">IÉSEG · Data Insights · Group presentation (Session 8)</p>
   <h1>The perfect presentation, slide by slide</h1>
-  <p class="lede">This page turns the “Guidelines for the presentation” of the instructions, the project slides and the course rules into a ready-to-build deck. It covers what goes on each slide, models of every slide type, the content for each of the 6 RQs (you will present 2), how to translate statistics for managers, timing, and the questions to prepare. The numbers come from the <a href="course.html">Course methods only</a> page.</p>
+  <p class="lede">This page turns the “Guidelines for the presentation” of the instructions, the project slides and the course rules into a ready-to-build deck. It covers what goes on each slide, models of every slide type, the content for each of the 6 RQs (you will present 2), how to translate statistics for managers, timing, and the questions to prepare. The slide models are written for <strong>your two RQs: RQ1 and RQ6</strong>. The numbers come from the <a href="course.html">Course methods only</a> page.</p>
 </header>
 
 <section id="rules">
@@ -350,37 +362,37 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
 </section>
 
 <section id="deck">
-  <h2><span class="tag">01</span>The deck: 11 to 13 slides</h2>
-  <p>Use this structure whatever your 2 RQs are. Each RQ gets the same 3 slides, so the audience knows what comes next.</p>
+  <h2><span class="tag">01</span>Your deck for RQ1 + RQ6: 12 slides</h2>
+  <p>Same logic for both RQs: <strong>question → results → what it means</strong>. RQ1 has many variables, so it gets <strong>2 results slides</strong>: who they are, then when/why/where.</p>
   <div class="tbl"><table><thead><tr><th>#</th><th>Slide</th><th>Must contain</th></tr></thead><tbody>
-    <tr><td>1</td><td><strong>Title</strong></td><td>“I Feel Like Chocolate Today”, subtitle with your 2 RQ topics, group number, names, date</td></tr>
-    <tr><td>2</td><td><strong>Context and objective</strong></td><td>Healthy chocolate launched; we must find who to target; 691 Belgian consumers surveyed; agenda (RQ x, RQ y)</td></tr>
-    <tr><td>3</td><td><strong>How we built the 3 segments</strong> (and the scales you use)</td><td>Health concern = 5 questions on feelings after eating chocolate → average score → 3 groups of about one third</td></tr>
-    <tr><td>4</td><td><strong>RQ A: question, hypotheses, method</strong></td><td>RQ in plain words, H0, H1, respondents, IV, DV, test</td></tr>
-    <tr><td>5</td><td><strong>RQ A: results</strong></td><td>Graph(s) with all groups and DVs, key numbers (M or %, significance, effect size)</td></tr>
-    <tr><td>6</td><td><strong>RQ A: what it means</strong></td><td>Hypothesis conclusion, interpretation in own words, recommendation for the product manager</td></tr>
-    <tr><td>7</td><td><strong>RQ B: question, hypotheses, method</strong></td><td>Same as 4</td></tr>
-    <tr><td>8</td><td><strong>RQ B: results</strong></td><td>Same as 5</td></tr>
-    <tr><td>9</td><td><strong>RQ B: what it means</strong></td><td>Same as 6</td></tr>
-    <tr><td>10</td><td><strong>Recommendations</strong></td><td>3–4 actions for the product manager combining both RQs (target, positioning, place, promotion)</td></tr>
-    <tr><td>11</td><td><strong>Key takeaways + thank you / questions</strong></td><td>3 bullet answers, one per line</td></tr>
-    <tr><td>+</td><td><em>Backup slides</em> (after the end, not presented)</td><td>Full statistics (F/t, df, p, all post hoc tests) and the α of the scales, ready if the professor asks</td></tr>
+    <tr><td>1</td><td><strong>Title</strong></td><td>“I Feel Like Chocolate Today”, subtitle with RQ1 and RQ6, group number, names, date</td></tr>
+    <tr><td>2</td><td><strong>Context and objective</strong></td><td>Healthy chocolate launched; who to target? 691 Belgian consumers; agenda: RQ1, then RQ6</td></tr>
+    <tr><td>3</td><td><strong>How we built the segments and the self-control score</strong></td><td>Health concern = 5 questions → average → 3 groups of about one third; self-control = average of 3 questions (used in RQ6)</td></tr>
+    <tr><td>4</td><td><strong>RQ1: question, hypotheses, method</strong></td><td>RQ in plain words, H0, H1, all 691 respondents, IV = segment, DVs, tests (Chi² + ANOVA)</td></tr>
+    <tr><td>5</td><td><strong>RQ1 results (1): who they are and why they eat</strong></td><td>% women, students, living with parents, age, motives (indulgence, lonely) per segment + what does <em>not</em> differ</td></tr>
+    <tr><td>6</td><td><strong>RQ1 results (2): when and where</strong></td><td>Moments (late at night, after dinner, breaks) and places (night shop, vending machine… vs supermarket) per segment</td></tr>
+    <tr><td>7</td><td><strong>RQ1: what it means</strong></td><td>Hypothesis conclusion, portrait of the target in one sentence, recommendation</td></tr>
+    <tr><td>8</td><td><strong>RQ6: question, hypotheses, method</strong></td><td>RQ in plain words, H0, H1, all 691 respondents, IV = “kill hunger” motive (yes/no), DVs, independent t-tests</td></tr>
+    <tr><td>9</td><td><strong>RQ6 results</strong></td><td>Attractiveness and self-control, target group vs others, + size of the group (16%)</td></tr>
+    <tr><td>10</td><td><strong>RQ6: what it means</strong></td><td>Hypothesis conclusion (partially supported), is this a good positioning? Recommendation</td></tr>
+    <tr><td>11</td><td><strong>Recommendations</strong></td><td>3–4 actions combining RQ1 and RQ6 (target, positioning, place, promotion)</td></tr>
+    <tr><td>12</td><td><strong>Key takeaways + questions</strong></td><td>3 lines, then “Questions?”</td></tr>
+    <tr><td>+</td><td><em>Backup B1–B3</em> (not presented)</td><td>RQ1 Chi² table, RQ1 ANOVA table, RQ6 t-test details: shown only if the professor asks</td></tr>
   </tbody></table></div>
-  <div class="note tip"><strong>If one RQ has many DVs (RQ1)</strong><p>RQ1 needs 2 results slides: one for “who they are” (socio-demographics, Chi²) and one for “when, why, where” (ANOVAs). Take that time from the context slide, not from the other RQ.</p></div>
 </section>
 
 <section id="timing">
   <h2><span class="tag">02</span>Timing for 10 minutes</h2>
-  <div class="timing" role="img" aria-label="Time split: opening 1.5 min, RQ A 3.5 min, RQ B 3.5 min, closing 1.5 min">
-    <div style="flex:1.5" class="t-a"><b>1:30</b><span>Title, context, segments</span></div>
-    <div style="flex:3.5" class="t-b"><b>3:30</b><span>RQ A (3 slides)</span></div>
-    <div style="flex:3.5" class="t-c"><b>3:30</b><span>RQ B (3 slides)</span></div>
-    <div style="flex:1.5" class="t-d"><b>1:30</b><span>Recommendations, takeaways</span></div>
+  <div class="timing" role="img" aria-label="Time split: opening 1.5 min, RQ1 4 min, RQ6 3 min, closing 1.5 min">
+    <div style="flex:1.5" class="t-a"><b>1:30</b><span>Slides 1–3</span></div>
+    <div style="flex:4" class="t-b"><b>4:00</b><span>RQ1 (slides 4–7)</span></div>
+    <div style="flex:3" class="t-c"><b>3:00</b><span>RQ6 (slides 8–10)</span></div>
+    <div style="flex:1.5" class="t-d"><b>1:30</b><span>Slides 11–12</span></div>
   </div>
   <ul>
-    <li>About <strong>1 minute per slide</strong>. More than 13 slides means you will rush.</li>
-    <li>Split the speaking: for example, one person per RQ plus one for the opening and closing. Plan the hand-overs (“Now X will show you…”).</li>
-    <li><strong>Rehearse with a timer</strong> at least twice. Aim for 9 minutes, because live it always takes longer.</li>
+    <li>RQ1 gets more time because it has 2 results slides. Don’t read every percentage: say the 3–4 that build the portrait.</li>
+    <li>Example split for 3–4 people: person 1 does slides 1–3 and 11–12, person 2 does RQ1, person 3 does RQ6. Plan the hand-overs (“Now X will show you whether…”).</li>
+    <li><strong>Rehearse with a timer</strong> at least twice and aim for 9 minutes.</li>
   </ul>
 </section>
 
@@ -392,144 +404,231 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <div class="slide">
       <div class="s-num">1</div>
       <div class="s-title big">I Feel Like Chocolate Today</div>
-      <div class="s-sub">Who should we target with the new healthy chocolate?<br>RQ2 · Attractiveness of the segment &nbsp;|&nbsp; RQ5 · Men vs women</div>
-      <div class="s-foot">Group 7 · Names · Data Insights · IÉSEG · Date</div>
+      <div class="s-sub">Who should we target with the new healthy chocolate, and how?<br>RQ1 · Who is the health-concerned consumer? &nbsp;|&nbsp; RQ6 · Is “kill hunger between meals” a good positioning?</div>
+      <div class="s-foot">Group … · Names · Data Insights · IÉSEG · Date</div>
     </div>
     <div class="slide">
       <div class="s-num">2</div>
       <div class="s-title">A tasty <em>and</em> healthy chocolate: who will buy it?</div>
       <ul class="s-list">
         <li>New chocolate with an added antioxidant: same taste, healthier</li>
-        <li>Target: consumers concerned about their health</li>
+        <li>Natural target: consumers concerned about their health</li>
         <li>Data: survey of <b>691 Belgian consumers</b></li>
-        <li>Today: RQ2 and RQ5</li>
+        <li>Today: <b>RQ1</b> who they are · <b>RQ6</b> the “kill hunger” positioning</li>
       </ul>
     </div>
     <div class="slide">
       <div class="s-num">3</div>
-      <div class="s-title">We split the market into 3 health-concern segments</div>
+      <div class="s-title">How we measured health concern and self-control</div>
       <div class="s-row">
-        <div class="s-box"><b>How</b>5 questions: after eating chocolate, do you feel worried about your health, guilty, ashamed, (not) satisfied, (not) full of joy? → average score (reliable: α = .77) → 3 groups of about one third</div>
-        <div class="s-seg"><span class="hi">High concern<b>34%</b></span><span>Medium<b>29%</b></span><span class="lo">Low<b>37%</b></span></div>
+        <div class="s-box"><b>Health concern</b>5 questions on how you feel after eating chocolate (worried, guilty, ashamed, (not) satisfied, (not) joyful) → average → 3 groups of ≈ ⅓ (reliable: α = .77)</div>
+        <div class="s-box"><b>Self-control</b>Average of 3 questions, e.g. “It is easy for me not to eat chocolate” (α = .92). High = easy to resist.</div>
       </div>
+      <div class="s-seg"><span class="hi">High concern<b>34%</b></span><span>Medium<b>29%</b></span><span class="lo">Low<b>37%</b></span></div>
     </div>
   </div>
-  <div class="note warn"><strong>Slide 3 is required, but keep it short</strong><p>The instructions forbid data-cleaning details but ask you to “shortly explain how you built the 3 health concern segments or summated scales when used”. If your RQ uses another scale (self-control, positive or negative feelings in RQ5 and RQ6), add one line about it here: “Self-control = average of 3 questions such as ‘it is easy for me not to eat chocolate’.”</p></div>
+  <div class="note warn"><strong>Slide 3: short, no data cleaning</strong><p>The instructions forbid details on cleaning (impossible values, recoding…) but ask you to “shortly explain how you built the 3 health concern segments or summated scales when used”. RQ6 uses the self-control scale, so it belongs here too. Say it in 30 seconds.</p></div>
 </section>
 
 <section id="s-rq">
-  <h2><span class="tag">A2 · Model</span>RQ slide: question, hypotheses, method</h2>
+  <h2><span class="tag">A2 · Model</span>RQ slides: question, hypotheses, method</h2>
   <div class="slide wide">
     <div class="s-num">4</div>
-    <div class="s-kicker">RQ2</div>
-    <div class="s-title">Do highly concerned consumers eat more chocolate and like it more?</div>
+    <div class="s-kicker">RQ1</div>
+    <div class="s-title">Who is the health-concerned consumer, compared with the others?</div>
     <div class="s-row">
       <div class="s-box">
         <b>Hypotheses</b>
-        <p><span class="h">H0</span> Highly concerned consumers eat chocolate <u>as often</u> and find it <u>as attractive</u> as medium and low concerned consumers.</p>
-        <p><span class="h">H1</span> Highly concerned consumers eat chocolate <u>more often</u> and find it <u>more attractive</u> than medium and low concerned consumers.</p>
+        <p><span class="h">H0</span> Highly concerned consumers have the <u>same</u> socio-demographic profile, eat chocolate at the <u>same</u> moments and for the <u>same</u> reasons, and buy it in the <u>same</u> places as medium and low concerned consumers.</p>
+        <p><span class="h">H1</span> Highly concerned consumers <u>differ</u> from medium and low concerned consumers in their socio-demographic profile, when and why they eat chocolate, and where they buy it.</p>
       </div>
       <div class="s-box method">
         <b>Method</b>
         <p><i>Respondents</i> All 691</p>
         <p><i>IV</i> Health-concern segment (high / medium / low)</p>
-        <p><i>DV</i> How often you eat chocolate (1–7) · How attractive chocolate is (1–7)</p>
-        <p><i>Test</i> One-way ANOVA (Welch) + Tamhane post hoc</p>
+        <p><i>DV</i> Gender, age, occupation, living situation… · motives · moments · places to buy</p>
+        <p><i>Tests</i> Chi² + Cramer’s V (categorical DVs) · One-way ANOVA + post hoc (scores and age)</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide wide">
+    <div class="s-num">8</div>
+    <div class="s-kicker">RQ6</div>
+    <div class="s-title">Is “the ideal snack to kill hunger between meals” a good positioning?</div>
+    <div class="s-row">
+      <div class="s-box">
+        <b>Hypotheses</b>
+        <p><span class="h">H0</span> People who eat chocolate to kill hunger between meals find chocolate <u>as attractive</u> and <u>as easy to resist</u> as other people.</p>
+        <p><span class="h">H1</span> People who eat chocolate to kill hunger between meals find chocolate <u>more attractive</u> and <u>less easy to resist</u> than other people.</p>
+      </div>
+      <div class="s-box method">
+        <b>Method</b>
+        <p><i>Respondents</i> All 691</p>
+        <p><i>IV</i> Eats chocolate “to kill hunger between meals”: yes (113) / no (578)</p>
+        <p><i>DV</i> Attractiveness of chocolate (1–7) · self-control score (1–7)</p>
+        <p><i>Test</i> Independent-samples t-test (×2) + Cohen’s d</p>
       </div>
     </div>
   </div>
   <div class="two">
-    <div class="note ok"><strong>Good hypothesis (S4)</strong><p>Cause (segment) → effect (frequency), specific DV, benchmark (“than medium and low”), direction (“more”), testable. H0 says “as often / the same”.</p></div>
-    <div class="note bad"><strong>Avoid</strong><p>“Concerned people are different” (no direction). “H0: they don’t eat more” (that could mean equal <em>or</em> less). A DV like “like chocolate” without saying how it was measured.</p></div>
+    <div class="note ok"><strong>Good hypothesis (S4)</strong><p>Cause (segment or motive) → effect, a specific DV, a benchmark (“than other people”), a direction (“more attractive, less easy to resist”), testable. H0 says “same / as … as”.</p></div>
+    <div class="note bad"><strong>Avoid</strong><p>“H0: they don’t find it more attractive” (that could mean equal <em>or</em> less). Saying “self-control” without explaining that a low score = harder to resist.</p></div>
   </div>
 </section>
 
 <section id="s-res">
-  <h2><span class="tag">A3 · Model</span>Results slide: the graph tells the story</h2>
+  <h2><span class="tag">A3 · Model</span>Results slides: the graph tells the story</h2>
   <div class="slide wide">
     <div class="s-num">5</div>
-    <div class="s-kicker">RQ2 · Results</div>
-    <div class="s-title">Highly concerned consumers eat chocolate the most often</div>
+    <div class="s-kicker">RQ1 · Results (1) · Chi² + ANOVA</div>
+    <div class="s-title">Highly concerned consumers are younger, more often women and students</div>
     <div class="s-row">
       <div class="s-chart">
-        <div class="vb">
-          <div class="col"><div class="bar hi" style="height:71%"><span>4.97</span></div><em>High</em></div>
-          <div class="col"><div class="bar" style="height:65%"><span>4.55</span></div><em>Medium</em></div>
-          <div class="col"><div class="bar lo" style="height:59%"><span>4.12</span></div><em>Low</em></div>
-          <div class="gap"></div>
-          <div class="col"><div class="bar hi" style="height:83%"><span>5.84</span></div><em>High</em></div>
-          <div class="col"><div class="bar" style="height:79%"><span>5.53</span></div><em>Medium</em></div>
-          <div class="col"><div class="bar lo" style="height:75%"><span>5.27</span></div><em>Low</em></div>
+        <div class="hb-legend"><span class="k hi"></span>High <span class="k"></span>Medium <span class="k lo"></span>Low</div>
+        <div class="hb">
+          <div class="hb-l">Women</div><div class="hb-g"><i class="hi" style="width:59.1%">59%</i><i style="width:54.5%">55%</i><i class="lo" style="width:45.6%">46%</i></div>
+          <div class="hb-l">Students</div><div class="hb-g"><i class="hi" style="width:31.6%">32%</i><i style="width:26.2%">26%</i><i class="lo" style="width:14.3%">14%</i></div>
+          <div class="hb-l">Live with parents</div><div class="hb-g"><i class="hi" style="width:34.6%">35%</i><i style="width:26.7%">27%</i><i class="lo" style="width:17.9%">18%</i></div>
+          <div class="hb-l">Eat for pure indulgence</div><div class="hb-g"><i class="hi" style="width:47.3%">47%</i><i style="width:41.6%">42%</i><i class="lo" style="width:30.2%">30%</i></div>
+          <div class="hb-l">Eat when lonely</div><div class="hb-g"><i class="hi" style="width:24.5%">25%</i><i style="width:11.9%">12%</i><i class="lo" style="width:14.7%">15%</i></div>
         </div>
-        <div class="vb-cap"><span>How often (1 = never … 7 = more than once a day)</span><span>Attractiveness (1–7)</span></div>
       </div>
       <div class="s-box">
         <b>Key numbers</b>
-        <p><strong>Frequency:</strong> significant (<i>p</i> &lt; .001), medium effect (η² = .06). High &gt; Medium &gt; Low: all 3 differences significant.</p>
-        <p><strong>Attractiveness:</strong> significant (<i>p</i> &lt; .001), small effect (η² = .02). High &gt; Low; High = Medium; Medium = Low.</p>
+        <p><strong>Age:</strong> 31 / 33 / 39 years: high and medium younger than low (<i>p</i> &lt; .001, η² = .07).</p>
+        <p>All the % shown differ significantly (<i>p</i> ≤ .010), but the effects are <strong>negligible</strong> (Cramer’s V .12–.15).</p>
+        <p><strong>No difference:</strong> education, native and survey language, region, living area, household size, other 7 motives (incl. “kill hunger”, <i>p</i> = .074).</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide wide">
+    <div class="s-num">6</div>
+    <div class="s-kicker">RQ1 · Results (2) · One-way ANOVA</div>
+    <div class="s-title">They eat chocolate more in the evening and buy it more in impulse channels</div>
+    <div class="s-row">
+      <div class="s-chart">
+        <div class="hb-legend"><span class="k hi"></span>High <span class="k"></span>Medium <span class="k lo"></span>Low · mean, 1 = never/doesn’t fit … 7 = always/fits very well</div>
+        <div class="hb">
+          <div class="hb-l">After dinner</div><div class="hb-g"><i class="hi" style="width:60.6%">4.24</i><i style="width:53%">3.71</i><i class="lo" style="width:49%">3.43</i></div>
+          <div class="hb-l">Late at night</div><div class="hb-g"><i class="hi" style="width:43.6%">3.05</i><i style="width:36.7%">2.57</i><i class="lo" style="width:33.6%">2.35</i></div>
+          <div class="hb-l">Break at home (week)</div><div class="hb-g"><i class="hi" style="width:58.1%">4.07</i><i style="width:52.6%">3.68</i><i class="lo" style="width:45.4%">3.18</i></div>
+          <div class="hb-l">Buy: vending machine</div><div class="hb-g"><i class="hi" style="width:31.1%">2.18</i><i style="width:29.1%">2.04</i><i class="lo" style="width:21.7%">1.52</i></div>
+          <div class="hb-l">Buy: night shop</div><div class="hb-g"><i class="hi" style="width:27%">1.89</i><i style="width:20.1%">1.41</i><i class="lo" style="width:17.4%">1.22</i></div>
+          <div class="hb-l">Buy: large supermarket</div><div class="hb-g"><i class="hi" style="width:65.7%">4.60</i><i style="width:65.7%">4.60</i><i class="lo" style="width:63.4%">4.44</i></div>
+        </div>
+      </div>
+      <div class="s-box">
+        <b>Key numbers</b>
+        <p>Late at night and after dinner: <strong>high &gt; medium and low</strong> (<i>p</i> &lt; .010). Night shop: high &gt; medium &gt; low.</p>
+        <p>Effects small to medium (η² .03–.09).</p>
+        <p><strong>Same for all segments:</strong> supermarkets (small and large), breakfast, lunch, household size.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide wide">
+    <div class="s-num">9</div>
+    <div class="s-kicker">RQ6 · Results · Independent t-tests</div>
+    <div class="s-title">The “kill hunger” group likes chocolate only slightly more, and resists it just as well</div>
+    <div class="s-row">
+      <div class="s-chart">
+        <div class="vb">
+          <div class="col"><div class="bar hi" style="height:82.6%"><span>5.78</span></div><em>Kill hunger</em></div>
+          <div class="col"><div class="bar" style="height:78.4%"><span>5.49</span></div><em>Others</em></div>
+          <div class="gap"></div>
+          <div class="col"><div class="bar hi" style="height:57.3%"><span>4.01</span></div><em>Kill hunger</em></div>
+          <div class="col"><div class="bar" style="height:62.3%"><span>4.36</span></div><em>Others</em></div>
+        </div>
+        <div class="vb-cap"><span>Attractiveness (1–7)</span><span>Self-control (1–7, high = easy to resist)</span></div>
+      </div>
+      <div class="s-box">
+        <b>Key numbers</b>
+        <p><strong>Attractiveness:</strong> significant (<i>p</i> = .045), but a <strong>small</strong> difference (<i>d</i> = .18).</p>
+        <p><strong>Self-control:</strong> <strong>no difference</strong> (<i>p</i> = .054): they resist chocolate as easily as others.</p>
+        <p><strong>Size:</strong> only <strong>16%</strong> of consumers (113 of 691) eat chocolate to kill hunger.</p>
       </div>
     </div>
   </div>
   <ul>
-    <li><strong>Title = the conclusion</strong> (“… eat chocolate the most often”), not the topic (“Results RQ2”).</li>
-    <li><strong>All groups and all DVs</strong> of the RQ are on the graph, including the parts that are not significant.</li>
-    <li>Show only means or percentages, significance and effect size, as the instructions ask. Put the full Welch/Tamhane numbers in a backup slide.</li>
-    <li>Highlight the target segment in one strong colour and keep the others grey.</li>
+    <li><strong>Title = the conclusion</strong>, not the topic (“Results RQ6”).</li>
+    <li><strong>The entire test is visible:</strong> RQ1 shows what differs <em>and</em> lists what does not; RQ6 shows both DVs, including the non-significant one.</li>
+    <li>Only %, means, significance and effect sizes on the slide (as the instructions ask). The χ², F, t and df values go in the backup slides.</li>
+    <li>The target group is in one strong colour on every slide; the other groups are grey.</li>
   </ul>
+  <div class="note tip"><strong>Make these graphs</strong><p>RQ1: Excel clustered bars from the crosstab column % (slide 5) and from the ANOVA means (slide 6). RQ6: Chart Builder › Simple Bar, DV on Y, mot3 on X, error bars (S5), once for att1 and once for selfcont.</p></div>
 </section>
 
 <section id="s-int">
-  <h2><span class="tag">A4 · Model</span>“What it means” slide: conclusion + recommendation</h2>
+  <h2><span class="tag">A4 · Model</span>“What it means” slides: conclusion + recommendation</h2>
   <div class="slide wide">
-    <div class="s-num">6</div>
-    <div class="s-kicker">RQ2 · What it means</div>
-    <div class="s-title">The high-concern segment is the most valuable target</div>
+    <div class="s-num">7</div>
+    <div class="s-kicker">RQ1 · What it means</div>
+    <div class="s-title">Our target: young women and students who indulge in the evening</div>
     <div class="s-row">
       <div class="s-box">
         <b>Hypotheses</b>
-        <p><span class="pill ok">H1 supported</span> Frequency: they eat chocolate more often than both other segments.</p>
-        <p><span class="pill warn">H1 partially supported</span> Attractiveness: more than low, equal to medium.</p>
+        <p><span class="pill warn">H1 partially supported</span> They differ on gender, age, occupation, living situation, 2 motives, most moments and impulse places. They are the same on education, language, region, household size and supermarkets.</p>
         <b>In our words</b>
-        <p>Health concern does not stop them from eating chocolate: they eat it the most, about a couple of times a week, and feel guilty about it.</p>
+        <p>The health-concerned consumer is younger, more often a woman or a student, eats chocolate as a treat or when lonely, in the evening, and often buys it on impulse. The differences are real but small: the segments overlap.</p>
       </div>
       <div class="s-box reco">
         <b>For the product manager</b>
-        <p>→ <strong>Target</strong> this segment first: high volume and a clear need.</p>
-        <p>→ <strong>Position</strong> as “all the pleasure, less guilt”.</p>
-        <p>→ Convince them to <strong>switch from their usual chocolate</strong>, not to start eating chocolate.</p>
+        <p>→ <strong>Targeting:</strong> young adults, women, students.</p>
+        <p>→ <strong>Place:</strong> keep supermarkets (same for all) and add impulse channels: night shops, vending machines on campuses, petrol stations.</p>
+        <p>→ <strong>Promotion:</strong> evening and “me-time” moments, social media.</p>
       </div>
     </div>
   </div>
-  <div class="note tip"><strong>Link to marketing principles</strong><p>The instructions ask for recommendations “in the light of more general marketing principles”. Use words managers know: <strong>segmentation, targeting, positioning</strong> (STP), the <strong>4P</strong> (product, price, place, promotion), heavy users, impulse buying, substitutes. Each recommendation must come from a result on the previous slide.</p></div>
+  <div class="slide wide">
+    <div class="s-num">10</div>
+    <div class="s-kicker">RQ6 · What it means</div>
+    <div class="s-title">“Kill hunger between meals” is not a strong positioning</div>
+    <div class="s-row">
+      <div class="s-box">
+        <b>Hypotheses</b>
+        <p><span class="pill ok">H1 supported</span> Attractiveness: they find chocolate more attractive (small difference).</p>
+        <p><span class="pill ns">H0 supported</span> Self-control: they resist chocolate as easily as other people.</p>
+        <p>→ <strong>H1 partially supported.</strong></p>
+        <b>In our words</b>
+        <p>This group is small (16%), likes chocolate only a little more, and is not more “addicted”. It is also not more common among health-concerned consumers (RQ1).</p>
+      </div>
+      <div class="s-box reco">
+        <b>For the product manager</b>
+        <p>→ <strong>Don’t</strong> make “kill hunger” the main positioning: the market is small and the effect is weak.</p>
+        <p>→ Position as <strong>guilt-free indulgence</strong>, which fits the target’s motives (RQ1).</p>
+        <p>→ “Between meals” can be a <strong>secondary</strong> message, e.g. a snack-size bar.</p>
+      </div>
+    </div>
+  </div>
+  <div class="note tip"><strong>Link to marketing principles</strong><p>The instructions ask for recommendations “in the light of more general marketing principles”. RQ1 is <strong>segmentation and targeting</strong> (who) plus <strong>place and promotion</strong> (where, when). RQ6 is <strong>positioning</strong> (which promise) and market size: a segment must be big enough and responsive to be worth targeting.</p></div>
 </section>
 
 <section id="s-close">
-  <h2><span class="tag">A5 · Model</span>Closing slides</h2>
+  <h2><span class="tag">A5 · Model</span>Closing slides and backup</h2>
   <div class="slides3">
     <div class="slide">
-      <div class="s-num">10</div>
+      <div class="s-num">11</div>
       <div class="s-title">Our recommendations</div>
       <ul class="s-list">
-        <li><b>Target</b> the high-concern segment: heavy users (RQ2)</li>
-        <li><b>Position</b> as guilt-free indulgence (RQ2)</li>
-        <li><b>Promotion</b> aimed at women, with joyful messages (RQ5)</li>
-        <li><b>Product</b> in small portions to help self-control (RQ5)</li>
+        <li><b>Target</b> young, health-concerned women and students (RQ1)</li>
+        <li><b>Position</b> as guilt-free indulgence, not “kill hunger” (RQ1, RQ6)</li>
+        <li><b>Place</b>: supermarkets + impulse channels (RQ1)</li>
+        <li><b>Promotion</b>: evening moments, social media (RQ1)</li>
       </ul>
     </div>
     <div class="slide">
-      <div class="s-num">11</div>
+      <div class="s-num">12</div>
       <div class="s-title">Key takeaways</div>
       <ul class="s-list">
-        <li>The most concerned consumers eat the most chocolate</li>
-        <li>Women in this segment resist chocolate less than men</li>
-        <li>Healthy chocolate = the answer to their guilt</li>
+        <li>The target is young, female, a student, an evening indulger</li>
+        <li>They buy on impulse, not only in supermarkets</li>
+        <li>“Kill hunger” is a weak promise: sell guilt-free pleasure</li>
       </ul>
       <div class="s-foot">Thank you · Questions?</div>
     </div>
     <div class="slide back">
-      <div class="s-num">B1</div>
-      <div class="s-title">Backup · RQ2 full statistics</div>
-      <p class="s-mono">Levene p = .048 / .020 → Welch<br>Freq: Welch’s F(2, 450.91) = 20.25, p &lt; .001, η² = .06<br>H 4.97 (.09) · M 4.55 (.10) · L 4.12 (.10)<br>Tamhane: H&gt;M p = .007; H&gt;L p &lt; .001; M&gt;L p = .008<br>Att: Welch’s F(2, 450.85) = 8.29, p &lt; .001, η² = .02 …</p>
+      <div class="s-num">B1–B3</div>
+      <div class="s-title">Backup · full statistics</div>
+      <p class="s-mono">B1 RQ1 Chi²: gender χ²(2) = 9.15, p = .010, V = .12 · occupation (merged) χ²(4) = 26.03, p &lt; .001, V = .14 …<br>B2 RQ1 ANOVA: late at night Welch’s F(2, 435.03) = 22.61, p &lt; .001, η² = .07, Tamhane H&gt;M, H&gt;L …<br>B3 RQ6: Levene p = .002 → att t(184.21) = 2.02, p = .045, d = .18; Levene p = .686 → selfcont t(689) = −1.93, p = .054</p>
     </div>
   </div>
   <p>Backup slides come after “Questions?”. Don’t present them; show them only if the professor asks “how did you get that?”. They prove that you analysed the entire test.</p>
@@ -539,9 +638,9 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
 
 <section id="cards">
   <h2><span class="tag">B1</span>What to put for each RQ</h2>
-  <p>Find your 2 assigned RQs below. Each card gives the method box, the hypotheses, the graph, the key numbers and the recommendation.</p>
+  <p>Your RQs are <strong>RQ1 and RQ6</strong> (highlighted); their full slides are in A2–A4 above. The other cards are there in case the assignment changes.</p>
 
-  <div class="rqcard" id="c1">
+  <div class="rqcard mine" id="c1">
     <h3>RQ1 · Profile of the high-concern segment</h3>
     <div class="spec">
       <div><div class="k">Respondents</div><div class="v">All 691</div></div>
@@ -604,7 +703,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <p class="small muted">On slide 3, explain the 3 scales in one line each (e.g. “Positive feelings = how often you eat chocolate when happy, joyful, relaxed…”).</p>
   </div>
 
-  <div class="rqcard" id="c6">
+  <div class="rqcard mine" id="c6">
     <h3>RQ6 · The “kill hunger between meals” group</h3>
     <div class="spec">
       <div><div class="k">Respondents</div><div class="v">All 691 (113 in the target group, 578 others)</div></div>
@@ -673,6 +772,11 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
     <tr><td>Why did you use only some respondents?</td><td>The RQ is about the high-concern segment only → Select Cases seg = 1.</td></tr>
     <tr><td>The effect is small: does it matter?</td><td>Significant = real in the population; small = groups overlap, so we combine it with other results before acting.</td></tr>
     <tr><td>Is H1 supported?</td><td>Say clearly: supported, partially supported or not supported, and for which DV.</td></tr>
+    <tr><td>RQ1: why Cramer’s V and not Phi?</td><td>Phi is for 2×2 tables; with 3 segments the table is larger, so Cramer’s V (S4).</td></tr>
+    <tr><td>RQ1: why did you merge categories of occupation / education / language?</td><td>The Chi² condition failed (too many expected counts &lt; 5); the course says merge cells or stop (S4).</td></tr>
+    <tr><td>RQ1: the effects are negligible, so is the profile useful?</td><td>The differences are real in the population (significant) but small: the profile tells us where to focus, not that other people will not buy.</td></tr>
+    <tr><td>RQ6: why the bottom row for attractiveness?</td><td>Levene p = .002 → variances not equal → “equal variances not assumed” row: t(184.21) = 2.02, p = .045.</td></tr>
+    <tr><td>RQ6: self-control p = .054, isn’t that almost significant?</td><td>No: p &gt; .050, so the groups are equal in the population. We don’t say one is lower.</td></tr>
     <tr><td>What would you do as product manager?</td><td>Repeat the recommendation slide, linked to a number.</td></tr>
   </tbody></table></div>
 </section>
@@ -695,7 +799,7 @@ footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid va
 </section>
 
 <footer>
-  Based on the project instructions (“Guidelines for the presentation”), the project slides (Deliverables), the course slides of sessions 1, 4 and 5, and the results on the Course methods only page. Example slides use RQ2 and RQ5; replace them with your assigned RQs.
+  Based on the project instructions (“Guidelines for the presentation”), the project slides (Deliverables), the course slides of sessions 1, 4 and 5, and the results on the Course methods only page. Slide models are written for RQ1 and RQ6.
 </footer>
 </main>
 </div>
