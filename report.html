@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Report Writing Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Young+Serif&display=swap">
+<style>
+/* Layout: sticky table of contents on the left, one reading column on the right; every step is a numbered card with "why → click path → what to read → expected result". */
+:root{
+  --bg:#f7f6f4; --surface:#ffffff; --sunk:#efece8; --line:#ddd7d0;
+  --fg:#231a15; --muted:#6b5f57;
+  --cocoa:#5b3420; --cocoa-soft:#f0e4dc; --accent:#9a4f22;
+  --spss:#1f5f9c; --spss-soft:#e3edf7;
+  --ok:#2f7a4a; --ok-soft:#e2f1e7; --warn:#9a6a0a; --warn-soft:#fbf0d6; --bad:#a3352a; --bad-soft:#f8e3e0;
+  --why:#5c4a8a; --why-soft:#eeeaf6;
+  --code-bg:#221a16; --code-fg:#f3e9e2;
+  --f-display:"Young Serif", Georgia, "Times New Roman", serif;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#171210; --surface:#211a17; --sunk:#2a221e; --line:#3d332d;
+  --fg:#f1e8e2; --muted:#b3a59b;
+  --cocoa:#e7b996; --cocoa-soft:#3a2a21; --accent:#e89a63;
+  --spss:#8cbcf0; --spss-soft:#1c2a3a;
+  --ok:#7ccf98; --ok-soft:#1a2e22; --warn:#e8c169; --warn-soft:#33290f; --bad:#f09a8e; --bad-soft:#3a1d19;
+  --why:#c4b5f0; --why-soft:#27213a;
+  --code-bg:#0f0b09; --code-fg:#f3e9e2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171210; --surface:#211a17; --sunk:#2a221e; --line:#3d332d;
+  --fg:#f1e8e2; --muted:#b3a59b;
+  --cocoa:#e7b996; --cocoa-soft:#3a2a21; --accent:#e89a63;
+  --spss:#8cbcf0; --spss-soft:#1c2a3a;
+  --ok:#7ccf98; --ok-soft:#1a2e22; --warn:#e8c169; --warn-soft:#33290f; --bad:#f09a8e; --bad-soft:#3a1d19;
+  --why:#c4b5f0; --why-soft:#27213a;
+  --code-bg:#0f0b09; --code-fg:#f3e9e2; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+
+.wrap{display:grid;grid-template-columns:270px minmax(0,1fr);gap:48px;max-width:1240px;margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:32px 96px}
+@media (max-width:960px){.wrap{grid-template-columns:minmax(0,1fr);gap:24px}}
+
+/* ---------- TOC ---------- */
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top, 0px) + 16px);align-self:start;max-height:calc(100vh - 32px);overflow:auto;font-size:14px;padding-right:4px}
+nav.toc .brand{font-family:var(--f-display);font-size:20px;line-height:1.2;color:var(--cocoa);margin:0 0 4px}
+nav.toc .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+nav.toc h4{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:18px 0 6px;font-weight:600}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+nav.toc a{display:flex;gap:8px;align-items:baseline;padding:4px 8px;border-radius:6px;color:var(--fg);text-decoration:none}
+nav.toc a:hover{background:var(--sunk)}
+nav.toc a .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);min-width:26px}
+nav.toc .progress{margin-top:18px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);font-size:13px}
+nav.toc .bar{height:6px;background:var(--sunk);border-radius:3px;margin-top:6px;overflow:hidden}
+nav.toc .bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+@media (max-width:960px){
+  nav.toc{position:static;max-height:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+  nav.toc ol{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
+
+/* ---------- Main ---------- */
+main{min-width:0}
+header.hero{padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:32px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 8px}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(32px,5vw,48px);line-height:1.1;margin:0 0 14px;text-wrap:balance;color:var(--cocoa)}
+.lede{font-size:18px;color:var(--muted);max-width:68ch;margin:0}
+h2{font-family:var(--f-display);font-weight:400;font-size:30px;line-height:1.2;margin:56px 0 8px;color:var(--cocoa);text-wrap:balance}
+h2 .tag{font-family:var(--f-mono);font-size:14px;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:.04em}
+h3{font-size:19px;line-height:1.35;margin:28px 0 8px;font-weight:600;text-wrap:balance}
+h4{font-size:15px;margin:18px 0 6px;font-weight:600}
+p,li{max-width:72ch}
+section > p{margin:8px 0}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+strong{font-weight:600}
+
+/* Step cards */
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;margin:18px 0;position:relative}
+.step-head{display:flex;gap:14px;align-items:flex-start}
+.step-num{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--cocoa);color:var(--surface);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:14px}
+.step-head h3{margin:4px 0 0;flex:1;min-width:0}
+.done{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap;margin-top:6px}
+.done input{width:17px;height:17px;accent-color:var(--ok);cursor:pointer}
+.step.is-done{border-color:var(--ok)}
+.step.is-done .step-num{background:var(--ok)}
+.step-body{margin-left:48px;min-width:0}
+@media (max-width:560px){.step-body{margin-left:0}.step{padding:16px}}
+
+/* "Why" box: the short explanation of what a step is for */
+.why{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;background:var(--why-soft);border-radius:6px;padding:10px 14px;margin:12px 0;font-size:15px}
+.why::before{content:"Why";font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--why);padding-top:3px}
+.why p{margin:0}
+.why p + p{margin-top:4px}
+
+/* Sub-headings inside a step */
+.phase{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+
+/* SPSS click paths */
+.path{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--f-mono);font-size:13.5px;line-height:1.3;vertical-align:middle}
+.path kbd{font:inherit;background:var(--spss-soft);color:var(--spss);border:1px solid color-mix(in srgb, var(--spss) 30%, transparent);border-radius:5px;padding:2px 7px;font-weight:500;white-space:nowrap}
+.path .sep{color:var(--muted)}
+.btn{font-family:var(--f-mono);font-size:13px;background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:1px 7px;white-space:nowrap;color:var(--fg)}
+.var{font-family:var(--f-mono);font-size:.9em;background:var(--cocoa-soft);color:var(--cocoa);padding:1px 6px;border-radius:4px;white-space:nowrap}
+
+ol.clicks{counter-reset:c;list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}
+ol.clicks[start="4"]{counter-reset:c 3}
+ol.clicks > li{counter-increment:c;display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;max-width:none}
+ol.clicks > li::before{content:counter(c);font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--spss);background:var(--spss-soft);border-radius:50%;width:24px;height:24px;display:grid;place-items:center;margin-top:1px}
+ol.clicks > li > span{min-width:0}
+ol.clicks .hint{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+
+/* Callouts */
+.note{border-radius:var(--r);padding:12px 16px;margin:14px 0;font-size:15px;border:1px solid transparent}
+.note p{margin:4px 0}
+.note > strong:first-child{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.note.tip{background:var(--spss-soft);border-color:color-mix(in srgb, var(--spss) 25%, transparent)}
+.note.tip > strong:first-child{color:var(--spss)}
+.note.warn{background:var(--warn-soft);border-color:color-mix(in srgb, var(--warn) 30%, transparent)}
+.note.warn > strong:first-child{color:var(--warn)}
+.note.ok{background:var(--ok-soft);border-color:color-mix(in srgb, var(--ok) 30%, transparent)}
+.note.ok > strong:first-child{color:var(--ok)}
+.note.bad{background:var(--bad-soft);border-color:color-mix(in srgb, var(--bad) 30%, transparent)}
+.note.bad > strong:first-child{color:var(--bad)}
+
+/* Tables */
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--sunk);font-weight:600;font-size:13px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+td code,th code{font-family:var(--f-mono);font-size:13px}
+.sig{color:var(--ok);font-weight:600}
+.ns{color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.ns{background:var(--sunk);color:var(--muted)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* Reading the output: table name -> what to look at */
+.read{border:1px dashed var(--line);border-radius:var(--r);margin:12px 0;overflow:hidden}
+.read > p{margin:0;padding:8px 14px;background:var(--sunk);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.read dl{margin:0;display:grid;grid-template-columns:minmax(120px,210px) minmax(0,1fr)}
+.read dt,.read dd{margin:0;padding:8px 14px;border-top:1px solid var(--line);font-size:14.5px}
+.read dt{font-family:var(--f-mono);font-size:13px;color:var(--spss);font-weight:500}
+@media (max-width:560px){.read dl{grid-template-columns:minmax(0,1fr)}.read dd{border-top:0;padding-top:0}}
+
+/* RQ spec grid */
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:14px 0}
+.spec > div{background:var(--surface);padding:10px 14px;min-width:0}
+.spec .k{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.spec .v{font-size:14.5px;margin-top:2px}
+
+.hyp{display:grid;gap:6px;margin:12px 0}
+.hyp div{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px;font-size:15px}
+.hyp b{font-family:var(--f-mono);color:var(--accent);font-weight:600}
+
+/* Report sentence */
+blockquote.report{margin:14px 0;padding:12px 16px;border-left:3px solid var(--cocoa);background:var(--cocoa-soft);border-radius:0 var(--r) var(--r) 0;font-size:15px}
+blockquote.report p{margin:4px 0}
+blockquote.report .lbl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--cocoa);font-weight:600}
+
+/* Code */
+details{margin:12px 0;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+details > summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:14px;list-style:none;display:flex;justify-content:space-between;gap:8px}
+details > summary::-webkit-details-marker{display:none}
+details > summary::after{content:"+";font-family:var(--f-mono);color:var(--muted)}
+details[open] > summary::after{content:"−"}
+details > .inner{padding:0 14px 14px;min-width:0}
+.code{position:relative}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);padding:14px 16px;border-radius:6px;overflow-x:auto;font-family:var(--f-mono);font-size:12.5px;line-height:1.55}
+.copy{position:absolute;top:8px;right:8px;font-family:var(--f-mono);font-size:11px;background:#3a2d27;color:#f3e9e2;border:0;border-radius:4px;padding:4px 8px;cursor:pointer}
+.copy:hover{background:#4d3c34}
+
+/* Flow diagram */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:18px 0}
+.flow a{flex:1 1 100px;text-decoration:none;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font-size:14px}
+.flow a:hover{border-color:var(--cocoa)}
+.flow a b{display:block;font-family:var(--f-mono);font-size:11px;color:var(--accent);letter-spacing:.06em}
+
+/* SPSS window sketch */
+.windows{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.win{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
+.win .tb{background:var(--sunk);padding:6px 12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.win .tb i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.win .wb{padding:10px 14px;font-size:14.5px}
+.win .wb p{margin:4px 0}
+
+/* Dialog sketch */
+.dialog{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0;font-size:13.5px}
+.dialog .box{border:1px solid var(--line);border-radius:5px;padding:8px 10px;background:var(--bg);min-height:72px;font-family:var(--f-mono);font-size:12.5px;line-height:1.7}
+.dialog .box b{display:block;font-family:var(--f-body);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.dialog .arrow{font-family:var(--f-mono);background:var(--spss-soft);color:var(--spss);border-radius:5px;padding:6px 10px;font-weight:600}
+.dialog .btns{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+
+/* Bar charts */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:14px 0}
+.chart h5{margin:0 0 10px;font-size:14px;font-weight:600}
+.bars{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 46px;gap:6px 10px;align-items:center;font-size:13.5px}
+.bars .track{height:16px;background:var(--sunk);border-radius:3px;position:relative}
+.bars .fill{position:absolute;inset:0 auto 0 0;background:var(--cocoa);border-radius:3px}
+.bars .fill.alt{background:var(--muted)}
+.bars .fill.hi{background:var(--accent)}
+.bars .val{font-family:var(--f-mono);font-size:12.5px;text-align:right}
+.axis{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 46px;gap:10px;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:4px}
+.axis span{display:flex;justify-content:space-between}
+.axis i{font-style:normal}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.two > *{min-width:0}
+/* Switch between the two pages of the guide */
+.pageswitch{display:flex;flex-wrap:wrap;gap:4px;background:var(--sunk);border-radius:999px;padding:4px;margin:0 0 20px;width:fit-content;max-width:100%}
+.pageswitch a{padding:6px 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500}
+.pageswitch a[aria-current="page"]{background:var(--surface);color:var(--cocoa);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.pageswitch a:hover{color:var(--fg)}
+.diff td:first-child{font-weight:600}
+hr.sep{border:0;border-top:1px solid var(--line);margin:48px 0 0}
+footer{margin-top:48px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:16px}
+
+.paper{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 22px;margin:14px 0;font-family:Georgia,"Times New Roman",serif;font-size:15.5px;line-height:1.6;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.paper p{margin:8px 0}
+.paper .cap{margin:14px 0 6px}
+.paper .muted,.paper .small{font-family:var(--f-body)}
+table.apa{width:100%;border-collapse:collapse;font-size:14px;margin:4px 0;display:block;overflow-x:auto}
+table.apa thead tr{border-top:1.5px solid var(--fg);border-bottom:1px solid var(--fg)}
+table.apa tbody tr:last-child{border-bottom:1.5px solid var(--fg)}
+table.apa th,table.apa td{padding:5px 8px;text-align:left;vertical-align:top;border:0;background:none}
+table.apa th{font-weight:600}
+table.apa .num{text-align:right;white-space:nowrap}
+.paper .fig{margin:14px 0;font-family:var(--f-body)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <p class="brand">I Feel Like Chocolate Today</p>
+  <p class="sub">Writing the report</p>
+  <h4>Start</h4>
+  <ol>
+    <li><a href="#rules"><span class="n">00</span>The 11 requirements</a></li>
+    <li><a href="#outline"><span class="n">01</span>Report outline (15 pages)</a></li>
+    <li><a href="#style"><span class="n">02</span>Writing rules</a></li>
+  </ol>
+  <h4>Part A · Before the RQs</h4>
+  <ol>
+    <li><a href="#exec"><span class="n">A1</span>Executive summary</a></li>
+    <li><a href="#vv"><span class="n">A2</span>Variable View screenshot</a></li>
+    <li><a href="#prep"><span class="n">A3</span>Data preparation text</a></li>
+  </ol>
+  <h4>Part B · One section per RQ</h4>
+  <ol>
+    <li><a href="#template"><span class="n">B0</span>Section template</a></li>
+    <li><a href="#rq1"><span class="n">RQ1</span>Profile of the segment</a></li>
+    <li><a href="#rq2"><span class="n">RQ2</span>Frequency &amp; attractiveness</a></li>
+    <li><a href="#rq3"><span class="n">RQ3</span>Chocolate vs other snacks</a></li>
+    <li><a href="#rq4"><span class="n">RQ4</span>Age</a></li>
+    <li><a href="#rq5"><span class="n">RQ5</span>Men vs women</a></li>
+    <li><a href="#rq6"><span class="n">RQ6</span>"Kill hunger" group</a></li>
+  </ol>
+  <h4>Part C · After the RQs</h4>
+  <ol>
+    <li><a href="#reco"><span class="n">C1</span>Recommendations</a></li>
+    <li><a href="#appendix"><span class="n">C2</span>Appendix</a></li>
+    <li><a href="#final"><span class="n">C3</span>Final checklist</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+  <nav class="pageswitch" aria-label="Guide pages"><a href="index.html">Full guide</a><a href="course.html">Course methods only</a><a href="revision.html">Revision sheet</a><a href="qcm.html">MCQ practice</a><a href="report.html" aria-current="page">Report guide</a></nav>
+  <p class="eyebrow">IÉSEG · Data Insights · Group project report</p>
+  <h1>How to write the report, with example text</h1>
+  <p class="lede">This page goes through every requirement in the “Guidelines for the report” section of the instructions. For each one it says what to do and gives the text you could write in the report. The numbers come from the <a href="course.html">Course methods only</a> page (segments 237 / 202 / 252). Rewrite the examples in your own words: the course checks for plagiarism.</p>
+</header>
+
+<section id="rules">
+  <h2><span class="tag">00</span>The 11 requirements and what each one means</h2>
+  <div class="tbl"><table class="diff"><thead><tr><th>Requirement (instructions)</th><th>What you actually do</th><th>Where</th></tr></thead><tbody>
+    <tr><td>Screenshot of the full Variable View</td><td>After all preparation (including the new variables), take screenshots of the Variable View showing every row and the Name, Type, Label, Values, Missing and Measure columns.</td><td><a href="#vv">A2</a></td></tr>
+    <tr><td>Report outliers, impossible values, new variables, α or r</td><td>A “Data preparation” section: every value set to missing or fixed, every recode with old → new values, every computed variable with its formula, every α with the decision on items.</td><td><a href="#prep">A3</a></td></tr>
+    <tr><td>All research questions solved</td><td>One section for each of RQ1–RQ6, even the four you do not present.</td><td><a href="#template">B</a></td></tr>
+    <tr><td>H0 and H1 only for the 2 presented RQs</td><td>Write hypotheses in those 2 sections only. In the other 4, go straight from the method to the results.</td><td><a href="#template">B0</a></td></tr>
+    <tr><td>Analyse the entire statistical test</td><td>Report every part: the condition (expected counts, Levene), the main test, <em>all</em> post hoc pairs, every DV and every pair, and non-significant results too.</td><td><a href="#entire">B0</a></td></tr>
+    <tr><td>Report statistics the way learnt in class</td><td>The course sentences, symbols (M, SE, t, F, χ², d, η², V), decimals (2, and 3 for p), no leading 0, plus a graph.</td><td><a href="#style">02</a></td></tr>
+    <tr><td>Recommendations for the product manager</td><td>For each RQ, a short “managerial implication”. At the end, a recommendations section organised with marketing frameworks (STP, 4P).</td><td><a href="#reco">C1</a></td></tr>
+    <tr><td>Only relevant output in the appendix</td><td>The SPSS tables you actually used, grouped per RQ and numbered, and referred to in the text.</td><td><a href="#appendix">C2</a></td></tr>
+    <tr><td>Own tables in the report, no SPSS screenshots</td><td>Rebuild the key numbers in a clean Word table (APA style). SPSS output goes only in the appendix.</td><td><a href="#owntable">B0</a></td></tr>
+    <tr><td>15 pages maximum (graphs included, appendix excluded)</td><td>Use the page budget below. Do not explain how SPSS works; give the results and what they mean.</td><td><a href="#outline">01</a></td></tr>
+    <tr><td>Structure the report per research question</td><td>Headings 3 to 8 = RQ1 to RQ6, each with the same sub-headings.</td><td><a href="#outline">01</a></td></tr>
+  </tbody></table></div>
+  <div class="note warn"><strong>Also send</strong><p>The report (with the appendix), the <strong>cleaned .sav file</strong> (you lose points without it) and the peer evaluation.</p></div>
+</section>
+
+<section id="outline">
+  <h2><span class="tag">01</span>Report outline and page budget</h2>
+  <p>Fifteen pages go fast. This outline keeps you at about 14, with one page spare for graphs.</p>
+  <div class="tbl"><table><thead><tr><th>#</th><th>Section</th><th class="num">Pages</th><th>Content</th></tr></thead><tbody>
+    <tr><td>–</td><td>Title page + table of contents</td><td class="num">(1)</td><td>Group number, names, course, date. Usually not counted, but check with your professor.</td></tr>
+    <tr><td>1</td><td>Executive summary</td><td class="num">0.5</td><td>The answer to each RQ in one sentence, and the 3 main recommendations.</td></tr>
+    <tr><td>2</td><td>Introduction</td><td class="num">0.5</td><td>Context (healthy chocolate), objective (find the target segment), data (691 Belgian consumers), report structure.</td></tr>
+    <tr><td>3</td><td>Data preparation</td><td class="num">2.5</td><td>Variable View screenshot, impossible values, string → numeric, recoded items, scales with α, the 3 segments.</td></tr>
+    <tr><td>4</td><td>RQ1 Profile of the high-concern segment</td><td class="num">3</td><td>Two summary tables (Chi² and ANOVA), the significant results in sentences, one graph.</td></tr>
+    <tr><td>5</td><td>RQ2 Frequency and attractiveness</td><td class="num">1.5</td><td>Full ANOVA report + graph.</td></tr>
+    <tr><td>6</td><td>RQ3 Chocolate vs other snacks</td><td class="num">1.5</td><td>Table of the 6 paired tests + graph.</td></tr>
+    <tr><td>7</td><td>RQ4 Age</td><td class="num">0.75</td><td>One-sample t-test + graph.</td></tr>
+    <tr><td>8</td><td>RQ5 Men vs women</td><td class="num">1.25</td><td>3 independent t-tests + graph.</td></tr>
+    <tr><td>9</td><td>RQ6 “Kill hunger” target group</td><td class="num">1.25</td><td>2 independent t-tests + graph.</td></tr>
+    <tr><td>10</td><td>Recommendations and conclusion</td><td class="num">1.25</td><td>Targeting, positioning, 4P, limitations.</td></tr>
+    <tr><td>–</td><td>Appendix</td><td class="num">(not counted)</td><td>Relevant SPSS output, per RQ.</td></tr>
+  </tbody></table></div>
+  <p>Inside each RQ section, always use the same sub-headings, so the reader finds things at the same place every time:</p>
+  <div class="paper">
+    <p><b>5. RQ2 — Is the high-concern segment attractive?</b><br>
+    5.1 Research question<br>
+    5.2 Method (respondents, IV, DV, test)<br>
+    5.3 Hypotheses <span class="muted">(only in the 2 RQs you present)</span><br>
+    5.4 Results (sentence, own table, graph)<br>
+    5.5 Interpretation and managerial implication</p>
+  </div>
+</section>
+
+<section id="style">
+  <h2><span class="tag">02</span>Writing rules from the course</h2>
+  <div class="two">
+    <div class="note ok"><strong>Do</strong>
+      <p>2 decimals for M, SE, SD, t, F, χ², d, η², V, α, r.</p>
+      <p>3 decimals for p; write <i>p</i> &lt; .001 when SPSS shows .000.</p>
+      <p>No 0 before values that cannot exceed 1: .05, α = .77, <i>r</i> = .72. Keep it for 10.50 or 34.74.</p>
+      <p>df in brackets, without decimals; Welch and “equal variances not assumed” df get 2 decimals.</p>
+      <p>Report M and SE for every group, even when the result is not significant.</p>
+      <p>Effect size only when the test is significant, with its label (small, moderate, big).</p>
+      <p>End with the hypothesis conclusion and a managerial conclusion.</p>
+    </div>
+    <div class="note bad"><strong>Don't</strong>
+      <p>Say a group is higher when the test is not significant. Write that they are <em>equal in the population</em>.</p>
+      <p>Paste SPSS tables or screenshots of output in the text (appendix only).</p>
+      <p>Write <i>p</i> = .000 or <i>p</i> = 0.005.</p>
+      <p>Report only the part that answers the hypothesis.</p>
+      <p>Explain menus and clicks (“we clicked Analyze…”). Name the test and the variables instead.</p>
+      <p>Use <i>M</i> and <i>SD</i> for test results: the course asks for <i>M</i> and <i>SE</i>.</p>
+    </div>
+  </div>
+  <div class="note tip"><strong>Symbols in Word</strong><p>Put statistical symbols in italics: <i>M</i>, <i>SE</i>, <i>t</i>, <i>F</i>, <i>p</i>, <i>d</i>, <i>r</i>. Insert χ² and η² with Insert › Symbol (Greek), or type “X²” and “eta²” as the slides allow.</p></div>
+</section>
+
+<hr class="sep">
+
+<section id="exec">
+  <h2><span class="tag">A1 · Report</span>Executive summary (½ page)</h2>
+  <div class="why"><p>The instructions say a manager will not read 50 pages. The executive summary gives them the answer in 30 seconds. Write it last.</p></div>
+  <div class="paper">
+    <p><b>Executive summary</b></p>
+    <p>A chocolate manufacturer wants to know which consumers to target with its new healthy chocolate. Using a survey of 691 Belgian consumers, we split the market into three segments based on health concern: high (34%), medium (29%) and low (37%).</p>
+    <p>The high-concern segment is an attractive target. These consumers eat chocolate more often than the other two segments and find it more attractive than the low-concern segment. For them, chocolate is more frequent and more attractive than candy, salty snacks or cookies. They are younger than average (31 vs 35 years), more often women, students and people living with their parents. They eat chocolate for pure indulgence and when they feel lonely, mostly after dinner and late at night, and they buy it more often in night shops, vending machines and petrol stations. Within this segment, women have less self-control than men.</p>
+    <p>A positioning as “the ideal snack to kill hunger between meals” is not recommended. Only 16% of consumers eat chocolate for that reason, and they find it only slightly more attractive than others.</p>
+    <p>We recommend targeting young, health-concerned consumers, especially women, with a “guilt-free indulgence” positioning, and distributing the product in impulse channels as well as supermarkets.</p>
+  </div>
+</section>
+
+<section id="vv">
+  <h2><span class="tag">A2 · Requirement 1</span>The Variable View screenshot</h2>
+  <div class="why"><p>The instructions ask for “a screenshot of the full variable view”. It proves to the grader that names, labels, values, missing values and measures are all set (Session 1 and the S2 checklist).</p></div>
+  <div class="step">
+    <div class="step-head"><div class="step-num">1</div><h3>Prepare the window</h3></div>
+    <div class="step-body"><ol class="clicks">
+      <li>Finish <strong>all</strong> preparation first, including the new variables (hhsize, g4_recoded, g5_recoded, posfeel, negfeel, selfcont, health, seg and any merged variables). The screenshot shows the final file.</li>
+      <li>Open the <strong>Variable View</strong> tab and maximise the SPSS window.</li>
+      <li>Make sure the columns <strong>Name, Type, Label, Values, Missing, Measure</strong> are readable. Drag the column borders so that the labels are not cut off. You can narrow Width, Decimals, Columns and Align.</li>
+      <li>The file has more than 80 rows, so it does not fit in one screen. Take <strong>2 or 3 screenshots</strong>, scrolling down between them. On Mac use <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>4</kbd>; on Windows use <kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>.</li>
+      <li>In Word, put them one under the other as one figure.</li>
+    </ol></div>
+  </div>
+  <blockquote class="report"><p class="lbl">How to write it</p><p><b>Figure 1.</b> Variable View of the cleaned dataset (all original and new variables).</p><p>Figure 1 shows the Variable View after data preparation. All variables received a meaningful name and a label with the survey question. All categorical variables received value labels for every category, and the invented 1–7 scales received labels for their end points. Every variable was set to its measurement level: the 7-point scales, age, household size and the summated scales as Scale; education and the segments as Ordinal; the other categorical variables as Nominal.</p></blockquote>
+  <div class="note tip"><strong>If it takes too much space</strong><p>Put the first screenshot in the text and the others in the appendix (“Figure 1 continues in Appendix A1”). The screenshots count towards the 15 pages, so check the length.</p></div>
+</section>
+
+<section id="prep">
+  <h2><span class="tag">A3 · Requirement 2</span>Data preparation section (example text)</h2>
+  <div class="why"><p>The instructions say to “report how you handled outliers, impossible values, provide detailed information about new variables you created, Cronbach’s alpha or Pearson Correlation”. Session 2 says to be transparent: every change needs to be reported, with old and new values.</p></div>
+
+  <h3>3.1 Names, labels, values and measures</h3>
+  <blockquote class="report"><p class="lbl">Example</p><p>The original dataset had 691 respondents and 73 variables without labels, all set to Nominal. We renamed the socio-demographic variables with meaningless codes (q42 → gender, q4301 → age, q44 → living, q46 → education, q47 → occupation, q48 → native_lang, q49 → province, q50 → area). We gave every variable a label with the survey question and added value labels. Finally we set the measurement level of each variable (see Figure 1).</p></blockquote>
+
+  <h3>3.2 Impossible values</h3>
+  <blockquote class="report"><p class="lbl">Example</p><p>We checked the frequency tables of all variables for impossible values. We found one answer of 8 in the frequency of eating salty snacks and one answer of 9 in the fit of chocolate after work/school, both on a 1–7 scale. Neither is an obvious mistake with only one possible correction, so we indicated both as missing. Age ranges from 11 to 77 years. Young respondents are possible, so we kept all ages; 24 respondents did not give their age. No other variable contained values outside its scale.</p></blockquote>
+  <div class="note warn"><strong>“Outliers” in the instructions</strong><p>The project slides use the word “outliers”. The course (Session 2) treats them as impossible values: outside the scale range, extremely unlikely, or unusable. Say this explicitly, so the grader sees you applied the course definition.</p></div>
+
+  <h3>3.3 Household size (text → number)</h3>
+  <blockquote class="report"><p class="lbl">Example</p><p>Household size (Q20) was recorded as text. We recoded it into a new numeric variable, hhsize. Written answers were translated into the number they describe (e.g. “four” → 4, “2 (me and partner)” → 2). Answers without a single interpretation (“4/5”, “/”) and impossible answers (0 people, 19 respondents) were set to missing. hhsize has 617 valid answers (1 to 9 people) and 74 missing.</p></blockquote>
+
+  <h3>3.4 Recoded items and summated scales</h3>
+  <blockquote class="report"><p class="lbl">Example</p><p>Three questions contain several items that could be combined: feelings while eating chocolate (Q2), self-control (Q14) and feelings after eating chocolate (Q16). For each one we checked the four requirements: same answer format (1–7), asked together in one matrix, same underlying construct, and internal reliability (Cronbach’s α).</p>
+  <p>Based on meaning, the 17 feelings contain two sub-concepts: positive moods (9 items) and negative moods (8 items). The health-concern items “very satisfied/happy” and “full of joy” are phrased in the opposite direction from “worried”, “guilty” and “ashamed”. We therefore recoded them by mirroring (1 = almost always – 7 = never instead of 1 = never – 7 = almost always).</p>
+  <p>All four scales are reliable (Table 1). For positive feelings, deleting “Cool” would raise α from .93 to .97. Both values are excellent, so following the course rule we kept all items. We computed each scale as the average of its items, using the recoded items for health concern. Summated scales are interval variables.</p></blockquote>
+
+  <div class="paper" id="owntable">
+    <p class="cap"><b>Table 1.</b> Summated scales</p>
+    <table class="apa"><thead><tr><th>Scale</th><th>Items</th><th class="num">α</th><th>Level</th><th class="num"><i>M</i></th><th class="num"><i>SD</i></th></tr></thead><tbody>
+      <tr><td>Positive feelings</td><td>Happy, joyful, relaxed, exceptional, cheerful, energetic, cool, special, playful</td><td class="num">.93</td><td>Excellent</td><td class="num">3.39</td><td class="num">1.20</td></tr>
+      <tr><td>Negative feelings</td><td>Dreary, worried, ugly, bored, irritated, stressed, lonely, depressed</td><td class="num">.94</td><td>Excellent</td><td class="num">3.37</td><td class="num">1.44</td></tr>
+      <tr><td>Self-control</td><td>Easy not to eat, easy to control the amount, easy to say no</td><td class="num">.92</td><td>Excellent</td><td class="num">4.30</td><td class="num">1.74</td></tr>
+      <tr><td>Health concern</td><td>Worried about health, guilty, ashamed, very satisfied (R), full of joy (R)</td><td class="num">.77</td><td>Good</td><td class="num">3.47</td><td class="num">1.18</td></tr>
+    </tbody></table>
+    <p class="small muted">Note. All items on 1–7 scales; (R) = recoded by mirroring. Higher self-control = easier to resist chocolate.</p>
+  </div>
+  <div class="note tip"><strong>This is what “make a nice table yourself” means</strong><p>A Word table with a numbered title above it, three horizontal lines (top, under the header, bottom), no vertical lines and a short note below. Do this for every table in the text.</p></div>
+
+  <h3>3.5 The three health-concern segments</h3>
+  <blockquote class="report"><p class="lbl">Example</p><p>To identify the three segments, we split the health-concern scale into three groups of about one third each. In the frequency table we cut after the cumulative percentages closest to 33.33% and 66.66%. This gives low concern (up to 2.80 → 3, n = 252, 36.5%), medium concern (3.00 to 3.80 → 2, n = 202, 29.2%) and high concern (4.00 and more → 1, n = 237, 34.3%). The new variable seg is ordinal.</p></blockquote>
+
+  <h3>3.6 Other preparation (only if you did it)</h3>
+  <blockquote class="report"><p class="lbl">Example</p><p>For the Chi² tests in RQ1, the expected-count condition was not met for occupation, education and native language. We therefore merged categories into new variables: occupation3 (1 = student; 2–6 = working; 7–10 = not working/other), education3 (1–4 = secondary or less; 5–6 = bachelor or non-university master; 7–8 = university master or PhD; 9 “other”, n = 3, set to missing) and native_lang3 (Dutch; French; bilingual or other). For RQ3 and RQ5 we selected only the high-concern segment (seg = 1) and switched the selection off afterwards.</p></blockquote>
+</section>
+
+<hr class="sep">
+
+<section id="template">
+  <h2><span class="tag">B0</span>The template for every RQ section</h2>
+  <div class="spec">
+    <div><div class="k">1. Research question</div><div class="v">Copy the RQ, then say in one line what it means for the manager.</div></div>
+    <div><div class="k">2. Method</div><div class="v">Respondents (all, or seg = 1), IV and its level or number of categories, DV and its level, the test and why (course decision tree).</div></div>
+    <div><div class="k">3. Hypotheses</div><div class="v">H0 and H1, only for the 2 RQs you present.</div></div>
+    <div><div class="k">4. Results</div><div class="v">The course sentence with all statistics, an own table if there are several DVs, and a graph.</div></div>
+    <div><div class="k">5. Implication</div><div class="v">What it means and what the product manager can do with it.</div></div>
+  </div>
+
+  <h3 id="entire">“Analyse the entire statistical test”: incomplete vs complete</h3>
+  <div class="two">
+    <div class="note bad"><strong>Incomplete</strong><p>“Highly concerned consumers eat chocolate more often than the others (<i>p</i> &lt; .001), so H1 is supported.”</p><p>Missing: which test, which row (Levene), F and df, M and SE for each group, the post hoc pairs, η², a graph and the attractiveness DV.</p></div>
+    <div class="note ok"><strong>Complete</strong><p>Levene → choice of Welch → Welch’s <i>F</i>(df1, df2), <i>p</i> → M and SE of the 3 segments → <em>all 3</em> Tamhane comparisons with p → η² and its label → H0/H1 conclusion → graph. The same again for the second DV.</p></div>
+  </div>
+  <div class="tbl"><table><thead><tr><th>Test</th><th>Parts you must report</th></tr></thead><tbody>
+    <tr><td>Chi² (S4)</td><td>Expected-count condition; χ²(df), p; if significant, Phi or Cramer’s V and the column % compared horizontally</td></tr>
+    <tr><td>One-sample t (S4)</td><td>Test value; M, SE; t(df), p; if significant, d and the direction</td></tr>
+    <tr><td>Paired t (S5)</td><td>M, SE of both measures; t(df), p; if significant, d; graph</td></tr>
+    <tr><td>Independent t (S5)</td><td>Levene and the row used; M, SE of both groups; t(df), p; if significant, d; graph</td></tr>
+    <tr><td>ANOVA (S5)</td><td>Levene → ANOVA + Bonferroni or Welch + Tamhane; F(df1, df2), p; M, SE of all groups; if significant, all post hoc pairs (exact p, or p &gt; .050) and η²; graph</td></tr>
+  </tbody></table></div>
+  <div class="note tip"><strong>Mentioning Levene</strong><p>The course templates do not show Levene in the sentence, but you need it to choose the row or table. Add half a sentence: “Levene’s test showed unequal variances (<i>p</i> = .048), so we report Welch’s test and Tamhane post hoc tests.” That shows you analysed the entire test.</p></div>
+</section>
+
+<section id="rq1">
+  <h2><span class="tag">RQ1 · Example</span>Profile of the high-concern segment</h2>
+  <div class="paper">
+    <p><b>4.1 Research question.</b> How do consumers with high health concern differ from the medium and low segments in socio-demographics, in when and why they eat chocolate, and in where they buy it? The answer tells the manager who the target is and how to reach them.</p>
+    <p><b>4.2 Method.</b> We used all respondents. The IV is the health-concern segment (3 independent categories). For the categorical DVs (gender, survey language, living situation, education, occupation, native language, province, living area and the nine motives) we used Chi² tests of independence. For the metric DVs (age, household size, the 13 time spots and occasions, and the 7 places to buy) we used one-way ANOVAs.</p>
+    <p><b>4.3 Hypotheses</b> <span class="muted">(only if RQ1 is one of your two presented RQs)</span><br>
+    H0: Consumers with high health concern have the same profile (socio-demographics, moments, motives and places of purchase) as consumers with medium and low health concern.<br>
+    H1: Consumers with high health concern have a different profile from consumers with medium and low health concern.</p>
+    <p><b>4.4 Results — socio-demographics and motives (Chi²).</b> For all tests the expected-count condition was met, after merging categories for occupation, education and native language (see 3.6). Table 2 summarises the results.</p>
+    <p>The chi-square test between segment and gender is significant with a negligible effect (χ²(2) = 9.15, <i>p</i> = .010, Cramer’s V = .12). Comparing the column percentages horizontally, the share of women rises with health concern: 59.1% in the high segment, 54.5% in the medium and 45.6% in the low segment.</p>
+    <p>The chi-square test between segment and occupation is highly significant with a negligible effect (χ²(4) = 26.03, <i>p</i> &lt; .001, Cramer’s V = .14). Students make up 31.6% of the high segment, against 26.2% of the medium and 14.3% of the low segment.</p>
+    <p>The chi-square test between segment and education is not significant (χ²(4) = 2.12, <i>p</i> = .713): the three segments have the same education level in the population.</p>
+    <p class="muted">… one sentence like these for every Chi² test in Table 2.</p>
+  </div>
+
+  <div class="paper">
+    <p class="cap"><b>Table 2.</b> Chi² tests: health-concern segment by categorical variables</p>
+    <table class="apa"><thead><tr><th>Variable</th><th class="num">χ²(df)</th><th class="num"><i>p</i></th><th class="num">V</th><th>High / Medium / Low</th></tr></thead><tbody>
+      <tr><td>Gender (% women)</td><td class="num">9.15 (2)</td><td class="num">.010</td><td class="num">.12</td><td>59.1% / 54.5% / 45.6%</td></tr>
+      <tr><td>Living situation (% with parents)</td><td class="num">28.84 (10)</td><td class="num">.001</td><td class="num">.14</td><td>34.6% / 26.7% / 17.9%</td></tr>
+      <tr><td>Occupation, merged (% students)</td><td class="num">26.03 (4)</td><td class="num">&lt; .001</td><td class="num">.14</td><td>31.6% / 26.2% / 14.3%</td></tr>
+      <tr><td>Why: pure indulgence (% applicable)</td><td class="num">15.55 (2)</td><td class="num">&lt; .001</td><td class="num">.15</td><td>47.3% / 41.6% / 30.2%</td></tr>
+      <tr><td>Why: when lonely (% applicable)</td><td class="num">13.92 (2)</td><td class="num">&lt; .001</td><td class="num">.14</td><td>24.5% / 11.9% / 14.7%</td></tr>
+      <tr><td>Education, merged</td><td class="num">2.12 (4)</td><td class="num">.713</td><td class="num">–</td><td>no difference</td></tr>
+      <tr><td>Native language, merged</td><td class="num">4.28 (4)</td><td class="num">.369</td><td class="num">–</td><td>no difference</td></tr>
+      <tr><td>Survey language</td><td class="num">1.65 (2)</td><td class="num">.437</td><td class="num">–</td><td>no difference</td></tr>
+      <tr><td>Province</td><td class="num">18.01 (18)</td><td class="num">.455</td><td class="num">–</td><td>no difference</td></tr>
+      <tr><td>Living area</td><td class="num">10.18 (10)</td><td class="num">.425</td><td class="num">–</td><td>no difference</td></tr>
+      <tr><td>Other 7 motives</td><td class="num">–</td><td class="num">&gt; .050</td><td class="num">–</td><td>no difference</td></tr>
+    </tbody></table>
+    <p class="small muted">Note. V = Cramer’s V, only reported when significant. N = 691 (fewer for variables with missing answers).</p>
+  </div>
+
+  <div class="paper">
+    <p><b>4.4 Results — when and where (ANOVA).</b> Table 3 shows the means per segment.</p>
+    <p>For “late at night”, Levene’s test showed unequal variances, so we report Welch’s test. An Anova indicated that there was a significant effect of health concern on how well chocolate fits late at night (Welch’s <i>F</i>(2, 435.03) = 22.61, <i>p</i> &lt; .001). Tamhane post hoc tests showed that highly concerned consumers (<i>M</i> = 3.05, <i>SE</i> = .09) find that chocolate fits better late at night than medium (<i>M</i> = 2.57, <i>SE</i> = .08, <i>p</i> &lt; .001) and low concerned consumers (<i>M</i> = 2.35, <i>SE</i> = .06, <i>p</i> &lt; .001). There was no significant difference between the medium and low segments (<i>p</i> &gt; .050). The difference is medium (η² = .07).</p>
+    <p>For “after dinner”, variances were equal. An Anova indicated a significant effect (<i>F</i>(2, 688) = 11.93, <i>p</i> &lt; .001). Bonferroni post hoc tests showed that highly concerned consumers (<i>M</i> = 4.24, <i>SE</i> = .12) score higher than medium (<i>M</i> = 3.71, <i>SE</i> = .12, <i>p</i> = .008) and low concerned consumers (<i>M</i> = 3.43, <i>SE</i> = .12, <i>p</i> &lt; .001), with no difference between medium and low (<i>p</i> &gt; .050). The difference is small (η² = .03).</p>
+    <p>There was no significant effect on buying chocolate in a large supermarket (Welch’s <i>F</i>(2, 453.45) = 0.57, <i>p</i> = .566): the three segments buy there equally often.</p>
+    <p class="muted">… the same for each significant DV in Table 3; the non-significant ones can be grouped in one sentence.</p>
+  </div>
+
+  <div class="paper">
+    <p class="cap"><b>Table 3.</b> Moments and places of purchase per segment (means, 1–7)</p>
+    <table class="apa"><thead><tr><th>DV</th><th class="num">High</th><th class="num">Medium</th><th class="num">Low</th><th>Test</th><th class="num">η²</th><th>Significant post hoc</th></tr></thead><tbody>
+      <tr><td>Late at night</td><td class="num">3.05</td><td class="num">2.57</td><td class="num">2.35</td><td>Welch <i>F</i>(2, 435.03) = 22.61***</td><td class="num">.07</td><td>H &gt; M, H &gt; L</td></tr>
+      <tr><td>After dinner</td><td class="num">4.24</td><td class="num">3.71</td><td class="num">3.43</td><td><i>F</i>(2, 688) = 11.93***</td><td class="num">.03</td><td>H &gt; M, H &gt; L</td></tr>
+      <tr><td>At home, break in the week</td><td class="num">4.07</td><td class="num">3.68</td><td class="num">3.18</td><td><i>F</i>(2, 687) = 16.92***</td><td class="num">.05</td><td>H &gt; M, H &gt; L, M &gt; L</td></tr>
+      <tr><td>Night shop</td><td class="num">1.89</td><td class="num">1.41</td><td class="num">1.22</td><td>Welch <i>F</i>(2, 405.96) = 32.46***</td><td class="num">.09</td><td>H &gt; M, H &gt; L, M &gt; L</td></tr>
+      <tr><td>Vending machine</td><td class="num">2.18</td><td class="num">2.04</td><td class="num">1.52</td><td>Welch <i>F</i>(2, 415.43) = 18.96***</td><td class="num">.04</td><td>H &gt; L, M &gt; L</td></tr>
+      <tr><td>Large supermarket</td><td class="num">4.60</td><td class="num">4.60</td><td class="num">4.44</td><td>Welch <i>F</i>(2, 453.45) = 0.57</td><td class="num">–</td><td>–</td></tr>
+      <tr><td>Age (years)</td><td class="num">31.47</td><td class="num">33.35</td><td class="num">39.02</td><td>Welch <i>F</i>(2, 433.23) = 22.99***</td><td class="num">.07</td><td>H &lt; L, M &lt; L</td></tr>
+      <tr><td colspan="7" class="muted">… one row per DV (all 22 metric DVs).</td></tr>
+    </tbody></table>
+    <p class="small muted">Note. *** <i>p</i> &lt; .001. “Welch” = unequal variances (Levene <i>p</i> ≤ .050), Tamhane post hoc; otherwise ANOVA with Bonferroni. Exact values are in Appendix B1.</p>
+  </div>
+
+  <blockquote class="report"><p class="lbl">4.5 Interpretation and managerial implication</p><p>Compared with the low-concern segment, highly concerned consumers are more often women, younger, students and people living with their parents. They eat chocolate more for pure indulgence and when they feel lonely, especially after dinner and late at night, and they buy it more in impulse channels (night shops, vending machines, petrol stations, bookshops), while supermarket purchases are the same for all segments. All effects are small, so the segments overlap a lot. For the product manager, this means the healthy chocolate should be sold in supermarkets <em>and</em> in impulse channels, with communication aimed at young people and evening moments of indulgence.</p></blockquote>
+  <div class="note tip"><strong>Graph for RQ1</strong><p>Choose one or two key results, for example a simple bar chart of mean “late at night” per segment (Chart Builder, error bars). Don’t make 30 graphs: that kills the page budget. For the Chi² results, Table 2 with the column % is enough. The course shows no Chi² graph.</p></div>
+</section>
+
+<section id="rq2">
+  <h2><span class="tag">RQ2 · Full model section</span>Do they eat more chocolate and find it more attractive?</h2>
+  <p>This is a complete section, written the way a presented RQ should look. The other RQs follow the same pattern.</p>
+  <div class="paper">
+    <p><b>5. RQ2 — How attractive is the high-concern segment?</b></p>
+    <p><b>5.1 Research question.</b> Do consumers with high health concern eat chocolate more often, and find chocolate more attractive, than consumers with medium and low health concern? If they do, they are a valuable segment to target.</p>
+    <p><b>5.2 Method.</b> We used all respondents (N = 691). The IV is the health-concern segment, with 3 independent categories (high, medium, low). The DVs are the frequency of eating chocolate (freq1) and the attractiveness of chocolate (att1), both interval variables on 7-point scales. With a metric DV and more than two independent groups, we used a one-way ANOVA with post hoc tests.</p>
+    <p><b>5.3 Hypotheses.</b><br>
+    H0a: Highly concerned consumers eat chocolate as often as medium and low concerned consumers (<i>M</i><sub>high</sub> = <i>M</i><sub>medium</sub> = <i>M</i><sub>low</sub>).<br>
+    H1a: Highly concerned consumers eat chocolate more often than medium and low concerned consumers (<i>M</i><sub>high</sub> &gt; <i>M</i><sub>medium</sub> &amp; <i>M</i><sub>low</sub>).<br>
+    H0b: Highly concerned consumers find chocolate as attractive as medium and low concerned consumers.<br>
+    H1b: Highly concerned consumers find chocolate more attractive than medium and low concerned consumers.</p>
+    <p><b>5.4 Results.</b> Levene’s test showed unequal variances for both frequency (<i>p</i> = .048) and attractiveness (<i>p</i> = .020). We therefore report Welch’s test and Tamhane post hoc tests.</p>
+    <p><i>Frequency.</i> An Anova indicated that there was a significant effect of health concern on how often people eat chocolate (Welch’s <i>F</i>(2, 450.91) = 20.25, <i>p</i> &lt; .001). Tamhane post hoc tests showed that highly concerned consumers (<i>M</i> = 4.97, <i>SE</i> = .09) eat chocolate significantly more often than medium (<i>M</i> = 4.55, <i>SE</i> = .10, <i>p</i> = .007) and low concerned consumers (<i>M</i> = 4.12, <i>SE</i> = .10, <i>p</i> &lt; .001). Medium concerned consumers also eat chocolate more often than low concerned consumers (<i>p</i> = .008). The difference is medium (η² = .06). Therefore H1a is supported.</p>
+    <p><i>Attractiveness.</i> An Anova indicated that there was a significant effect of health concern on the attractiveness of chocolate (Welch’s <i>F</i>(2, 450.85) = 8.29, <i>p</i> &lt; .001). Tamhane post hoc tests showed that highly concerned consumers (<i>M</i> = 5.84, <i>SE</i> = .09) find chocolate significantly more attractive than low concerned consumers (<i>M</i> = 5.27, <i>SE</i> = .11, <i>p</i> &lt; .001), but equally attractive as medium concerned consumers (<i>M</i> = 5.53, <i>SE</i> = .11, <i>p</i> &gt; .050). Medium and low concerned consumers also do not differ (<i>p</i> &gt; .050). The difference is small (η² = .02). Therefore H1b is partially supported.</p>
+    <div class="fig">
+      <p class="cap"><b>Figure 2.</b> Mean frequency and attractiveness of chocolate per segment (1–7)</p>
+      <div class="chart" role="img" aria-label="Bar chart: frequency high 4.97, medium 4.55, low 4.12; attractiveness high 5.84, medium 5.53, low 5.27">
+        <div class="bars">
+          <span>Frequency · High</span><div class="track"><div class="fill hi" style="width:71.0%"></div></div><span class="val">4.97</span>
+          <span>Frequency · Medium</span><div class="track"><div class="fill" style="width:65.0%"></div></div><span class="val">4.55</span>
+          <span>Frequency · Low</span><div class="track"><div class="fill alt" style="width:58.9%"></div></div><span class="val">4.12</span>
+          <span>Attractive · High</span><div class="track"><div class="fill hi" style="width:83.4%"></div></div><span class="val">5.84</span>
+          <span>Attractive · Medium</span><div class="track"><div class="fill" style="width:79.0%"></div></div><span class="val">5.53</span>
+          <span>Attractive · Low</span><div class="track"><div class="fill alt" style="width:75.3%"></div></div><span class="val">5.27</span>
+        </div>
+      </div>
+      <p class="small muted">In SPSS: Graphs › Chart Builder › Simple Bar, freq1 (then att1) on the Y-axis, seg on the X-axis, Display error bars. Output in Appendix B2.</p>
+    </div>
+    <p><b>5.5 Interpretation and managerial implication.</b> The high-concern segment is the most valuable one. Its members eat chocolate the most often (about a couple of times a week) and like it at least as much as the other segments. Their health concern does not stop them from eating chocolate; it makes them feel guilty about it. A healthy chocolate answers exactly this tension: it lets heavy users keep their habit with less guilt. The manager should target this segment first, as it combines high volume with a clear need.</p>
+  </div>
+</section>
+
+<section id="rq3">
+  <h2><span class="tag">RQ3 · Example</span>Chocolate vs other snacks</h2>
+  <div class="paper">
+    <p><b>6.2 Method.</b> We selected only the high-concern segment (seg = 1, n = 237). The IV is the type of snack, with 2 dependent categories each time: the same respondents rated chocolate and the other snack. The DVs are frequency and attractiveness (interval, 1–7). We ran six paired-samples t-tests: chocolate against candy, salty snacks and cookies, for both frequency and attractiveness.</p>
+    <p><b>6.4 Results.</b> A dependent sample t-test indicated that highly concerned consumers eat chocolate (<i>M</i> = 4.97, <i>SE</i> = .09) significantly more often than candy (<i>M</i> = 3.59, <i>SE</i> = .10; <i>t</i>(236) = 11.00, <i>p</i> &lt; .001), a moderate difference (<i>d</i> = .71). They also eat chocolate significantly more often than salty snacks (<i>M</i> = 3.64, <i>SE</i> = .08; <i>t</i>(235) = 11.58, <i>p</i> &lt; .001, <i>d</i> = .75) and cookies (<i>M</i> = 4.32, <i>SE</i> = .09; <i>t</i>(236) = 5.77, <i>p</i> &lt; .001, <i>d</i> = .37). In the same way, they find chocolate (<i>M</i> = 5.84, <i>SE</i> = .09) significantly more attractive than candy (<i>M</i> = 4.43, <i>SE</i> = .11; <i>t</i>(236) = 9.90, <i>p</i> &lt; .001, <i>d</i> = .64), salty snacks (<i>M</i> = 4.96, <i>SE</i> = .10; <i>t</i>(236) = 6.02, <i>p</i> &lt; .001, <i>d</i> = .39) and cookies (<i>M</i> = 4.99, <i>SE</i> = .08; <i>t</i>(236) = 7.62, <i>p</i> &lt; .001, <i>d</i> = .49). All differences are moderate (Table 4, Figure 3).</p>
+    <p class="cap"><b>Table 4.</b> Paired t-tests, high-concern segment (n = 237)</p>
+    <table class="apa"><thead><tr><th>Comparison</th><th class="num">Chocolate <i>M</i> (<i>SE</i>)</th><th class="num">Other <i>M</i> (<i>SE</i>)</th><th class="num"><i>t</i>(df)</th><th class="num"><i>p</i></th><th class="num"><i>d</i></th></tr></thead><tbody>
+      <tr><td>Frequency vs candy</td><td class="num">4.97 (.09)</td><td class="num">3.59 (.10)</td><td class="num">11.00 (236)</td><td class="num">&lt; .001</td><td class="num">.71</td></tr>
+      <tr><td>Frequency vs salty snacks</td><td class="num">4.97 (.09)</td><td class="num">3.64 (.08)</td><td class="num">11.58 (235)</td><td class="num">&lt; .001</td><td class="num">.75</td></tr>
+      <tr><td>Frequency vs cookies</td><td class="num">4.97 (.09)</td><td class="num">4.32 (.09)</td><td class="num">5.77 (236)</td><td class="num">&lt; .001</td><td class="num">.37</td></tr>
+      <tr><td>Attractiveness vs candy</td><td class="num">5.84 (.09)</td><td class="num">4.43 (.11)</td><td class="num">9.90 (236)</td><td class="num">&lt; .001</td><td class="num">.64</td></tr>
+      <tr><td>Attractiveness vs salty snacks</td><td class="num">5.84 (.09)</td><td class="num">4.96 (.10)</td><td class="num">6.02 (236)</td><td class="num">&lt; .001</td><td class="num">.39</td></tr>
+      <tr><td>Attractiveness vs cookies</td><td class="num">5.84 (.09)</td><td class="num">4.99 (.08)</td><td class="num">7.62 (236)</td><td class="num">&lt; .001</td><td class="num">.49</td></tr>
+    </tbody></table>
+    <p class="small muted">Note. Salty snacks n = 236 (one impossible value set to missing).</p>
+    <p><b>6.5 Implication.</b> For highly concerned consumers, chocolate is clearly the favourite snack. The healthy chocolate therefore does not need to win them over from other snacks; its real competitor is the regular chocolate they already eat. Communication should compare it with “your usual chocolate” (same taste, less guilt), not with fruit or other snacks.</p>
+  </div>
+  <div class="note tip"><strong>Graph</strong><p>Course paired graph: Chart Builder › Simple Bar, drag freq1 onto the Y-axis, then freq2, freq3 and freq4 onto the “+” of the same box. Make a second one for att1–att4.</p></div>
+</section>
+
+<section id="rq4">
+  <h2><span class="tag">RQ4 · Example</span>Older or younger than average?</h2>
+  <div class="paper">
+    <p><b>7.2 Method.</b> First we computed the mean age of all respondents (<i>M</i> = 34.74, n = 667). Then we selected the high-concern segment (seg = 1) and compared its mean age with 34.74 using a one-sample t-test. Age is a ratio variable, and there is one group compared with a known value.</p>
+    <p><b>7.4 Results.</b> One-sample t-test indicated that highly concerned consumers were significantly younger than the average age of 34.74 years in the dataset (<i>M</i> = 31.47, <i>SE</i> = .75; <i>t</i>(231) = −4.36, <i>p</i> &lt; .001). The difference is moderate (<i>d</i> = −.29). Therefore H1 is supported.</p>
+    <p><b>7.5 Implication.</b> The target segment is about three years younger than the average consumer, which matches RQ1 (more students, more people living with their parents). Media and tone of voice should fit young adults, for example social media and campus or student-city activations.</p>
+  </div>
+  <div class="note tip"><strong>Graph</strong><p>A simple bar with the segment’s mean age next to a reference line at 34.74 (Chart Builder, then add a Y-axis reference line in the Chart Editor), or two bars made in Excel: “High concern 31.47” and “All respondents 34.74”.</p></div>
+</section>
+
+<section id="rq5">
+  <h2><span class="tag">RQ5 · Example</span>Men vs women in the high segment</h2>
+  <div class="paper">
+    <p><b>8.2 Method.</b> We selected the high-concern segment (seg = 1; 97 men, 140 women). The IV is gender (2 independent categories). The DVs are the summated scales self-control, positive feelings and negative feelings (interval). We used independent-samples t-tests.</p>
+    <p><b>8.4 Results.</b> For all three DVs, Levene’s test was not significant (<i>p</i> = .441, .703 and .244), so we read the “equal variances assumed” row.</p>
+    <p>Independent sample t-test indicated that, among highly concerned consumers, men (<i>M</i> = 4.32, <i>SE</i> = .16) have significantly more self-control than women (<i>M</i> = 3.70, <i>SE</i> = .14; <i>t</i>(235) = 2.84, <i>p</i> = .005). The difference is moderate (<i>d</i> = .37). Women (<i>M</i> = 3.81, <i>SE</i> = .09) eat chocolate significantly more when they feel positive than men (<i>M</i> = 3.52, <i>SE</i> = .11; <i>t</i>(235) = −2.08, <i>p</i> = .039), a moderate difference (<i>d</i> = −.27). For negative feelings, men (<i>M</i> = 3.99, <i>SE</i> = .13) and women (<i>M</i> = 4.21, <i>SE</i> = .09) are equal (<i>t</i>(235) = −1.39, <i>p</i> = .166). H1 is supported for self-control and positive feelings; H0 is supported for negative feelings.</p>
+    <p><b>8.5 Implication.</b> Women in the target segment find chocolate harder to resist and link it more with positive moods. Since they are also the majority of the segment (RQ1), the main communication can target women with joyful, “treat yourself without guilt” messages. Negative moods are equally important for men and women, so there is no need for a gender-specific message there.</p>
+  </div>
+</section>
+
+<section id="rq6">
+  <h2><span class="tag">RQ6 · Example</span>The “kill hunger between meals” target group</h2>
+  <div class="paper">
+    <p><b>9.2 Method.</b> We used all respondents. The IV is the motive “to kill hunger between meals” (mot3: 1 = applicable, the potential target group, n = 113; 0 = not applicable, n = 578), 2 independent categories. The DVs are attractiveness of chocolate (att1) and self-control (interval). A lower self-control score means chocolate is less easy to resist. We used independent-samples t-tests.</p>
+    <p><b>9.4 Results.</b> For attractiveness, Levene’s test was significant (<i>p</i> = .002), so we read the “equal variances not assumed” row. For self-control it was not (<i>p</i> = .686), so we read the top row.</p>
+    <p>Independent sample t-test indicated that people who eat chocolate to kill hunger between meals (<i>M</i> = 5.78, <i>SE</i> = .12) find chocolate significantly more attractive than other people (<i>M</i> = 5.49, <i>SE</i> = .07; <i>t</i>(184.21) = 2.02, <i>p</i> = .045). The difference is small (<i>d</i> = .18). They find chocolate equally easy to resist as other people (<i>M</i> = 4.01, <i>SE</i> = .17 vs <i>M</i> = 4.36, <i>SE</i> = .07; <i>t</i>(689) = −1.93, <i>p</i> = .054). H1 is supported for attractiveness and H0 for self-control.</p>
+    <p><b>9.5 Implication.</b> The “kill hunger” positioning reaches only 16% of consumers, who like chocolate only slightly more and resist it just as well as others. It is a weak basis for the brand. It could be a secondary message (e.g. a snack-size format), but not the main positioning.</p>
+  </div>
+  <div class="note warn"><strong>Read the right row</strong><p>On the top row, attractiveness would give <i>p</i> = .078, which is not significant. Explaining the Levene choice in one sentence shows the grader why your conclusion is correct.</p></div>
+</section>
+
+<hr class="sep">
+
+<section id="reco">
+  <h2><span class="tag">C1 · Requirement 7</span>Recommendations for the product manager</h2>
+  <div class="why"><p>The instructions ask for recommendations “in the light of more general marketing principles”. Organise them with frameworks a manager knows, such as segmentation–targeting–positioning (STP) and the 4P, and link every point to the RQ that supports it. That shows the recommendation comes from your data and not from opinion.</p></div>
+  <div class="paper">
+    <p><b>10. Recommendations</b></p>
+    <p><b>Targeting.</b> Target the high-concern segment (34% of the market). It eats chocolate the most often (RQ2) and prefers chocolate to every other snack (RQ3), so it combines high volume with a clear need for a healthier option. Within it, give priority to young adults (RQ4: 31 years on average), students and people living with their parents (RQ1), and women, who are the majority of the segment and have less self-control (RQ1, RQ5).</p>
+    <p><b>Positioning.</b> Position the product as “guilt-free indulgence”: the same pleasure as regular chocolate, without the guilt. This matches why the segment eats chocolate (pure indulgence, RQ1) and how they feel afterwards (worried, guilty, the basis of the segment). Do not use “the ideal snack to kill hunger between meals” as the main positioning: it concerns only 16% of consumers and the effect is small (RQ6).</p>
+    <p><b>Product.</b> Since the target compares the product with regular chocolate (RQ3), taste parity must be the core claim. Small portions or single bars fit the evening and late-night moments (RQ1) and help women who find chocolate hard to resist control the amount (RQ5).</p>
+    <p><b>Place.</b> Keep a strong presence in supermarkets, where all segments buy equally (RQ1), and add impulse channels where the high-concern segment buys more: night shops, vending machines (e.g. on campuses), petrol stations and bookshops (RQ1).</p>
+    <p><b>Promotion.</b> Use channels that reach young adults (social media, student events). Use joyful, positive messages aimed at women (RQ5) and moments after dinner and late at night (RQ1). Comforting messages around being alone can address the “when lonely” motive (RQ1).</p>
+    <p><b>Price.</b> The data do not include price. In earlier attempts, healthy variants failed partly because they were too expensive (case background), so price should stay close to regular chocolate. A test of willingness to pay is advised.</p>
+    <p><b>Limitations.</b> Most differences between segments are small (η² ≤ .09, Cramer’s V ≤ .15), so the segments overlap. The results are based on self-reported behaviour in Belgium.</p>
+  </div>
+</section>
+
+<section id="appendix">
+  <h2><span class="tag">C2 · Requirement 8</span>The appendix</h2>
+  <div class="step">
+    <div class="step-head"><div class="step-num">1</div><h3>What goes in, what stays out</h3></div>
+    <div class="step-body">
+      <div class="two">
+        <div class="note ok"><strong>In</strong><p>Reliability Statistics and Item-Total Statistics for each scale; the frequency table of health with the cut-points; for each test, the tables you report (Crosstab + Chi-Square Tests + Symmetric Measures; Descriptives + Levene + ANOVA/Welch + Multiple Comparisons + Effect Sizes; t-test tables); the rest of the Variable View screenshots.</p></div>
+        <div class="note bad"><strong>Out</strong><p>The frequency tables of all 73 variables used to find impossible values (one sentence in the text is enough), duplicate tables, the log, notes, warnings, and output from tests you ran by mistake.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-head"><div class="step-num">2</div><h3>Copy the output and number it</h3></div>
+    <div class="step-body"><ol class="clicks">
+      <li>In the SPSS Output Viewer, click a table → right-click › <strong>Copy</strong> (or Copy Special › Image) → paste in Word. Or use File › Export… to Word and delete what you don’t need.</li>
+      <li>Group the output per RQ, in the order of the report, with a title for each block.</li>
+      <li>Refer to it from the text: “(see Appendix B2)”.</li>
+    </ol></div>
+  </div>
+  <div class="paper">
+    <p><b>Appendix</b></p>
+    <p>A. Data preparation<br>&nbsp;&nbsp;A1 Variable View (continued)<br>&nbsp;&nbsp;A2 Reliability: positive feelings, negative feelings, self-control, health concern<br>&nbsp;&nbsp;A3 Frequency table of health concern (cut-points)</p>
+    <p>B. Research questions<br>&nbsp;&nbsp;B1 RQ1 Crosstabs and Chi² tests; one-way ANOVAs<br>&nbsp;&nbsp;B2 RQ2 One-way ANOVA (freq1, att1) and bar chart<br>&nbsp;&nbsp;B3 RQ3 Paired-samples t-tests<br>&nbsp;&nbsp;B4 RQ4 Mean age; one-sample t-test<br>&nbsp;&nbsp;B5 RQ5 Independent-samples t-tests (seg = 1)<br>&nbsp;&nbsp;B6 RQ6 Independent-samples t-tests (mot3)</p>
+  </div>
+</section>
+
+<section id="final">
+  <h2><span class="tag">C3</span>Final checklist before sending</h2>
+  <div class="tbl"><table><thead><tr><th>✓</th><th>Check</th></tr></thead><tbody>
+    <tr><td>☐</td><td>15 pages or fewer, graphs included, appendix excluded</td></tr>
+    <tr><td>☐</td><td>One section per RQ, all 6 answered, with the same sub-headings</td></tr>
+    <tr><td>☐</td><td>H0/H1 only in the 2 presented RQs</td></tr>
+    <tr><td>☐</td><td>Variable View screenshot of the final file</td></tr>
+    <tr><td>☐</td><td>Every impossible value, recode, computed variable, α and selection reported</td></tr>
+    <tr><td>☐</td><td>Every test reported entirely: condition/Levene, statistic, df, p, M and SE, all post hoc tests, effect size</td></tr>
+    <tr><td>☐</td><td>2 decimals, 3 for p, no leading 0, <i>p</i> &lt; .001 instead of .000, symbols in italics</td></tr>
+    <tr><td>☐</td><td>No sentence says a group is higher when p &gt; .050</td></tr>
+    <tr><td>☐</td><td>A graph for each RQ; own tables in the text, SPSS output only in the appendix</td></tr>
+    <tr><td>☐</td><td>A managerial implication per RQ and a recommendations section</td></tr>
+    <tr><td>☐</td><td>Email: report + cleaned .sav file + peer evaluation</td></tr>
+  </tbody></table></div>
+</section>
+
+<footer>
+  Based on the project instructions (“Guidelines for the report”), the course slides of sessions 1, 2, 4 and 5, and the results on the Course methods only page. Rewrite the examples in your own words.
+</footer>
+</main>
+</div>
+
+</body>
+</html>
